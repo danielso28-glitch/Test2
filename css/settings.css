@@ -171,3 +171,14 @@
 .accform .seg {
   background:var(--bg);
 }
+
+.fbcard {
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  border:2px solid var(--lime);
+}
+
+.fbcard b {
+  font-size:1.1rem;
+}

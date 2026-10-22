@@ -123,6 +123,8 @@ function renderAvatar() {
   $("#stats").innerHTML = Object.keys(sv).map(k => `<div class="stat"><div class="lb"><span>${t("stats")[k]}</span><span style="font-variant-numeric:tabular-nums">${sv[k]}</span></div><div class="bar"><i style="width:${sv[k]}%"></i></div></div>`).join("");
   renderGoal();
   renderFitness();
+  $("#fbAvatar").innerHTML = feedbackCard();
+  bindFeedback($("#fbAvatar"));
   renderPoints();
   const last = lastAct(), d = daysSince(last);
   $("#checkinMsg").textContent = last ? t("lastAct")(d === 0 ? t("todayW") : d === 1 ? t("yesterday") : t("daysAgo")(d)) : t("never");
@@ -143,6 +145,11 @@ function doCheckin(gid) {
   renderAvatar();
   toast(t("checked")(sessionPts(g)));
 }
+/* anonymous tester feedback: opens the external form, sends no app data */
+const feedbackCard = () => `<div class="card fbcard"><b>${t("fb").title}</b><span class="muted">${t("fb").text}</span><button class="btn lime" data-feedback>${t("fb").btn}</button><span class="hint" style="margin:0">${t("fb").anon}</span></div>`;
+function bindFeedback(box) {
+  box.querySelectorAll("[data-feedback]").forEach(b => b.onclick = () => FEEDBACK_URL ? window.open(FEEDBACK_URL, "_blank", "noopener") : toast(t("fb").soon));
+}
 let resetArm = false;
 function renderSettings(box, sheet) {
   box.innerHTML = `${sheet ? `<h2 class="t" style="font-size:1.6rem">${t("settings")}</h2>` : ""}
@@ -153,6 +160,7 @@ function renderSettings(box, sheet) {
    ${sheet ? `<button class="btn dark" data-close-sheet>${t("done")}</button>` : `
    <div class="lbl">${t("tracker")}</div>${trackerCard()}
    <div class="lbl">${t("location")}</div><div class="card setrow"><span class="muted" style="flex:1;min-width:0">${me ? t("locStatusOn") : t("locStatusOff")}</span><button class="btn small dark" data-loc>${t("locAsk")}</button></div>
+   ${feedbackCard()}
    <button class="btn out" data-restart>${t("restartIntro")}</button>
    <button class="btn out" data-reset style="border-color:var(--danger);color:var(--danger)">${resetArm ? t("resetSure") : t("resetAll")}</button>
    <p class="hint">${t("privacy")}</p>`}`;
@@ -169,6 +177,7 @@ function renderSettings(box, sheet) {
   const cs = box.querySelector("[data-close-sheet]");
   if (cs)
     cs.onclick = () => $("#setSheet").hidden = true;
+  bindFeedback(box);
   const rs = box.querySelector("[data-restart]");
   if (rs)
     rs.onclick = () => go("s1");

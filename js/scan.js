@@ -22,11 +22,22 @@ function scanIntro(msg) {
   $("#scanFile").onchange = e => { const f = e.target.files && e.target.files[0]; if (!f)
     return; const r = new FileReader(); r.onload = () => { const im = new Image(); im.onload = () => { SC.img = im; scanAdjust(); }; im.src = r.result; }; r.readAsDataURL(f); };
 }
+/* Face-ID style progress: short radial dashes around the face oval, lit clockwise from the top */
+const SCAN_TICKS = 72;
+function scanTicks() {
+  let s = "";
+  for (let i = 0; i < SCAN_TICKS; i++) {
+    const a = i / SCAN_TICKS * 2 * Math.PI, sx = Math.sin(a), cy = -Math.cos(a);
+    const p = (rx, ry) => `${(150 + rx * sx).toFixed(1)} ${(190 + ry * cy).toFixed(1)}`;
+    s += `<path d="M${p(110, 138)}L${p(120, 148)}"/>`;
+  }
+  return s;
+}
 async function scanCam() {
   const b = $("#scanBody");
   b.innerHTML = `<button class="round scx" data-scan-close aria-label="${TL("Close", "Schließen")}">✕</button>
  <div class="camwrap"><video id="scanVid" playsinline autoplay muted></video>
- <svg class="cammask" viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice"><defs><mask id="hole"><rect width="300" height="400" fill="#fff"/><ellipse cx="150" cy="190" rx="100" ry="128" fill="#000"/></mask></defs><rect width="300" height="400" fill="rgba(10,18,15,.72)" mask="url(#hole)"/><ellipse cx="150" cy="190" rx="108" ry="136" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="7"/><ellipse id="scanRing" cx="150" cy="190" rx="108" ry="136" fill="none" stroke="#C8F06A" stroke-width="7" stroke-linecap="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100" transform="rotate(-90 150 190)"/></svg>
+ <svg class="cammask" viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice"><defs><mask id="hole"><rect width="300" height="400" fill="#fff"/><ellipse cx="150" cy="190" rx="100" ry="128" fill="#000"/></mask></defs><rect width="300" height="400" fill="rgba(10,18,15,.72)" mask="url(#hole)"/><ellipse cx="150" cy="190" rx="104" ry="132" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="1.5"/><g id="scanRing">${scanTicks()}</g><g class="scdone"><circle cx="150" cy="190" r="34" fill="#C8F06A"/><path d="M135 191l10 10 20-21" fill="none" stroke="#12201B" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></g></svg>
  <div class="camhint" id="scanHint">${TL("Starting camera…", "Kamera startet…")}</div>
  <div class="camstep" id="scanStep"></div></div>
  <button class="btn ghost" id="scanSkip" hidden>${TL("Skip head turns", "Kopfdrehungen überspringen")}</button>`;
@@ -48,8 +59,8 @@ async function scanCam() {
   cv.height = 52;
   const cx = cv.getContext("2d", { willReadFrequently: true });
   let prev = null, steady = 0, phase = 0, turn = 0;
-  const ring = p => { const r = $("#scanRing"); if (r)
-    r.setAttribute("stroke-dashoffset", (100 - p * 100).toFixed(1)); };
+  const ring = p => { const r = $("#scanRing"); if (!r)
+    return; const n = Math.round(p * SCAN_TICKS); r.querySelectorAll("path").forEach((t, i) => t.classList.toggle("on", i < n)); r.closest("svg").classList.toggle("done", p >= 1); };
   const hint = s => { const h = $("#scanHint"); if (h && h.textContent !== s)
     h.textContent = s; };
   const step = s => { const h = $("#scanStep"); if (h)

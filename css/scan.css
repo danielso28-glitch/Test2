@@ -101,19 +101,55 @@
   height:100%;
 }
 
-#scanRing {
-  transition:stroke-dashoffset .25s;
+#scanRing path {
+  stroke:rgba(255,255,255,.35);
+  stroke-width:4;
+  stroke-linecap:round;
+  transition:stroke .25s;
+}
+
+#scanRing path.on {
+  stroke:#C8F06A;
+  filter:drop-shadow(0 0 3px rgba(200,240,106,.8));
+}
+
+.cammask .scdone {
+  opacity:0;
+  transform-origin:150px 190px;
+  transform:scale(.6);
+  transition:opacity .3s, transform .35s cubic-bezier(.3,1.6,.5,1);
+}
+
+.cammask.done .scdone {
+  opacity:1;
+  transform:scale(1);
+}
+
+.cammask.done #scanRing path {
+  animation:scanpulse .9s ease-out;
+}
+
+@keyframes scanpulse {
+  50% { stroke-width:6; }
 }
 
 .camhint {
   position:absolute;
   left:0;
   right:0;
-  bottom:18px;
+  bottom:14px;
+  margin:0 auto;
+  width:fit-content;
+  max-width:calc(100% - 32px);
+  padding:10px 18px;
+  border-radius:22px;
+  background:rgba(10,18,15,.72);
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
   text-align:center;
   font-weight:800;
-  font-size:1.25rem;
-  text-shadow:0 1px 6px rgba(0,0,0,.6);
+  font-size:1.15rem;
+  line-height:1.25;
 }
 
 .camstep {
