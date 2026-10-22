@@ -47,5 +47,5 @@ function storyCard(f, why) {
   return `<article class="post stcard k-${f.kind}" style="background:${f.sc}">${why}<span class="stbadge">${badge}</span>
    <blockquote>${f.kind === "study" ? "" : "“"}${esc(quote)}${f.kind === "study" ? "" : "”"}</blockquote>
    <div class="person">${person}</div>
-   <div class="foot">${link}<button class="like" data-like="${f.k}" aria-pressed="${S.liked.includes(f.k)}" aria-label="Like">${ICON.heart}</button></div></article>`;
+   <div class="foot">${link}<button class="like" data-like="${f.k}" aria-pressed="${S.liked.includes(f.k)}" aria-label="${t("aria").like}">${ICON.heart}</button></div></article>`;
 }

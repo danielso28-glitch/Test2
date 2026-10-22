@@ -11,17 +11,17 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Inter+Tight:wght@700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/base.css?v=8e00c29">
-<link rel="stylesheet" href="css/intro.css?v=8e00c29">
-<link rel="stylesheet" href="css/map.css?v=8e00c29">
-<link rel="stylesheet" href="css/booking.css?v=8e00c29">
-<link rel="stylesheet" href="css/scan.css?v=8e00c29">
-<link rel="stylesheet" href="css/tracker.css?v=8e00c29">
-<link rel="stylesheet" href="css/confirmation.css?v=8e00c29">
-<link rel="stylesheet" href="css/main-app.css?v=8e00c29">
-<link rel="stylesheet" href="css/avatar.css?v=8e00c29">
-<link rel="stylesheet" href="css/feed.css?v=8e00c29">
-<link rel="stylesheet" href="css/settings.css?v=8e00c29">
+<link rel="stylesheet" href="css/base.css?v=770b4f5">
+<link rel="stylesheet" href="css/intro.css?v=770b4f5">
+<link rel="stylesheet" href="css/map.css?v=770b4f5">
+<link rel="stylesheet" href="css/booking.css?v=770b4f5">
+<link rel="stylesheet" href="css/scan.css?v=770b4f5">
+<link rel="stylesheet" href="css/tracker.css?v=770b4f5">
+<link rel="stylesheet" href="css/confirmation.css?v=770b4f5">
+<link rel="stylesheet" href="css/main-app.css?v=770b4f5">
+<link rel="stylesheet" href="css/avatar.css?v=770b4f5">
+<link rel="stylesheet" href="css/feed.css?v=770b4f5">
+<link rel="stylesheet" href="css/settings.css?v=770b4f5">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
 </head>
 <body>
@@ -34,8 +34,8 @@
       <header>
         <div class="logo"><svg viewBox="0 0 22 26" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M2 2l9 11 9-11M11 13v11"/></svg>Two Paths</div>
         <div class="head-btns">
-          <button class="pillbtn" id="aplus" aria-label="Text size">A+</button>
-          <button class="pillbtn" data-open-settings aria-label="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2.5"/><circle cx="10" cy="17" r="2.5"/></svg></button>
+          <button class="pillbtn" id="aplus" aria-label="Text size" data-aria="textSize">A+</button>
+          <button class="pillbtn" data-open-settings aria-label="Settings" data-aria="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2.5"/><circle cx="10" cy="17" r="2.5"/></svg></button>
         </div>
       </header>
       <div class="bars" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></div>
@@ -56,16 +56,16 @@
     <div class="top pad">
       <div class="bars"><i><b id="progA"></b></i><i><b></b></i></div>
       <div class="row">
-        <button class="round" data-go="s1" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button>
+        <button class="round" data-go="s1" aria-label="Back" data-aria="back"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button>
         <div class="chip"><span class="av" data-avatar="sad"></span><span style="min-width:0"><b data-t="pathA"></b><span data-scanlabel></span></span></div>
-        <button class="round" data-share aria-label="Share"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4M7 9l5-5 5 5M5 20h14"/></svg></button>
+        <button class="round" data-share aria-label="Share" data-aria="share"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4M7 9l5-5 5 5M5 20h14"/></svg></button>
       </div>
     </div>
     <div class="scene" id="sceneA"></div>
     <div class="dlg pad">
       <div class="who" id="whoA"></div>
       <p class="line sub" id="subA"></p>
-      <div class="player"><button class="play" data-play="A" aria-label="Play"></button><div class="track"><b id="trA"></b></div><span class="time" id="tmA"></span></div>
+      <div class="player"><button class="play" data-play="A" aria-label="Play" data-aria="play"></button><div class="track"><b id="trA"></b></div><span class="time" id="tmA"></span></div>
       <button class="cta light" data-go="s3"><span data-t="seeB"></span><span class="arr"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>
     </div>
   </section>
@@ -75,16 +75,16 @@
     <div class="top pad">
       <div class="bars"><i><b style="width:100%"></b></i><i><b id="progB"></b></i></div>
       <div class="row">
-        <button class="round" data-go="s2" aria-label="Back" style="background:rgba(70,62,50,.7)"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button>
+        <button class="round" data-go="s2" aria-label="Back" data-aria="back" style="background:rgba(70,62,50,.7)"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button>
         <div class="chip" style="background:rgba(70,62,50,.7)"><span class="av" data-avatar="happy"></span><span style="min-width:0"><b data-t="pathB"></b><span data-scanlabel></span></span></div>
-        <button class="round" data-share aria-label="Share" style="background:rgba(70,62,50,.7)"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4M7 9l5-5 5 5M5 20h14"/></svg></button>
+        <button class="round" data-share aria-label="Share" data-aria="share" style="background:rgba(70,62,50,.7)"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4M7 9l5-5 5 5M5 20h14"/></svg></button>
       </div>
     </div>
     <div class="scene" id="sceneB"></div>
     <div class="dlg pad">
       <div class="who" id="whoB"></div>
       <p class="line sub" id="subB"></p>
-      <div class="player"><button class="play" data-play="B" aria-label="Play"></button><div class="track"><b id="trB"></b></div><span class="time" id="tmB"></span></div>
+      <div class="player"><button class="play" data-play="B" aria-label="Play" data-aria="play"></button><div class="track"><b id="trB"></b></div><span class="time" id="tmB"></span></div>
       <button class="cta lime" id="chooseB"><span data-t="chooseB"></span><span class="arr"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>
       <div class="again"><button class="link" data-go="s2" data-t="watchA"></button></div>
     </div>
@@ -105,7 +105,7 @@
 
   <!-- 5 Detail -->
   <section class="screen s5 pad" id="s5" hidden>
-    <div class="topbar"><button class="round" id="detailBack" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button></div>
+    <div class="topbar"><button class="round" id="detailBack" aria-label="Back" data-aria="back"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button></div>
     <div><h2 class="t" id="dName"></h2><p class="sub" id="dWhen"></p></div>
     <div class="facts">
       <div class="fact"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg><div><b id="dPlace"></b><span id="dDist"></span></div></div>
@@ -164,7 +164,7 @@
       <div class="tab" id="tab-avatar" hidden>
         <div class="tabhead pad"><div class="eyebrow" data-t="youAt75"></div><h2 class="t" id="avTitle"></h2></div>
         <div id="geoBanner" class="pad" hidden style="padding-top:8px"></div>
-        <div style="padding-top:12px"><div class="avstage" id="avStage" role="button" tabindex="0" aria-label="Avatar"></div></div>
+        <div style="padding-top:12px"><div class="avstage" id="avStage" role="button" tabindex="0" aria-label="Avatar" data-aria="avatar"></div></div>
         <div class="stack pad" style="padding-top:16px">
           <div class="card score"><div class="ring" id="ring"></div><div style="min-width:0"><span class="lvl" id="lvl"></span><div class="muted" id="lvlText" style="line-height:1.45"></div></div></div>
           <div class="card goalcard" id="goalCard"></div>
@@ -216,7 +216,7 @@
         <div class="stack pad" style="padding-top:14px" id="settingsBody"></div>
       </div>
     </div>
-    <nav class="nav" aria-label="Main">
+    <nav class="nav" aria-label="Main" data-aria="main">
       <button data-tab="explore"><span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg></span><span data-t="explore"></span></button>
       <button data-tab="avatar"><span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="9" r="5"/><path d="M4 21c1.5-3.8 4.5-5.5 8-5.5s6.5 1.7 8 5.5"/><path d="M10 9h.01M14 9h.01"/></svg></span><span data-t="avatar"></span></button>
       <button data-tab="map" class="mid"><span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg></span><span data-t="map"></span></button>
@@ -225,39 +225,41 @@
     </nav>
   </section>
 
-  <div class="scanov" id="scanOv" hidden><div class="scanbody pad" id="scanBody" role="dialog" aria-modal="true" aria-label="Face scan"></div></div>
-  <div class="overlay" id="trSheet" hidden><div class="panel pad" role="dialog" aria-modal="true" aria-label="Connect tracker" id="trBody"></div></div>
-  <div class="overlay" id="setSheet" hidden><div class="panel pad" role="dialog" aria-modal="true" aria-label="Settings" id="setSheetBody"></div></div>
-  <div class="toast" id="toast" role="status" hidden></div>
+  <div class="scanov" id="scanOv" hidden><div class="scanbody pad" id="scanBody" role="dialog" aria-modal="true" aria-label="Face scan" data-aria="faceScan"></div></div>
+  <div class="overlay" id="trSheet" hidden><div class="panel pad" role="dialog" aria-modal="true" aria-label="Connect tracker" data-aria="tracker" id="trBody"></div></div>
+  <div class="overlay" id="setSheet" hidden><div class="panel pad" role="dialog" aria-modal="true" aria-label="Settings" data-aria="settings" id="setSheetBody"></div></div>
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 </div>
 
-<script src="js/i18n.js?v=8e00c29"></script>
-<script src="js/icons.js?v=8e00c29"></script>
-<script src="js/data.js?v=8e00c29"></script>
-<script src="js/tracker.js?v=8e00c29"></script>
-<script src="js/state.js?v=8e00c29"></script>
-<script src="js/drawing.js?v=8e00c29"></script>
-<script src="js/story/audio-manifest.js?v=8e00c29"></script>
-<script src="js/story/helpers.js?v=8e00c29"></script>
-<script src="js/story/lines.js?v=8e00c29"></script>
-<script src="js/story/characters.js?v=8e00c29"></script>
-<script src="js/story/props.js?v=8e00c29"></script>
-<script src="js/story/backgrounds.js?v=8e00c29"></script>
-<script src="js/story/camera.js?v=8e00c29"></script>
-<script src="js/story/shots.js?v=8e00c29"></script>
-<script src="js/story/audio.js?v=8e00c29"></script>
-<script src="js/story/player.js?v=8e00c29"></script>
-<script src="js/scan.js?v=8e00c29"></script>
-<script src="js/score.js?v=8e00c29"></script>
-<script src="js/points.js?v=8e00c29"></script>
-<script src="js/avatar.js?v=8e00c29"></script>
-<script src="js/feed.js?v=8e00c29"></script>
-<script src="js/stories.js?v=8e00c29"></script>
-<script src="js/geo.js?v=8e00c29"></script>
-<script src="js/render.js?v=8e00c29"></script>
-<script src="js/community.js?v=8e00c29"></script>
-<script src="js/account.js?v=8e00c29"></script>
-<script src="js/navigation.js?v=8e00c29"></script>
-<script src="js/main.js?v=8e00c29"></script>
+<script src="js/i18n.js?v=770b4f5"></script>
+<script src="js/icons.js?v=770b4f5"></script>
+<script src="js/data.js?v=770b4f5"></script>
+<script src="js/tracker.js?v=770b4f5"></script>
+<script src="js/healthimport.js?v=770b4f5"></script>
+<script src="js/state.js?v=770b4f5"></script>
+<script src="js/drawing.js?v=770b4f5"></script>
+<script src="js/story/audio-manifest.js?v=770b4f5"></script>
+<script src="js/story/helpers.js?v=770b4f5"></script>
+<script src="js/story/lines.js?v=770b4f5"></script>
+<script src="js/story/characters.js?v=770b4f5"></script>
+<script src="js/story/props.js?v=770b4f5"></script>
+<script src="js/story/backgrounds.js?v=770b4f5"></script>
+<script src="js/story/camera.js?v=770b4f5"></script>
+<script src="js/story/shots.js?v=770b4f5"></script>
+<script src="js/story/audio.js?v=770b4f5"></script>
+<script src="js/story/player.js?v=770b4f5"></script>
+<script src="js/facedetect.js?v=770b4f5"></script>
+<script src="js/scan.js?v=770b4f5"></script>
+<script src="js/score.js?v=770b4f5"></script>
+<script src="js/points.js?v=770b4f5"></script>
+<script src="js/avatar.js?v=770b4f5"></script>
+<script src="js/feed.js?v=770b4f5"></script>
+<script src="js/stories.js?v=770b4f5"></script>
+<script src="js/geo.js?v=770b4f5"></script>
+<script src="js/render.js?v=770b4f5"></script>
+<script src="js/community.js?v=770b4f5"></script>
+<script src="js/account.js?v=770b4f5"></script>
+<script src="js/navigation.js?v=770b4f5"></script>
+<script src="js/main.js?v=770b4f5"></script>
 </body>
 </html>

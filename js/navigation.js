@@ -103,8 +103,16 @@ $("#setSheet").onclick = e => { if (e.target.id === "setSheet")
 $("#showPaths").onclick = () => go("s2");
 $("#noPhoto").onclick = () => { S.scanned = false; renderText(); go("s2"); };
 $("#scanBtn").onclick = () => scanOpen();
-$("#chooseB").onclick = () => { go("s4"); if (!me)
+const findGroup = () => { go("s4"); if (!me)
   askLocation(); };
+$("#chooseB").onclick = findGroup;
+document.addEventListener("click", e => {
+  if (e.target.closest("[data-findgroup]"))
+    findGroup();
+  const r = e.target.closest("[data-replay]");
+  if (r)
+    startPath(r.dataset.replay);
+});
 $("#aplus").onclick = () => { S.size = S.size >= 20 ? 16 : S.size + 2; applySize(); save(); renderText(); };
 function applySize() { document.documentElement.style.setProperty("--fs", S.size + "px"); }
 $("#detailBack").onclick = () => { if (S.onboarded)

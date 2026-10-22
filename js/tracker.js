@@ -3,7 +3,8 @@ const TRACKERS = ["Apple Health", "Health Connect", "Garmin", "Fitbit", "Withing
 const TRCOL = { "Apple Health": "#E8475B", "Health Connect": "#3A7BD5", "Garmin": "#1B1B1B", "Fitbit": "#00B0B9", "Withings": "#4A5A6A" };
 const TL = (en, de) => S.lang === "de" ? de : en;
 function stepsOn(d) { const k = d.getDate() * 7919 + d.getMonth() * 131 + d.getDay() * 977; return 3100 + (k % 7400); }
-function week() { const out = []; for (let i = 6; i >= 0; i--) {
+function week() { if (S.health)
+  return healthWeek(); const out = []; for (let i = 6; i >= 0; i--) {
   const d = new Date();
   d.setDate(d.getDate() - i);
   out.push([d, i === 0 ? steps() : stepsOn(d)]);
@@ -16,12 +17,12 @@ function barsHtml() {
 function trackerCard() {
   if (S.tracker) {
     const ago = S.trSync ? Math.max(0, Math.round((Date.now() - new Date(S.trSync)) / 60000)) : 0;
-    return `<div class="card"><div class="trhead"><span class="trlogo" style="background:${TRCOL[S.tracker] || "#333"}">${S.tracker[0]}</span><div style="flex:1;min-width:0"><b>${S.tracker}</b> <span class="demo">DEMO</span><p class="hint">${TL("Connected", "Verbunden")} · ${TL("last sync", "zuletzt synchronisiert")} ${ago < 1 ? TL("just now", "gerade eben") : ago + " min"}</p></div></div>
-  <p style="margin:14px 0 0;font-weight:700">${steps().toLocaleString(S.lang)} ${TL("steps today", "Schritte heute")}</p>${barsHtml()}
+    return `<div class="card"><div class="trhead"><span class="trlogo" style="background:${TRCOL[S.tracker] || "#333"}">${S.tracker[0]}</span><div style="flex:1;min-width:0"><b>${S.tracker}</b> ${S.health ? `<span class="realtag">${t("health").real}</span>` : `<span class="demo">DEMO</span>`}<p class="hint">${TL("Connected", "Verbunden")} · ${TL("last sync", "zuletzt synchronisiert")} ${ago < 1 ? TL("just now", "gerade eben") : ago + " min"}</p></div></div>
+  <p style="margin:14px 0 0;font-weight:700">${steps().toLocaleString(S.lang)} ${S.health ? t("health").avg : TL("steps today", "Schritte heute")}</p>${S.health ? `<p class="hint" style="margin:2px 0 0">${t("health").from(new Date(S.health.at).toLocaleDateString(S.lang === "de" ? "de-DE" : "en-GB"))}</p>` : ""}${barsHtml()}
   <p class="hint" style="margin-top:10px">${TL("Days over 6,000 steps make your future self stronger.", "Tage über 6.000 Schritten machen dein Zukunfts-Ich stärker.")}</p>
-  <div style="display:flex;gap:10px;margin-top:14px"><button class="btn small dark" data-trsync>${TL("Sync now", "Jetzt synchronisieren")}</button><button class="btn small out" data-trdis>${TL("Disconnect", "Trennen")}</button></div></div>`;
+  <div style="display:flex;gap:10px;margin-top:14px">${S.health ? "" : `<button class="btn small dark" data-trsync>${TL("Sync now", "Jetzt synchronisieren")}</button>`}<button class="btn small out" data-trdis>${TL("Disconnect", "Trennen")}</button></div></div>${S.health ? healthImportCard() : ""}`;
   }
-  return `<p class="hint">${t("trackerD")}</p><div class="card" style="padding:8px 16px">${TRACKERS.map(n => `<button class="perm" data-tr="${n}" style="width:100%;text-align:left"><span class="trlogo" style="background:${TRCOL[n]};width:40px;height:40px;border-radius:12px;font-size:1rem">${n[0]}</span><span><b>${n}</b><small>${n === "Apple Health" ? "iPhone, Apple Watch" : n === "Health Connect" ? "Android, Samsung, Google" : n === "Garmin" ? "Garmin watches" : n === "Fitbit" ? "Fitbit, Pixel Watch" : "Withings watches & scales"}</small></span><span aria-hidden="true">›</span></button>`).join("")}</div>`;
+  return `<p class="hint">${t("trackerD")}</p><div class="card" style="padding:8px 16px">${TRACKERS.map(n => `<button class="perm" data-tr="${n}" style="width:100%;text-align:left"><span class="trlogo" style="background:${TRCOL[n]};width:40px;height:40px;border-radius:12px;font-size:1rem">${n[0]}</span><span><b>${n}</b><small>${n === "Apple Health" ? "iPhone, Apple Watch" : n === "Health Connect" ? "Android, Samsung, Google" : n === "Garmin" ? "Garmin watches" : n === "Fitbit" ? "Fitbit, Pixel Watch" : "Withings watches & scales"}</small></span><span aria-hidden="true">›</span></button>`).join("")}</div>${healthImportCard()}`;
 }
 let TRF = {};
 function openTracker(name, resync) { TRF = { name, step: resync ? 2 : 1, perm: S.trPerm || { steps: true, active: true, hr: false, sleep: false } }; $("#trSheet").hidden = false; trStep(); }

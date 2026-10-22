@@ -179,3 +179,41 @@
   margin:0;
 }
 
+
+/* Apple Health import */
+.hicard {
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  margin-top:12px;
+}
+
+.hicard .filebtn {
+  align-self:flex-start;
+  cursor:pointer;
+}
+
+.hiprog {
+  height:8px;
+  border-radius:4px;
+  background:var(--line);
+  overflow:hidden;
+}
+
+.hiprog i {
+  display:block;
+  height:100%;
+  width:0;
+  background:var(--green);
+  transition:width .2s;
+}
+
+.realtag {
+  font-size:.7rem;
+  font-weight:800;
+  letter-spacing:.05em;
+  background:var(--green-soft);
+  color:var(--green);
+  padding:2px 8px;
+  border-radius:8px;
+}

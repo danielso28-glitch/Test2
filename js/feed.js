@@ -135,7 +135,7 @@ function renderExplore() {
     const media = f.kind === "video" ? `<a class="vid" href="${url}" target="_blank" rel="noopener" aria-label="${t("watch")}"><svg viewBox="0 0 56 56"><circle cx="28" cy="28" r="28" fill="#fff"/><path d="M23 18l15 10-15 10z" fill="#12201B"/></svg></a>` : "";
     const btn = url ? `<a class="open" href="${url}" target="_blank" rel="noopener">${f.kind === "video" ? t("watch") : t("openSrc")}${ICON.ext}</a>` : "";
     const why = S.exCat === "all" && f.why ? `<span class="why">${esc(f.why)}</span>` : "";
-    return `<article class="post" style="background:${f.sc}">${why}<div class="src"><i>${esc(f.src.slice(0, 3).toUpperCase())}</i><span>${esc(f.src)}</span><span class="kind">${t("kinds")[f.kind]}</span></div>${media}<h3>${esc(h)}</h3><p>${esc(p)}</p><div class="foot">${btn}${f.min ? `<span class="muted" style="font-size:.85rem">${t("read")(f.min)}</span>` : ""}<button class="like" data-like="${f.k}" aria-pressed="${liked}" aria-label="Like">${ICON.heart}</button></div></article>`;
+    return `<article class="post" style="background:${f.sc}">${why}<div class="src"><i>${esc(f.src.slice(0, 3).toUpperCase())}</i><span>${esc(f.src)}</span><span class="kind">${t("kinds")[f.kind]}</span></div>${media}<h3>${esc(h)}</h3><p>${esc(p)}</p><div class="foot">${btn}${f.min ? `<span class="muted" style="font-size:.85rem">${t("read")(f.min)}</span>` : ""}<button class="like" data-like="${f.k}" aria-pressed="${liked}" aria-label="${t("aria").like}">${ICON.heart}</button></div></article>`;
   }).join("");
   $$("[data-like]").forEach(b => b.onclick = () => { const k = b.dataset.like; S.liked = S.liked.includes(k) ? S.liked.filter(x => x !== k) : [...S.liked, k]; save(); b.setAttribute("aria-pressed", S.liked.includes(k)); });
 }

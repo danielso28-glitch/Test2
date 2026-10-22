@@ -4,6 +4,7 @@ function renderText() {
   document.documentElement.lang = S.lang;
   $$("[data-t]").forEach(el => { const v = t(el.dataset.t); if (typeof v === "string")
     el.textContent = v; });
+  $$("[data-aria]").forEach(el => el.setAttribute("aria-label", t("aria")[el.dataset.aria]));
   $$("[data-radius]").forEach(el => { el.innerHTML = radiusOpts(); el.setAttribute("aria-label", t("radiusL")); });
   S.scanned = !!S.face;
   $$("[data-scanlabel]").forEach(el => el.textContent = S.scanned ? t("fromScan") : t("noScan"));
@@ -170,7 +171,7 @@ function renderSettings(box, sheet) {
   box.querySelectorAll("[data-tr]").forEach(b => b.onclick = () => openTracker(b.dataset.tr));
   const td = box.querySelector("[data-trdis]");
   if (td)
-    td.onclick = () => { S.tracker = null; S.trSync = null; save(); renderText(); toast(TL("Disconnected. Your data was removed from this phone.", "Getrennt. Deine Daten wurden vom Handy gelöscht.")); };
+    td.onclick = () => { S.tracker = null; S.trSync = null; S.health = null; save(); renderText(); toast(TL("Disconnected. Your data was removed from this phone.", "Getrennt. Deine Daten wurden vom Handy gelöscht.")); };
   const tsy = box.querySelector("[data-trsync]");
   if (tsy)
     tsy.onclick = () => openTracker(S.tracker, true);
@@ -178,6 +179,7 @@ function renderSettings(box, sheet) {
   if (cs)
     cs.onclick = () => $("#setSheet").hidden = true;
   bindFeedback(box);
+  bindHealthImport(box);
   const rs = box.querySelector("[data-restart]");
   if (rs)
     rs.onclick = () => go("s1");

@@ -12,15 +12,15 @@ const scanHas = () => !!(navigator.mediaDevices && navigator.mediaDevices.getUse
 function scanIntro(msg) {
   const b = $("#scanBody");
   b.innerHTML = `<button class="round scx" data-scan-close aria-label="${TL("Close", "Schließen")}">✕</button>
- <div class="scanhero"><svg viewBox="0 0 200 220" width="170"><ellipse cx="100" cy="110" rx="74" ry="92" fill="none" stroke="#C8F06A" stroke-width="6" stroke-dasharray="14 10"/><circle cx="76" cy="98" r="6" fill="#fff"/><circle cx="124" cy="98" r="6" fill="#fff"/><path d="M76 146q24 18 48 0" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="round"/></svg></div>
+ <div class="scanhero"><svg viewBox="0 0 200 220" width="170"><g class="herotick">${ovalTicks(100, 110, 74, 92, 9)}</g><circle cx="76" cy="98" r="6" fill="#fff"/><circle cx="124" cy="98" r="6" fill="#fff"/><path d="M76 146q24 18 48 0" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="round"/></svg></div>
  <h2>${TL("Let's meet your future self", "Lerne dein Zukunfts-Ich kennen")}</h2>
- <p class="scanp">${TL("Look straight into the camera. We take one photo and two short head turns – like setting up Face ID. Takes about 20 seconds.", "Schau gerade in die Kamera. Wir machen ein Foto und zwei kurze Kopfdrehungen – wie beim Einrichten von Face ID. Dauert ca. 20 Sekunden.")}</p>
+ <p class="scanp">${TL("Look straight into the camera and hold still for two seconds. The app finds your face and takes the photo by itself.", "Schau gerade in die Kamera und halt zwei Sekunden still. Die App findet dein Gesicht und macht das Foto von selbst.")}</p>
  <p class="scanp small">🔒 ${TL("Your photo stays on this phone. No upload, no server. You can delete it any time in Settings.", "Dein Foto bleibt auf diesem Handy. Kein Upload, kein Server. Du kannst es jederzeit in den Einstellungen löschen.")}</p>
  ${msg ? `<p class="scanmsg">${msg}</p>` : ""}
  ${scanHas() && !msg ? `<button class="btn lime" data-scan-cam>${TL("Start the scan", "Scan starten")}</button>` : ""}
  <label class="btn ${scanHas() && !msg ? "ghost" : "lime"} filebtn">${TL("Take or choose a photo", "Foto aufnehmen oder auswählen")}<input type="file" accept="image/*" capture="user" id="scanFile" hidden></label>`;
   $("#scanFile").onchange = e => { const f = e.target.files && e.target.files[0]; if (!f)
-    return; const r = new FileReader(); r.onload = () => { const im = new Image(); im.onload = () => { SC.img = im; scanAdjust(); }; im.src = r.result; }; r.readAsDataURL(f); };
+    return; const r = new FileReader(); r.onload = () => { const im = new Image(); im.onload = () => { SC.img = im; Promise.race([detectFace(im).catch(() => null), new Promise(ok => setTimeout(ok, 5000))]).then(b => { SC.box = b && !b.none ? b : null; scanAdjust(); }); }; im.src = r.result; }; r.readAsDataURL(f); };
 }
 /* Face-ID style progress: short radial dashes around the face oval, lit clockwise from the top */
 const SCAN_TICKS = 72;
@@ -40,8 +40,7 @@ async function scanCam() {
  <div class="camwrap"><video id="scanVid" playsinline autoplay muted></video>
  <svg class="cammask" viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice"><defs><mask id="hole"><rect width="300" height="400" fill="#fff"/><ellipse cx="150" cy="190" rx="100" ry="128" fill="#000"/></mask></defs><rect width="300" height="400" fill="rgba(10,18,15,.72)" mask="url(#hole)"/><ellipse cx="150" cy="190" rx="104" ry="132" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="1.5"/><g id="scanRing">${scanTicks()}</g><g class="scdone"><circle cx="150" cy="190" r="34" fill="#C8F06A"/><path d="M135 191l10 10 20-21" fill="none" stroke="#12201B" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></g></svg>
  <div class="camhint" id="scanHint">${TL("Starting camera…", "Kamera startet…")}</div>
- <div class="camstep" id="scanStep"></div></div>
- <button class="btn ghost" id="scanSkip" hidden>${TL("Skip head turns", "Kopfdrehungen überspringen")}</button>`;
+ <div class="camstep" id="scanStep"></div></div>`;
   try {
     SC.stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user", width: { ideal: 960 }, height: { ideal: 1280 } }, audio: false });
   }
@@ -59,17 +58,20 @@ async function scanCam() {
   cv.width = 40;
   cv.height = 52;
   const cx = cv.getContext("2d", { willReadFrequently: true });
-  let prev = null, steady = 0, phase = 0, turn = 0;
+  let prev = null, steady = 0, busy = false, lastBox = null;
+  const NEED = 10;
   const ring = p => { const r = $("#scanRing"); if (!r)
     return; const n = Math.round(p * SCAN_TICKS); r.querySelectorAll("path").forEach((t, i) => t.classList.toggle("on", i < n)); r.closest("svg").classList.toggle("done", p >= 1); };
   const hint = s => { const h = $("#scanHint"); if (h && h.textContent !== s)
     h.textContent = s; };
   const step = s => { const h = $("#scanStep"); if (h)
     h.textContent = s; };
-  step(TL("Step 1 of 3 · Front", "Schritt 1 von 3 · Vorne"));
-  SC.timer = setInterval(() => {
-    if (!v.videoWidth)
+  step(TL("Look straight into the camera", "Schau gerade in die Kamera"));
+  faceDetector();
+  SC.timer = setInterval(async () => {
+    if (!v.videoWidth || busy)
       return;
+    busy = true;
     const vw = v.videoWidth, vh = v.videoHeight;
     cx.drawImage(v, vw * .25, vh * .18, vw * .5, vh * .6, 0, 0, 40, 52);
     const d = cx.getImageData(0, 0, 40, 52).data;
@@ -84,51 +86,54 @@ async function scanCam() {
     lum /= g.length;
     diff = prev ? diff / g.length : 99;
     prev = g;
-    if (phase === 0) {
-      if (lum < 55) {
-        hint(TL("More light, please", "Bitte mehr Licht"));
-        steady = Math.max(0, steady - 2);
-      }
-      else if (diff > 9) {
-        hint(TL("Hold still…", "Halt still…"));
-        steady = Math.max(0, steady - 1);
-      }
-      else {
-        hint(TL("Perfect – stay like this", "Perfekt – so bleiben"));
-        steady++;
-      }
-      ring(Math.min(1, steady / 8) / 3);
-      if (steady >= 8) {
-        scanGrab(v);
-        phase = 1;
-        turn = 0;
-        const sk = $("#scanSkip");
-        if (sk) {
-          sk.hidden = false;
-          sk.onclick = () => { scanStopCam(); scanAdjust(); };
-        }
-        step(TL("Step 2 of 3 · Turn left", "Schritt 2 von 3 · Nach links drehen"));
-      }
+    /* face position on screen: the video is mirrored and cropped to 3:4 (object-fit: cover) */
+    const box = await detectFace(v).catch(() => null);
+    let ok = true;
+    if (lum < 55) {
+      hint(TL("More light, please", "Bitte mehr Licht"));
+      ok = false;
     }
-    else {
-      turn += diff > 2.5 ? 1.4 : .6;
-      const need = 10, p = Math.min(1, turn / need);
-      hint(phase === 1 ? TL("Slowly turn your head to the left…", "Dreh den Kopf langsam nach links…") : TL("…and slowly to the right", "…und langsam nach rechts"));
-      ring((1 + (phase - 1) + p) / 3);
-      if (p >= 1) {
-        if (phase === 1) {
-          phase = 2;
-          turn = 0;
-          step(TL("Step 3 of 3 · Turn right", "Schritt 3 von 3 · Nach rechts drehen"));
-        }
-        else {
-          ring(1);
-          hint(TL("Done!", "Fertig!"));
-          clearInterval(SC.timer);
-          setTimeout(() => { scanStopCam(); scanAdjust(); }, 500);
-        }
-      }
+    else if (box && box.none) {
+      hint(TL("Put your face in the oval", "Halte dein Gesicht ins Oval"));
+      ok = false;
     }
+    else if (box) {
+      const ar = vw / vh, fx = Math.min(1, .75 / ar), fy = Math.min(1, ar / .75);
+      const cxd = (1 - box.x - box.w / 2 - (1 - fx) / 2) / fx, cyd = (box.y + box.h / 2 - (1 - fy) / 2) / fy, hd = box.h / fy;
+      if (hd < .3) {
+        hint(TL("Come a little closer", "Komm etwas näher"));
+        ok = false;
+      }
+      else if (hd > .62) {
+        hint(TL("A little further away", "Etwas weiter weg"));
+        ok = false;
+      }
+      else if (Math.abs(cxd - .5) > .12 || Math.abs(cyd - .475) > .13) {
+        hint(TL("Move your face into the oval", "Schieb dein Gesicht ins Oval"));
+        ok = false;
+      }
+      else
+        lastBox = { x: 1 - box.x - box.w, y: box.y, w: box.w, h: box.h }; /* in the mirrored photo */
+    }
+    if (ok && diff > 9) {
+      hint(TL("Hold still…", "Halt still…"));
+      ok = false;
+    }
+    if (ok) {
+      hint(TL("Perfect – stay like this", "Perfekt – so bleiben"));
+      steady++;
+    }
+    else
+      steady = Math.max(0, steady - 2);
+    ring(Math.min(1, steady / NEED));
+    if (steady >= NEED) {
+      clearInterval(SC.timer);
+      scanGrab(v);
+      SC.box = lastBox;
+      hint(TL("Done!", "Fertig!"));
+      setTimeout(() => { scanStopCam(); scanAdjust(); }, 700);
+    }
+    busy = false;
   }, 200);
 }
 function scanGrab(v) {
@@ -153,10 +158,13 @@ function scanAdjust() {
   SC.zoom = SC.fromCam ? 1.55 : 1.2;
   SC.dx = 0;
   SC.dy = SC.fromCam ? -.04 : 0;
+  if (SC.box)
+    Object.assign(SC, autoCrop(SC.box, SC.img));
+  SC.box = null;
   SC.fromCam = false;
   b.innerHTML = `<h2>${TL("Fit your face in the oval", "Passe dein Gesicht ins Oval ein")}</h2><p class="scanp">${TL("Drag to move, use the slider to zoom. Eyebrows to chin should fill the oval.", "Ziehen zum Verschieben, Regler zum Zoomen. Von den Augenbrauen bis zum Kinn sollte das Oval gefüllt sein.")}</p>
  <div class="adjwrap"><canvas id="adjCv" width="300" height="352"></canvas><svg viewBox="0 0 300 352" class="adjguide" aria-hidden="true"><defs><mask id="adjHole"><rect width="300" height="352" fill="#fff"/><ellipse cx="150" cy="176" rx="120" ry="141" fill="#000"/></mask></defs><rect width="300" height="352" fill="rgba(10,18,15,.62)" mask="url(#adjHole)"/><ellipse cx="150" cy="176" rx="120" ry="141" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.5"/><g class="adjticks">${ovalTicks(150, 176, 126, 147, 10)}</g></svg></div>
- <input type="range" id="adjZoom" min="1" max="3.5" step=".01" value="${SC.zoom}" aria-label="Zoom">
+ <input type="range" id="adjZoom" min="1" max="3.5" step=".01" value="${SC.zoom}" aria-label="${t("aria").zoom}">
  <button class="btn lime" id="adjOk">${TL("Looks good", "Passt so")}</button><button class="btn ghost" id="adjRedo">${TL("Try again", "Nochmal")}</button>`;
   const cv = $("#adjCv"), x = cv.getContext("2d");
   const draw = () => {

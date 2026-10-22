@@ -22,24 +22,41 @@ function stopPath() {
   if (ACX && ACX.state === "suspended")
     ACX.resume().catch(() => { });
   play = null;
-  $(`[data-play="${st.k}"]`).innerHTML = PLAY;
+  setPlayBtn(st.k, false);
   const bp = $("#scene" + st.k + " .bigplay");
   if (bp)
     bp.hidden = false;
 }
+function setPlayBtn(k, playing) { const b = $(`[data-play="${k}"]`); if (!b)
+  return; b.innerHTML = playing ? PAUSE : PLAY; b.setAttribute("aria-label", t("aria")[playing ? "pause" : "play"]); }
+/* end of a video: next step right on the picture */
+function showEndCard(k) {
+  const sc = $("#scene" + k), E = t("endCard");
+  hideEndCard(k);
+  const btn = (cls, attr, label) => `<button class="btn ${cls}" ${attr}>${label}</button>`;
+  sc.insertAdjacentHTML("beforeend", `<div class="endcard" role="group" aria-label="${E.title[k]}"><b>${E.title[k]}</b>
+   ${k === "B" ? btn("lime", "data-findgroup", E.find) + btn("ghost", `data-replay="${k}"`, E.again) : btn("lime", 'data-go="s3"', E.seeB) + btn("ghost", "data-findgroup", E.find)}</div>`);
+  const bp = sc.querySelector(".bigplay");
+  if (bp)
+    bp.hidden = true;
+  sc.querySelector(".endcard .btn").focus({ preventScroll: true });
+}
+function hideEndCard(k) { const e = $("#scene" + k + " .endcard"); if (e)
+  e.remove(); }
 function renderStill(k) {
   const tl = buildStory(STORY_OF[k]);
   const sc = $("#scene" + k);
   if (!sc)
     return;
   if (!sc.querySelector(".bigplay"))
-    sc.insertAdjacentHTML("beforeend", `<button class="bigplay" data-play-big="${k}" aria-label="${t("tapPlay")}">${PLAY}</button>`);
+    sc.insertAdjacentHTML("beforeend", `<button class="bigplay" data-play-big="${k}">${PLAY}</button>`);
+  sc.querySelector(".bigplay").setAttribute("aria-label", t("tapPlay"));
   const sh = tl.shots.find(s => s.id.endsWith("8"));
   drawAt(k, tl, sh.start + sh.dur * .5);
   $("#who" + k).textContent = (S.lang === "de" ? "Deine Geschichte" : "Your story") + " · " + `${Math.floor(tl.total / 60)}:${String(Math.round(tl.total % 60)).padStart(2, "0")}`;
   $("#sub" + k).textContent = S.lang === "de" ? "Tippe auf Play – mit Stimmen und Untertiteln." : "Tap play – with voices and subtitles.";
   $("#sub" + k).classList.add("lit");
-  $(`[data-play="${k}"]`).innerHTML = PLAY;
+  setPlayBtn(k, false);
   preloadStory(STORY_OF[k]);
 }
 function startPath(k) {
@@ -54,7 +71,7 @@ function startPath(k) {
       catch (e) { }
       ;
       play.p0 = performance.now() - play.pt * 1000;
-      $(`[data-play="${k}"]`).innerHTML = PAUSE;
+      setPlayBtn(k, true);
     }
     else {
       play.paused = true;
@@ -66,11 +83,12 @@ function startPath(k) {
       }
       catch (e) { }
       ;
-      $(`[data-play="${k}"]`).innerHTML = PLAY;
+      setPlayBtn(k, false);
     }
     return;
   }
   stopPath();
+  hideEndCard(k);
   const tl = buildStory(STORY_OF[k]);
   const c = actx();
   if (c && c.state !== "running")
@@ -84,7 +102,7 @@ function startPath(k) {
   catch (e) { }
   const st = { k, tl, stop: false, paused: false, srcs: [], spoken: new Set(), p0: performance.now() };
   play = st;
-  $(`[data-play="${k}"]`).innerHTML = PAUSE;
+  setPlayBtn(k, true);
   const bp = $("#scene" + k + " .bigplay");
   if (bp)
     bp.hidden = true;
@@ -124,11 +142,12 @@ function startPath(k) {
       }
       if (T >= tl.total) {
         play = null;
-        $(`[data-play="${k}"]`).innerHTML = PLAY;
+        setPlayBtn(k, false);
         const b = $("#scene" + k + " .bigplay");
         if (b)
           b.hidden = false;
         $("#who" + k).textContent = S.lang === "de" ? "Ende" : "The end";
+        showEndCard(k);
         return;
       }
       st.raf = requestAnimationFrame(loop);

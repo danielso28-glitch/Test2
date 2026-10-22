@@ -34,6 +34,42 @@ function decodeClip(id) {
 }
 function preloadStory(kind) { const tl = buildStory(kind); tl.lines.forEach(l => l.clip && decodeClip(l.clip)); }
 function note(c, dest, t, f, d, g, type = "sine") { const o = c.createOscillator(), a = c.createGain(); o.type = type; o.frequency.value = f; a.gain.setValueAtTime(0, t); a.gain.linearRampToValueAtTime(g, t + .02); a.gain.exponentialRampToValueAtTime(.0001, t + d); o.connect(a); a.connect(dest); o.start(t); o.stop(t + d + .05); }
+/* synthesized sound effects – no audio files needed */
+function noiseBuf(c) {
+  if (noiseBuf.c !== c) {
+    const b = c.createBuffer(1, c.sampleRate * .6, c.sampleRate), d = b.getChannelData(0);
+    for (let i = 0; i < d.length; i++)
+      d[i] = Math.random() * 2 - 1;
+    noiseBuf.c = c;
+    noiseBuf.b = b;
+  }
+  return noiseBuf.b;
+}
+function thump(c, dest, t, freq, dur, g) {
+  const s = c.createBufferSource(), f = c.createBiquadFilter(), a = c.createGain();
+  s.buffer = noiseBuf(c);
+  f.type = "lowpass";
+  f.frequency.value = freq;
+  a.gain.setValueAtTime(g, t);
+  a.gain.exponentialRampToValueAtTime(.0001, t + dur);
+  s.connect(f);
+  f.connect(a);
+  a.connect(dest);
+  s.start(t);
+  s.stop(t + dur + .05);
+}
+function chirp(c, dest, t, f0, f1, dur, g) {
+  const o = c.createOscillator(), a = c.createGain();
+  o.frequency.setValueAtTime(f0, t);
+  o.frequency.exponentialRampToValueAtTime(f1, t + dur);
+  a.gain.setValueAtTime(0, t);
+  a.gain.linearRampToValueAtTime(g, t + .01);
+  a.gain.exponentialRampToValueAtTime(.0001, t + dur);
+  o.connect(a);
+  a.connect(dest);
+  o.start(t);
+  o.stop(t + dur + .02);
+}
 function scheduleMusic(c, dest, t0, tl) {
   const hz = m => 440 * Math.pow(2, (m - 69) / 12);
   const good = tl.kind === "good";
@@ -63,6 +99,22 @@ function scheduleMusic(c, dest, t0, tl) {
     if (k === "hang") {
       note(c, dest, t, 480, .18, .06, "square");
       note(c, dest, t + .25, 480, .18, .06, "square");
+    }
+    if (k === "steps") /* footsteps every ~0.5 s for the whole shot */
+      for (let j = 0, n = 0; j < s.dur - at - .2; j += .52, n++)
+        thump(c, dest, t + j, n % 2 ? 420 : 340, .09, .1);
+    if (k === "birds") /* little groups of chirps at irregular times */
+      for (let j = 0, n = 1; j < s.dur - at - .3; j += .6 + ((n * .618) % 1) * .9, n++)
+        for (let r = 0; r < 2 + (n % 2); r++)
+          chirp(c, dest, t + j + r * .11, 2700 + (n % 3) * 300, 3700 + (n % 2) * 400, .07, .022);
+    if (k === "door") { /* car door: latch click + deep thud */
+      thump(c, dest, t, 2600, .03, .06);
+      thump(c, dest, t + .02, 150, .35, .45);
+      note(c, dest, t + .02, 68, .25, .12);
+    }
+    if (k === "ding") { /* lift bell */
+      note(c, dest, t, 1318, 1.1, .09);
+      note(c, dest, t, 2637, .6, .02);
     }
     if (k === "tick") {
       for (let j = 0; j < s.dur; j += 1)

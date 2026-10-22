@@ -183,7 +183,7 @@
   display:block;
 }
 
-.adjticks path {
+.adjticks path, .herotick path {
   stroke:#C8F06A;
   stroke-width:4;
   stroke-linecap:round;

@@ -14,7 +14,7 @@ const radiusOpts = () => RADII.map(k => `<option value="${k}"${S.radius === k ? 
 function makeMap(id) {
   const wrap = $("#" + id);
   wrap.innerHTML = `<div class="tpmap"></div>
-   <div class="search">${id === "mapA" ? `<button class="round" data-mapback aria-label="Back">${ICON.arrow}</button>` : ""}<form data-plzform>${ICON.search}<input inputmode="numeric" maxlength="5" aria-label="Postcode" data-plz value="${S.plz}"><select class="rad" data-radius aria-label="${t("radiusL")}">${radiusOpts()}</select></form></div>
+   <div class="search">${id === "mapA" ? `<button class="round" data-mapback aria-label="${t("aria").back}">${ICON.arrow}</button>` : ""}<form data-plzform>${ICON.search}<input inputmode="numeric" maxlength="5" aria-label="${t("aria").postcode}" data-plz value="${S.plz}"><select class="rad" data-radius aria-label="${t("radiusL")}">${radiusOpts()}</select></form></div>
    <button class="locbtn" data-loc>${ICON.loc}<span data-t="useLoc">${t("useLoc")}</span></button>`;
   const mb = wrap.querySelector("[data-mapback]");
   if (mb)
@@ -53,7 +53,7 @@ function drawMarkers() {
       mk.on("click", () => { S.group = g.id; renderGroups(); renderDetail(); });
       M.markers.push(mk);
     });
-    M.markers.push(L.marker(me || S.center, { icon: L.divIcon({ className: "", html: '<div class="me"></div>', iconSize: [38, 38], iconAnchor: [19, 19] }), interactive: false, zIndexOffset: -100 }).addTo(M.map));
+    M.markers.push(L.marker(me || S.center, { icon: L.divIcon({ className: "", html: '<div class="me"></div>', iconSize: [38, 38], iconAnchor: [19, 19] }), interactive: false, keyboard: false, alt: t("aria").me, zIndexOffset: -100 }).addTo(M.map));
   });
 }
 /* zoom so the whole search radius is visible (top padding = search bar) */

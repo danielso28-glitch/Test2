@@ -1,7 +1,18 @@
 /* ================= SCORE MODEL ================= */
 function daysSince(iso) { if (!iso)
   return 999; return Math.round((new Date(dayKey(new Date()) + "T12:00:00") - new Date(iso + "T12:00:00")) / 864e5); }
-function steps() { if (!S.tracker)
+/* the 7 days ending with the newest day of an Apple Health export: [[Date, steps], …] */
+function healthWeek() {
+  const ks = Object.keys(S.health.days).sort(), end = new Date(ks[ks.length - 1] + "T12:00:00"), out = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(end);
+    d.setDate(end.getDate() - i);
+    out.push([d, S.health.days[dayKey(d)] || 0]);
+  }
+  return out;
+}
+function steps() { if (S.health)
+  return Math.round(healthWeek().reduce((a, x) => a + x[1], 0) / 7); if (!S.tracker)
   return 0; const d = new Date(); return 4200 + ((d.getDate() * 7919 + d.getMonth() * 131) % 5200); }
 const lastAct = () => S.checkins.length ? S.checkins.slice().sort().pop() : null;
 /* the point rules – shown to the user in "How to earn points" */

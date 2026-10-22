@@ -350,3 +350,33 @@
 }
 
 
+
+/* end card over the finished video */
+.endcard {
+  position:absolute;
+  left:16px;
+  right:16px;
+  bottom:16px;
+  z-index:5;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  padding:18px;
+  border-radius:24px;
+  background:rgba(18,32,27,.88);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  color:#fff;
+  animation:in .35s ease;
+}
+
+.endcard b {
+  font-family:var(--display);
+  font-size:1.35rem;
+  line-height:1.2;
+}
+
+.endcard .btn.ghost {
+  background:rgba(255,255,255,.12);
+  color:#fff;
+}
