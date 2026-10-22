@@ -16,6 +16,11 @@ async function pwHash(pw, salt) {
     return "f" + (h >>> 0).toString(16);
   }
 }
+/* accounts made before sign-up asked for the insurance number get the demo number (the prototype only ever uses it) */
+if (S.account && !S.account.ins) {
+  S.account = { ...S.account, ins: DEMO_INS };
+  save();
+}
 const okEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
 /* age in whole years on a given day */
 function ageOn(birth, d = new Date()) {
