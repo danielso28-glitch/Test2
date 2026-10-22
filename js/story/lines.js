@@ -5,12 +5,12 @@ const LT = {
   O03: ["One small choice. Twenty years. Two paths.", "Eine kleine Entscheidung. Zwanzig Jahre. Zwei Wege."],
   A01: ["So you went. Just once, to try.", "Also bist du hingegangen. Nur einmal, zum Ausprobieren."],
   A02: ["First time? Don't worry – we mostly talk.", "Das erste Mal? Keine Sorge – wir reden hauptsächlich."],
-  A03: ["Funny. I actually look forward to Tuesdays now.", "Komisch. Ich freue mich jetzt richtig auf Dienstage."],
+  A03: ["Funny. I actually look forward to Tuesdays now.", "Komisch. Ich freue mich jetzt richtig auf die Dienstage."],
   A04: ["Ten years later. The group has changed. You kept going.", "Zehn Jahre später. Die Gruppe hat sich verändert. Du bist geblieben."],
   A05: ["Same as last year? I'll take that.", "Genauso wie letztes Jahr? Nehme ich."],
   A06: ["Can you lead the Thursday group? They listen to you.", "Kannst du die Donnerstagsgruppe leiten? Auf dich hören sie."],
   A07: ["Seventy-five.", "Fünfundsiebzig."],
-  A09: ["It started with one Tuesday. Your Tuesday is waiting.", "Es fing mit einem Dienstag an. Dein Dienstag wartet schon."],
+  A09: ["It started with one Tuesday. Your Tuesday is waiting.", "Mit einem einzigen Dienstag hat alles angefangen. Fang du auch an."],
   B01: ["Next week turned into next month.", "Aus nächster Woche wurde nächster Monat."],
   B02: ["I'll start when things calm down at work.", "Ich fange an, wenn es im Job ruhiger wird."],
   B03: ["They never calmed down.", "Es wurde nie ruhiger."],
@@ -20,12 +20,12 @@ const LT = {
   B07: ["Seventy-five.", "Fünfundsiebzig."],
   B09: ["But this isn't fixed. You're still on the sofa at fifty-five.", "Aber nichts davon steht fest. Du sitzt noch mit fünfundfünfzig auf dem Sofa."],
   B10: ["And the question is still open.", "Und die Frage ist noch offen."],
-  A08_grand: ["I'm coming, I'm coming!", "Ich komm ja, ich komm ja!"],
-  A08_travel: ["Two hundred steps – and worth every one.", "Zweihundert Stufen – und jede hat sich gelohnt."],
-  A08_own: ["My flat, my rules, my stairs.", "Meine Wohnung, meine Regeln, meine Treppe."],
-  A08_garden: ["Best harvest yet – and my back agrees.", "Beste Ernte bisher – und mein Rücken ist einverstanden."],
-  A08_dance: ["Tuesdays!", "Dienstags!"],
-  A08_friends: ["Wouldn't miss it.", "Auf keinen Fall verpassen."],
+  A08_grand: ["I'm coming, I'm coming!", "Warte auf mich, ich bin gleich da!"],
+  A08_travel: ["Two hundred steps – and worth every one.", "So viele Stufen, aber die Aussicht ist es wert."],
+  A08_own: ["My flat, my rules, my stairs.", "Ich wohne hier und mache alles selbst."],
+  A08_garden: ["Best harvest yet – and my back agrees.", "So viel Gemüse hatte ich noch nie."],
+  A08_dance: ["Tuesdays!", "Immer dienstags!"],
+  A08_friends: ["Wouldn't miss it.", "Da bin ich jedes Mal dabei."],
   B08_grand: ["Next time, sweetheart.", "Nächstes Mal, Schatz."],
   B08_travel: ["I'll see the photos later.", "Ich schau mir später die Fotos an."],
   B08_cycle: ["I should really sell it.", "Ich sollte es wirklich verkaufen."],
@@ -63,9 +63,10 @@ function spkOf(id) {
     return "D";
   return "N";
 }
-function clipFor(id, sp) { if (S.lang !== "en" || !ADUR[id])
+/* recorded clip for this line, or null (→ browser voice). German clips are named de_<ID>. */
+function clipFor(id, sp) { const k = S.lang === "de" ? "de_" + id : id; if (!ADUR[k])
   return null; if (sp[0] === "Y" && S.gender === "f")
-  return null; return id; }
+  return null; return k; }
 function lineInfo(id) {
   const sp = spkOf(id), clip = clipFor(id, sp), txt = LT[id][S.lang === "de" ? 1 : 0];
   const d = clip ? ADUR[clip] : Math.max(1.1, txt.length * (S.lang === "de" ? .068 : .062) + .35) * (/75B|65B/.test(sp) ? 1.2 : 1);
