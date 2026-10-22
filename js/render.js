@@ -175,7 +175,7 @@ function renderSettings(box, sheet) {
    ${feedbackCard()}
    <button class="btn out" data-restart>${t("restartIntro")}</button>
    <button class="btn out" data-reset style="border-color:var(--danger);color:var(--danger)">${resetArm ? t("resetSure") : t("resetAll")}</button>
-   <p class="hint">${t("privacy")}</p>`}`;
+   <p class="hint">${t("privacy")}</p><p class="hint">${t("credits")}</p>`}`;
   box.querySelectorAll("[data-lang]").forEach(b => b.onclick = () => { S.lang = b.dataset.lang; save(); renderText(); });
   box.querySelectorAll("[data-size]").forEach(b => b.onclick = () => { S.size = +b.dataset.size; applySize(); save(); renderText(); });
   bindAccountRow(box);
