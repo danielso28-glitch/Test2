@@ -182,3 +182,11 @@
 .fbcard b {
   font-size:1.1rem;
 }
+
+.acclinks .btn {
+  width:100%;
+}
+
+.acclinks .btn.danger {
+  color:var(--danger);
+}
