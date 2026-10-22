@@ -123,12 +123,12 @@ function renderAvatar() {
   $("#avTitle").textContent = GOALTXT[S.lang][S.goal];
   $("#tab-avatar .eyebrow").textContent = S.account && S.loggedIn ? `${t("acc").hi(S.account.first)} · ${t("youAt75")}` : t("youAt75");
   renderAvatarStage(s);
-  const C = 2 * Math.PI * 42, col = ["#B3261E", "#C98A0B", "#1F7A55", "#1F7A55"][L];
+  const C = 2 * Math.PI * 42, col = ["#E8743B", "#C98A0B", "#1F7A55", "#1F7A55"][L]; /* start = warm orange, not alarm red */
   $("#ring").innerHTML = `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" fill="none" stroke="#E9EDEA" stroke-width="10"/><circle cx="50" cy="50" r="42" fill="none" stroke="${col}" stroke-width="10" stroke-linecap="round" stroke-dasharray="${C * s / 100} ${C}"/></svg><b>${s}</b>`;
   const lv = $("#lvl");
   lv.textContent = t("lvl")[L];
-  lv.style.background = ["#F9DEDC", "#FFF1C2", "#E3F1DD", "#C8F06A"][L];
-  lv.style.color = ["#8C1D18", "#6B4A00", "#1F7A55", "#12201B"][L];
+  lv.style.background = ["#FFE3CC", "#FFF1C2", "#E3F1DD", "#C8F06A"][L];
+  lv.style.color = ["#8A3B12", "#6B4A00", "#1F7A55", "#12201B"][L];
   $("#lvlText").textContent = t("lvlText")[L];
   const sv = statVals(s);
   $("#stats").innerHTML = Object.keys(sv).map(k => `<div class="stat"><div class="lb"><span>${t("stats")[k]}</span><span style="font-variant-numeric:tabular-nums">${sv[k]}</span></div><div class="bar"><i style="width:${sv[k]}%"></i></div><small class="statd">${t("statsD")[k]}</small></div>`).join("") + `<p class="hint statnote">${t("statsNote")}</p>`;

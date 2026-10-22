@@ -24,10 +24,11 @@ function avatarSVG(L, T) {
   TNOW = T;
   FACE_REF = S.face ? "yiAV" : null;
   let bg, back = "", people = "", front = "";
-  if (L === 0) {
-    bg = bgPark(T, { sun: false, c1: "#7F8A93", c2: "#C3C8CB" });
-    back = `<rect x="0" y="0" width="440" height="600" fill="#5E6A72" opacity=".28"/>` + bench(220, AV_GY);
-    people = you(75, false, { x: 220, y: AV_GY, outfit: "cardigan", mood: "sad", cane: true, pose: { sit: true } });
+  if (L === 0) { /* the start: still on the bench, but the sun comes out and the grandchild waves you over */
+    bg = bgPark(T, { c1: "#BFD9EA", c2: "#FCE9CF", sx: 360, sy: 250 + Math.sin(T * .4) * 4 });
+    back = bench(190, AV_GY);
+    people = you(75, true, { x: 190, y: AV_GY, outfit: "cardigan", mood: "smile", pose: { sit: true, aR: [70 + Math.sin(T * 2) * 8, 20] } })
+      + KID({ x: 360, y: AV_GY - 30, s: .42, mood: "laugh", pose: { aR: [150 + Math.sin(T * 6) * 20, 10] } });
   }
   else if (L === 1) {
     bg = bgPark(T, { sun: false, c1: "#B4C6D0", c2: "#EEF1EC" });
