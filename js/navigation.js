@@ -134,6 +134,9 @@ function doJoin() {
   }
   err.hidden = true;
   $("#insNo").value = v;
+  /* accounts from before the sign-up asked for it: store it once, so it's never asked again */
+  if (S.account && !S.account.ins)
+    S.account = { ...S.account, ins: v };
   const fresh = !S.joined.includes(S.group);
   if (fresh)
     S.joined.push(S.group);
