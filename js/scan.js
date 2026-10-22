@@ -185,13 +185,10 @@ function scanAdjust() {
 }
 function scanReveal() {
   const b = $("#scanBody");
-  FACE_REF = "yiR";
-  const col = (age, good, lab, sub) => `<div class="rv"><svg viewBox="-62 -330 124 150">${fig({ ...youOpts(age, good), x: 0, y: 0, noShadow: true, mood: good ? "smile" : "neutral" })}</svg><b>${lab}</b><small>${sub}</small></div>`;
-  const youOpts = (age, good) => ({ f: S.gender === "f", age, good, who: "Y", glasses: age >= 62, top: good ? "#E8743B" : "#8A7F72", bot: "#2F3A45", zip: good, belly: good ? 0 : 7 });
-  b.innerHTML = `<h2>${TL("This is you", "Das bist du")}</h2><div class="rvrow">${faceDefs("yiR").replace("<defs>", "<svg width='0' height='0' style='position:absolute'><defs>").replace("</defs>", "</defs></svg>")}${col(55, true, TL("Today", "Heute"), "55")}${col(75, false, "75", TL("Path A · without exercise", "Weg A · ohne Bewegung"))}${col(75, true, "75", TL("Path B · with exercise", "Weg B · mit Bewegung"))}</div>
- <p class="scanp">${TL("Same person, same age – the difference is twenty years of small choices. Your face now appears in both path videos.", "Gleiche Person, gleiches Alter – der Unterschied sind zwanzig Jahre kleiner Entscheidungen. Dein Gesicht erscheint jetzt in beiden Weg-Videos.")}</p>
+  const col = (age, bad, lab, sub) => `<div class="rv"><img src="${S.face}" alt="" style="filter:${age > 55 ? agedFilter(age, bad) : "none"}"><b>${lab}</b><small>${sub}</small></div>`;
+  b.innerHTML = `<h2>${TL("This is you", "Das bist du")}</h2><div class="rvrow">${col(55, false, TL("Today", "Heute"), "55")}${col(75, true, "75", TL("Path A · without exercise", "Weg A · ohne Bewegung"))}${col(75, false, "75", TL("Path B · with exercise", "Weg B · mit Bewegung"))}</div>
+ <p class="scanp">${TL("Same person – the difference is twenty years of small choices. You'll see both paths in two short films.", "Dieselbe Person – der Unterschied sind zwanzig Jahre kleiner Entscheidungen. Beide Wege siehst du gleich in zwei kurzen Filmen.")}</p>
  <button class="btn lime" id="rvGo">${TL("Choose my goal", "Mein Ziel wählen")}</button>`;
-  FACE_REF = null;
   $("#rvGo").onclick = () => scanClose();
 }
 function faceRow() {

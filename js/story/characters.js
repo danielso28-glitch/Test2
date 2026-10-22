@@ -1,4 +1,6 @@
 /* ---------- character ---------- */
+/* photo as the drawn figure's head: off (team feedback: looked odd). The photo is shown as a portrait instead (film.js, scan reveal). */
+const PHOTO_HEAD = false;
 let TNOW = 0, TALK = null, PFX = "";
 function limb(x, y, a1, l1, a2, l2, w, col, side) {
   const sx = side || 1;
@@ -103,7 +105,7 @@ function fig(o) {
   const jaw = !good && old > .3 ? `<path d="M-21 8Q-20 30 0 31Q20 30 21 8" fill="${sk}"/>` : "";
   const face = `<ellipse cx="-23" cy="2" rx="5" ry="8" fill="${skD}"/><ellipse cx="23" cy="2" rx="5" ry="8" fill="${skD}"/>${hairBack}<ellipse rx="23" ry="27" fill="${sk}"/>${jaw}${hairFront}${brows}<ellipse cx="${-9 + lx}" cy="-1" rx="2.6" ry="${eyeRy}" fill="#1E2328"/><ellipse cx="${9 + lx}" cy="-1" rx="2.6" ry="${eyeRy}" fill="#1E2328"/>${under}<path d="M0 1q-3 8 0 10q2 0 3 -1" stroke="${skD}" stroke-width="2" fill="none" stroke-linecap="round"/>${cheeks}${wrinkles}${mouth}${glasses}`;
   let faceOut = face;
-  if (o.who === "Y" && FACE_REF && S.face) {
+  if (o.who === "Y" && FACE_REF && S.face && PHOTO_HEAD) {
     const sat = good ? 1 - old * .22 : 1 - old * .72, br = good ? 1 - old * .03 : 1 - old * .16, fid = "fy" + (++FID);
     faceOut = `<filter id="${fid}"><feColorMatrix type="saturate" values="${sat.toFixed(2)}"/><feComponentTransfer><feFuncR type="linear" slope="${br.toFixed(2)}"/><feFuncG type="linear" slope="${br.toFixed(2)}"/><feFuncB type="linear" slope="${(br * (good ? 1 : 1.04)).toFixed(2)}"/></feComponentTransfer></filter><clipPath id="c${fid}"><ellipse rx="23" ry="27"/></clipPath><ellipse cx="-23" cy="2" rx="5" ry="8" fill="${skD}"/><ellipse cx="23" cy="2" rx="5" ry="8" fill="${skD}"/><g opacity="${cl(grey * 1.15).toFixed(2)}">${hairBack}</g><ellipse rx="23.5" ry="27.5" fill="${skD}"/><linearGradient id="g${fid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ECEDEF" stop-opacity="${cl(grey * .95).toFixed(2)}"/><stop offset="1" stop-color="#ECEDEF" stop-opacity="0"/></linearGradient><g clip-path="url(#c${fid})"><use href="#${FACE_REF}" filter="url(#${fid})"/><ellipse rx="23" ry="27" fill="#C9C2BA" opacity="${(old * (good ? .08 : .22)).toFixed(2)}"/><rect x="-24" y="-28" width="48" height="16" fill="url(#g${fid})"/>${!good && old > .5 ? `<g fill="#9C7B66" opacity=".35"><circle cx="-11" cy="-14" r="1.4"/><circle cx="13" cy="-9" r="1.1"/><circle cx="-15" cy="11" r="1.2"/></g>` : ""}</g><g opacity="${cl(grey * 1.15).toFixed(2)}">${hairFront}</g>${wrinkles.replace(/opacity="([\d.]+)"/, (m, v) => `opacity="${cl(+v * 1.1).toFixed(2)}"`)}${under}${glasses}`;
   }

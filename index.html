@@ -11,17 +11,17 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Inter+Tight:wght@700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/base.css?v=0c540c2">
-<link rel="stylesheet" href="css/intro.css?v=0c540c2">
-<link rel="stylesheet" href="css/map.css?v=0c540c2">
-<link rel="stylesheet" href="css/booking.css?v=0c540c2">
-<link rel="stylesheet" href="css/scan.css?v=0c540c2">
-<link rel="stylesheet" href="css/tracker.css?v=0c540c2">
-<link rel="stylesheet" href="css/confirmation.css?v=0c540c2">
-<link rel="stylesheet" href="css/main-app.css?v=0c540c2">
-<link rel="stylesheet" href="css/avatar.css?v=0c540c2">
-<link rel="stylesheet" href="css/feed.css?v=0c540c2">
-<link rel="stylesheet" href="css/settings.css?v=0c540c2">
+<link rel="stylesheet" href="css/base.css?v=8aa64de">
+<link rel="stylesheet" href="css/intro.css?v=8aa64de">
+<link rel="stylesheet" href="css/map.css?v=8aa64de">
+<link rel="stylesheet" href="css/booking.css?v=8aa64de">
+<link rel="stylesheet" href="css/scan.css?v=8aa64de">
+<link rel="stylesheet" href="css/tracker.css?v=8aa64de">
+<link rel="stylesheet" href="css/confirmation.css?v=8aa64de">
+<link rel="stylesheet" href="css/main-app.css?v=8aa64de">
+<link rel="stylesheet" href="css/avatar.css?v=8aa64de">
+<link rel="stylesheet" href="css/feed.css?v=8aa64de">
+<link rel="stylesheet" href="css/settings.css?v=8aa64de">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
 </head>
 <body>
@@ -47,7 +47,7 @@
       <p class="q"><span data-t="matters"></span><small data-t="mattersSub"></small></p>
       <div class="grid" id="goals"></div>
       <button class="cta" id="showPaths"><span data-t="show"></span><span class="arr"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>
-      <div style="text-align:center"><button class="link" id="noPhoto" data-t="nophoto"></button></div>
+      <p class="twohint" data-t="twoHint"></p>
     </div>
   </section>
 
@@ -58,7 +58,6 @@
       <div class="row">
         <button class="round" data-go="s1" aria-label="Back" data-aria="back"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button>
         <div class="chip"><span class="av" data-avatar="sad"></span><span style="min-width:0"><b data-t="pathA"></b><span data-scanlabel></span></span></div>
-        <button class="round" data-share aria-label="Share" data-aria="share"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4M7 9l5-5 5 5M5 20h14"/></svg></button>
       </div>
     </div>
     <div class="scene" id="sceneA"></div>
@@ -77,7 +76,6 @@
       <div class="row">
         <button class="round" data-go="s2" aria-label="Back" data-aria="back" style="background:rgba(70,62,50,.7)"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button>
         <div class="chip" style="background:rgba(70,62,50,.7)"><span class="av" data-avatar="happy"></span><span style="min-width:0"><b data-t="pathB"></b><span data-scanlabel></span></span></div>
-        <button class="round" data-share aria-label="Share" data-aria="share" style="background:rgba(70,62,50,.7)"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4M7 9l5-5 5 5M5 20h14"/></svg></button>
       </div>
     </div>
     <div class="scene" id="sceneB"></div>
@@ -117,9 +115,10 @@
     <div class="note"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg><span data-t="trial"></span></div>
     <form class="ins card" id="insForm" novalidate>
       <h3 data-t="letpay"></h3>
-      <label class="l" for="insNo" data-t="insNo"></label>
-      <input type="text" id="insNo" value="A123456789" maxlength="10" autocomplete="off" spellcheck="false">
-      <p class="hint" data-t="insHint"></p>
+      <p class="insknown" id="insKnown" hidden></p>
+      <label class="l askins" for="insNo" data-t="insNo"></label>
+      <input type="text" class="askins" id="insNo" value="A123456789" maxlength="10" autocomplete="off" spellcheck="false">
+      <p class="hint askins" data-t="insHint"></p>
       <p class="err" id="insErr" hidden></p>
       <label class="check"><input type="checkbox" id="consent" checked><span data-t="consent"></span></label>
       <p class="demo" data-t="demoNote"></p>
@@ -167,6 +166,7 @@
         <div style="padding-top:12px"><div class="avstage" id="avStage" role="button" tabindex="0" aria-label="Avatar" data-aria="avatar"></div></div>
         <div class="stack pad" style="padding-top:16px">
           <div class="card score"><div class="ring" id="ring"></div><div style="min-width:0"><span class="lvl" id="lvl"></span><div class="muted" id="lvlText" style="line-height:1.45"></div></div></div>
+          <p class="hint" id="scoreHint" style="margin:-4px 6px 0"></p>
           <div class="card goalcard" id="goalCard"></div>
           <div class="card fitcard" id="fitCard"></div>
           <div class="card" id="ptsCard"></div>
@@ -231,35 +231,37 @@
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 </div>
 
-<script src="js/i18n.js?v=0c540c2"></script>
-<script src="js/icons.js?v=0c540c2"></script>
-<script src="js/data.js?v=0c540c2"></script>
-<script src="js/tracker.js?v=0c540c2"></script>
-<script src="js/healthimport.js?v=0c540c2"></script>
-<script src="js/state.js?v=0c540c2"></script>
-<script src="js/drawing.js?v=0c540c2"></script>
-<script src="js/story/audio-manifest.js?v=0c540c2"></script>
-<script src="js/story/helpers.js?v=0c540c2"></script>
-<script src="js/story/lines.js?v=0c540c2"></script>
-<script src="js/story/characters.js?v=0c540c2"></script>
-<script src="js/story/props.js?v=0c540c2"></script>
-<script src="js/story/backgrounds.js?v=0c540c2"></script>
-<script src="js/story/camera.js?v=0c540c2"></script>
-<script src="js/story/shots.js?v=0c540c2"></script>
-<script src="js/story/audio.js?v=0c540c2"></script>
-<script src="js/story/player.js?v=0c540c2"></script>
-<script src="js/facedetect.js?v=0c540c2"></script>
-<script src="js/scan.js?v=0c540c2"></script>
-<script src="js/score.js?v=0c540c2"></script>
-<script src="js/points.js?v=0c540c2"></script>
-<script src="js/avatar.js?v=0c540c2"></script>
-<script src="js/feed.js?v=0c540c2"></script>
-<script src="js/stories.js?v=0c540c2"></script>
-<script src="js/geo.js?v=0c540c2"></script>
-<script src="js/render.js?v=0c540c2"></script>
-<script src="js/community.js?v=0c540c2"></script>
-<script src="js/account.js?v=0c540c2"></script>
-<script src="js/navigation.js?v=0c540c2"></script>
-<script src="js/main.js?v=0c540c2"></script>
+<script src="js/i18n.js?v=8aa64de"></script>
+<script src="js/icons.js?v=8aa64de"></script>
+<script src="js/data.js?v=8aa64de"></script>
+<script src="js/tracker.js?v=8aa64de"></script>
+<script src="js/healthimport.js?v=8aa64de"></script>
+<script src="js/state.js?v=8aa64de"></script>
+<script src="js/drawing.js?v=8aa64de"></script>
+<script src="js/story/audio-manifest.js?v=8aa64de"></script>
+<script src="js/story/helpers.js?v=8aa64de"></script>
+<script src="js/story/lines.js?v=8aa64de"></script>
+<script src="js/story/characters.js?v=8aa64de"></script>
+<script src="js/story/props.js?v=8aa64de"></script>
+<script src="js/story/backgrounds.js?v=8aa64de"></script>
+<script src="js/story/camera.js?v=8aa64de"></script>
+<script src="js/story/shots.js?v=8aa64de"></script>
+<script src="js/story/audio.js?v=8aa64de"></script>
+<script src="js/story/film-manifest.js?v=8aa64de"></script>
+<script src="js/story/film.js?v=8aa64de"></script>
+<script src="js/story/player.js?v=8aa64de"></script>
+<script src="js/facedetect.js?v=8aa64de"></script>
+<script src="js/scan.js?v=8aa64de"></script>
+<script src="js/score.js?v=8aa64de"></script>
+<script src="js/points.js?v=8aa64de"></script>
+<script src="js/avatar.js?v=8aa64de"></script>
+<script src="js/feed.js?v=8aa64de"></script>
+<script src="js/stories.js?v=8aa64de"></script>
+<script src="js/geo.js?v=8aa64de"></script>
+<script src="js/render.js?v=8aa64de"></script>
+<script src="js/community.js?v=8aa64de"></script>
+<script src="js/account.js?v=8aa64de"></script>
+<script src="js/navigation.js?v=8aa64de"></script>
+<script src="js/main.js?v=8aa64de"></script>
 </body>
 </html>

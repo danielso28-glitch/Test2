@@ -220,9 +220,13 @@
   text-align:center;
 }
 
-.rv svg {
-  width:100%;
-  height:auto;
+.rv img {
+  width:84px;
+  height:100px;
+  object-fit:cover;
+  border-radius:50%;
+  border:3px solid rgba(255,255,255,.8);
+  margin-bottom:6px;
 }
 
 .rv b {

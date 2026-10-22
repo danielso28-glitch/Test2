@@ -24,7 +24,10 @@ function renderText() {
   $$("[data-goal-short]").forEach(el => el.textContent = GOALTXT[S.lang][S.goal]);
   const g = $("#goals");
   g.innerHTML = "";
-  GOALS.forEach(k => { const b = document.createElement("button"); b.className = "opt"; b.setAttribute("aria-pressed", S.goal === k); b.innerHTML = ICON[k] + `<span>${GOALTXT[S.lang][k]}</span>`; b.onclick = () => { S.goal = k; save(); renderText(); }; g.appendChild(b); });
+  /* several goals possible; the first one (S.goal) decides the film ending */
+  if (!S.goals || !S.goals.length)
+    S.goals = [S.goal];
+  GOALS.forEach(k => { const b = document.createElement("button"); b.className = "opt"; const on = S.goals.includes(k); b.setAttribute("aria-pressed", on); b.innerHTML = ICON[k] + `<span>${GOALTXT[S.lang][k]}</span>` + (k === S.goal && S.goals.length > 1 ? `<em class="optfilm">${t("goalFilm")}</em>` : ""); b.onclick = () => { S.goals = on ? (S.goals.length > 1 ? S.goals.filter(x => x !== k) : S.goals) : [...S.goals, k]; S.goal = S.goals[0]; save(); renderText(); }; g.appendChild(b); });
   if (!play) {
     renderStill("A");
     renderStill("B");
@@ -83,8 +86,15 @@ function renderDetail() {
   a.hidden = !inG;
   a.textContent = t("alreadyIn");
   renderGroupPts(g);
-  if (S.account && S.account.ins && !inG)
+  /* insurance number was given at sign-up: don't ask again, just show it */
+  const known = !!(S.account && S.account.ins);
+  if (known && !inG)
     $("#insNo").value = S.account.ins;
+  $$("#insForm .askins").forEach(e => e.hidden = known);
+  const kn = $("#insKnown");
+  kn.hidden = !known;
+  if (known)
+    kn.textContent = t("insFromAcc")(S.account.ins.slice(0, 3) + "••••" + S.account.ins.slice(-3));
   $("#join").hidden = inG;
   $("#insForm").hidden = inG;
 }
@@ -121,7 +131,8 @@ function renderAvatar() {
   lv.style.color = ["#8C1D18", "#6B4A00", "#1F7A55", "#12201B"][L];
   $("#lvlText").textContent = t("lvlText")[L];
   const sv = statVals(s);
-  $("#stats").innerHTML = Object.keys(sv).map(k => `<div class="stat"><div class="lb"><span>${t("stats")[k]}</span><span style="font-variant-numeric:tabular-nums">${sv[k]}</span></div><div class="bar"><i style="width:${sv[k]}%"></i></div></div>`).join("");
+  $("#stats").innerHTML = Object.keys(sv).map(k => `<div class="stat"><div class="lb"><span>${t("stats")[k]}</span><span style="font-variant-numeric:tabular-nums">${sv[k]}</span></div><div class="bar"><i style="width:${sv[k]}%"></i></div><small class="statd">${t("statsD")[k]}</small></div>`).join("") + `<p class="hint statnote">${t("statsNote")}</p>`;
+  $("#scoreHint").textContent = t("scoreHint");
   renderGoal();
   renderFitness();
   $("#fbAvatar").innerHTML = feedbackCard();

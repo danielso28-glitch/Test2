@@ -5,7 +5,8 @@ function renderGroupPts(g) {
   const per = sessionPts(g.id), month = Math.min(PTS.sessionMax, g.days.length * 4 * per);
   $("#dPts").innerHTML = `<div class="ptsrow"><span class="pp">+${per}</span><span>${t("ptsPer")}</span></div>
    <div class="ptsrow"><span class="pp">+${PTS.join}</span><span>${t("ptsJoin")}</span></div>
-   <p class="hint" style="margin:0">${t("ptsMonth")(month)}</p>`;
+   <p class="hint" style="margin:0">${t("ptsMonth")(month)}</p>
+   <details class="ptsrules"><summary>${t("ptsWhatT")}</summary><p class="hint">${t("ptsWhat")}</p></details>`;
 }
 /* avatar tab: where the score comes from + the rules */
 function renderPoints() {
@@ -53,7 +54,7 @@ function renderGoal() {
   const behind = G.expected - G.got, done = G.got >= G.target;
   const status = done ? C.done : behind <= 0 ? C.onTrack : C.behind(behind, Math.ceil(behind / PTS.sessionDef));
   const endTxt = G.end.toLocaleDateString(S.lang === "de" ? "de-DE" : "en-GB", { day: "numeric", month: "long", year: "numeric" });
-  el.innerHTML = `<div class="eyebrow">${C.eyebrow}</div><h3>${C.title(G.endAge)}</h3>
+  el.innerHTML = `<div class="eyebrow">${C.eyebrow}</div><h3>${C.title(G.endAge)}</h3>${C.stage(G.endAge) ? `<p class="muted" style="margin-top:-4px">${C.stage(G.endAge)}</p>` : ""}
    <div class="gnum"><b>${G.got.toLocaleString(S.lang)}</b> <span>${C.of(G.target.toLocaleString(S.lang))}</span></div>
    <div class="bar" role="img" aria-label="${pct(G.got)}%"><i style="width:${pct(G.got)}%"></i>${done ? "" : `<s style="left:${pct(G.expected)}%" title="${C.today}"></s>`}</div>
    <p class="gstatus ${done || behind <= 0 ? "ok" : "late"}">${status}</p>

@@ -1,4 +1,5 @@
 /* ---------- shot lists ---------- */
+const STORY_CUT = { bad: ["O1", "O2", "B2", "B3", "B5", "B7", "B8", "B9"], good: ["A1", "A2", "A4", "A7", "A8", "A9"] };
 /* a dancer's turn: mirror quickly instead of squashing to a paper-thin figure */
 const spin = c => Math.sign(c || 1) * Math.max(.8, Math.abs(c));
 function goalShot(kind, goal) {
@@ -77,7 +78,9 @@ function storyShots(kind, goal) {
         lines += `<rect x="0" y="${(i * 47 + T * 900) % 640 - 40}" width="440" height="3" fill="#FFF" opacity="${(.35 * (1 - u)).toFixed(2)}"/>`; return bgRoom(T, {}) + you(age, age < 64, { x: 220, y: 500, outfit: age < 62 ? "work" : "cardigan", pose: { sit: true, aR: [-20, -75] }, holdR: (hx, hy) => phone(hx, hy - 6, -10), mood: "neutral" }) + lines + (u < .4 ? `<g opacity=".9">${TXT(390, 60, 26, "#FFF", "◀◀", 800)}</g>` : ""); } },
     { id: "B10", L: ["B10"], d: 3.8, fx: "neutral", end: true, sfx: [["ping", .3]], draw: (u, T) => phoneUI(T, u, { bg: "#2B3440", screen: "#4F86A8" }) }
   ];
-  return open.concat(kind === "good" ? goodShots : badShots);
+  /* short cut (team feedback: too long): the opening only once, in the first video (Path A = "bad"); remove an id to drop a scene */
+  const all = kind === "good" ? goodShots : open.concat(badShots);
+  return all.filter(s => STORY_CUT[kind].includes(s.id));
 }
 function buildStory(kind) {
   const shots = storyShots(kind, S.goal);
@@ -117,6 +120,14 @@ function drawAt(k, tl, T) {
   const act = tl.lines.find(l => T >= l.at && T < l.at + l.d);
   TALK = act ? act.sp[0] : null;
   const age = sh.age ? lerp(sh.age[0], sh.age[1], ease(cl((u - .2) / .5))) : null;
+  const filmed = filmAt(k, tl, sh, u, T), st = sc.querySelector("svg.st");
+  if (st)
+    st.style.visibility = filmed ? "hidden" : "";
+  if (filmed) {
+    FACE_REF = null;
+    drawSubs(k, tl, T, act);
+    return;
+  }
   let inner;
   try {
     inner = sh.draw(u, T, age);
@@ -147,7 +158,9 @@ function drawAt(k, tl, T) {
   }
   svg.style.filter = filt;
   svg.querySelector(".fr").innerHTML = `<g transform="${camT(sh.cam, u)}">${inner}</g><rect width="440" height="600" fill="#000" opacity="${(Math.min(1, fade) * .85).toFixed(2)}" pointer-events="none"/>`;
-  // subtitles
+  drawSubs(k, tl, T, act);
+}
+function drawSubs(k, tl, T, act) {
   const shown = act || tl.lines.filter(l => l.at <= T && T < l.at + l.d + 1.2).pop();
   const who = $("#who" + k), sub = $("#sub" + k);
   if (shown) {

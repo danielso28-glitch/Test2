@@ -132,3 +132,8 @@
   place-items:center;
   font-weight:800;
 }
+
+.insknown {
+  margin:0;
+  font-weight:700;
+}

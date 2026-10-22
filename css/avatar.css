@@ -449,3 +449,42 @@ details.demo-box summary {
 .pplrow svg.on {
   fill:var(--green);
 }
+
+.stat .statd {
+  display:block;
+  margin-top:4px;
+  font-size:.8rem;
+  color:var(--ink-2);
+}
+
+.statnote {
+  grid-column:1/-1;
+  margin:4px 0 0;
+}
+
+.avport {
+  position:absolute;
+  top:12px;
+  right:12px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:2px;
+  pointer-events:none;
+}
+
+.avport img {
+  width:58px;
+  height:68px;
+  object-fit:cover;
+  border-radius:50%;
+  border:3px solid #fff;
+  box-shadow:0 4px 14px rgba(0,0,0,.25);
+}
+
+.avport b {
+  font-size:.75rem;
+  background:rgba(255,255,255,.85);
+  padding:1px 8px;
+  border-radius:8px;
+}

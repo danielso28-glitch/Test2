@@ -74,6 +74,21 @@ function renderAvatarStage(s) {
     pd.dataset.face = String(S.face && S.face.length);
   }
   st.querySelector(".scene").outerHTML = avatarSVG(L, (performance.now() - avT0) / 1000);
+  /* your face as a small aged portrait in the corner (not on the drawn figure) */
+  let ap = st.querySelector(".avport");
+  if (S.face) {
+    if (!ap) {
+      st.insertAdjacentHTML("beforeend", `<div class="avport"><img alt=""><b></b></div>`);
+      ap = st.querySelector(".avport");
+    }
+    const img = ap.querySelector("img");
+    if (img.getAttribute("src") !== S.face)
+      img.src = S.face;
+    img.style.filter = agedFilter(75, L < 2);
+    ap.querySelector("b").textContent = (S.lang === "de" ? "Du · " : "You · ") + 75;
+  }
+  else if (ap)
+    ap.remove();
   const still = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (!still && !avRAF)
     avRAF = requestAnimationFrame(avLoop);

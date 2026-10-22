@@ -101,7 +101,6 @@ document.addEventListener("input", e => { if (e.target.matches("[data-plz]")) {
 $("#setSheet").onclick = e => { if (e.target.id === "setSheet")
   $("#setSheet").hidden = true; };
 $("#showPaths").onclick = () => go("s2");
-$("#noPhoto").onclick = () => { S.scanned = false; renderText(); go("s2"); };
 $("#scanBtn").onclick = () => scanOpen();
 const findGroup = () => { go("s4"); if (!me)
   askLocation(); };

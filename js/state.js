@@ -1,5 +1,5 @@
 /* ================= STATE ================= */
-const DEF = { face: null, trPerm: null, trSync: null, lang: null, size: 16, goal: "grand", gender: "m", filter: "all", group: "w", scanned: false, onboarded: false, joined: [], checkins: [], volunteer: false, comJoined: [], own: [], tracker: null, plz: "48149", center: [51.9650, 7.6000], useGeo: false, radius: 2, tab: "avatar", exCat: "all", liked: [], interests: [], ciLog: {}, account: null, loggedIn: false, posts: {}, rsvp: {}, comSeen: [], health: null };
+const DEF = { face: null, trPerm: null, trSync: null, lang: null, size: 16, goal: "grand", gender: "m", filter: "all", group: "w", scanned: false, onboarded: false, joined: [], checkins: [], volunteer: false, comJoined: [], own: [], tracker: null, plz: "48149", center: [51.9650, 7.6000], useGeo: false, radius: 2, tab: "avatar", exCat: "all", liked: [], interests: [], ciLog: {}, account: null, loggedIn: false, posts: {}, rsvp: {}, comSeen: [], health: null, goals: null };
 let S = { ...DEF };
 try {
   const s = JSON.parse(localStorage.getItem("tp2") || "null");

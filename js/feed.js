@@ -90,7 +90,7 @@ function rankItem(f) {
   const g = joined.find(g => f.tags.includes(g.type));
   if (g)
     hit(2.5, t("whyGroup")(nm(g)));
-  if (f.tags.some(x => (GOAL_TAGS[S.goal] || []).includes(x)))
+  if (f.tags.some(x => (S.goals || [S.goal]).some(g => (GOAL_TAGS[g] || []).includes(x))))
     hit(2, t("whyGoal"));
   if (!S.liked.includes(f.k) && f.tags.some(x => likedTags.includes(x)))
     hit(1, t("whyLiked"));

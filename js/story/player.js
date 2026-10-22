@@ -5,6 +5,7 @@ function stopPath() {
   if (!play)
     return;
   const st = play;
+  filmStop(st.k);
   st.stop = true;
   cancelAnimationFrame(st.raf);
   try {
@@ -76,6 +77,7 @@ function startPath(k) {
     else {
       play.paused = true;
       play.pt = play.now();
+      filmStop(k);
       if (ACX)
         ACX.suspend().catch(() => { });
       try {
@@ -134,7 +136,8 @@ function startPath(k) {
         return;
       const T = st.now();
       if (!st.paused) {
-        tl.lines.forEach(li => { if (!li.clip && T >= li.at && !st.spoken.has(li)) {
+        /* browser voice for lines without a recording – and for all lines if Web Audio couldn't start */
+        tl.lines.forEach(li => { if ((!li.clip || !st.useCtx) && T >= li.at && !st.spoken.has(li)) {
           st.spoken.add(li);
           ttsLine(li);
         } });
@@ -155,5 +158,9 @@ function startPath(k) {
     st.raf = requestAnimationFrame(loop);
   };
   // wait for clips (max 1.5 s) so voice and picture start together
-  Promise.race([Promise.all(tl.lines.filter(l => l.clip).map(l => decodeClip(l.clip))), new Promise(r => setTimeout(r, 1500))]).then(begin);
+  // and for the audio output to actually start: on the first tap browsers start it with a delay (was: no sound in the first video)
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+  Promise.race([Promise.all(tl.lines.filter(l => l.clip).map(l => decodeClip(l.clip))), wait(1500)])
+    .then(() => c && c.state !== "running" ? Promise.race([c.resume().catch(() => { }), wait(1000)]) : 0)
+    .then(begin);
 }
