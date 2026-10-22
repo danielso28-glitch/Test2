@@ -35,6 +35,11 @@ const afterAccount = () => S.onboarded ? openMain(S.tab) : go("s1");
 function openAccount(mode) {
   accMode = mode;
   accReset = false;
+  /* close anything still open on top (tracker sheet, settings sheet, face scan) – it would block the login */
+  ["#trSheet", "#setSheet"].forEach(id => { const e = $(id); if (e)
+    e.hidden = true; });
+  if (!$("#scanOv").hidden)
+    scanClose();
   go("sacc");
   renderAccount();
 }
