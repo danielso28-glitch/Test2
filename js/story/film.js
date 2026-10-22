@@ -17,6 +17,17 @@ function filmKey(sh) {
   const g = S.gender === "f" ? "f" : "m", goal = /8$/.test(sh.id) ? "_" + S.goal : "";
   return [sh.id + goal + "_" + g, sh.id + goal, sh.id + "_" + g, sh.id].find(k => FILM[k]) || null;
 }
+/* preload: fetch every clip of a story into memory (blob URL), so scenes switch without a black gap on slow mobile data.
+   Phones (iOS) ignore <video preload>, a fetched blob always plays at once. Each clip is fetched once. */
+const FILM_BLOB = {}, FILM_LOADING = {};
+function filmPreload(tl) {
+  if (typeof FILM === "undefined")
+    return;
+  tl.shots.map(filmKey).filter(k => k && !FILM_BLOB[k] && !FILM_LOADING[k]).forEach(k => {
+    FILM_LOADING[k] = fetch(FILM_BASE + FILM[k].src).then(r => r.ok ? r.blob() : null).then(b => { if (b)
+      FILM_BLOB[k] = URL.createObjectURL(b); }).catch(() => { }).finally(() => delete FILM_LOADING[k]);
+  });
+}
 /* one <video> per clip, created on demand; returns the layer */
 function filmLayer(sc) {
   let L = sc.querySelector(".film");
@@ -37,7 +48,7 @@ function filmVideo(L, key) {
     v.playsInline = true;
     v.setAttribute("playsinline", "");
     v.preload = "auto";
-    v.src = FILM_BASE + FILM[key].src;
+    v.src = FILM_BLOB[key] || FILM_BASE + FILM[key].src;
     L.querySelector(".fv").appendChild(v);
   }
   return v;
@@ -86,7 +97,8 @@ function filmAt(k, tl, sh, u, T) {
     if (img.getAttribute("src") !== S.face)
       img.src = S.face;
     img.style.filter = agedFilter(age, tl.kind === "bad");
-    port.querySelector("b").textContent = (S.lang === "de" ? "Du · " : "You · ") + age;
+    /* label: the age the narrator names (75), counting only while rewinding back to 55 */
+    port.querySelector("b").textContent = (S.lang === "de" ? "Du · " : "You · ") + (sh.age && sh.fx !== "rewind" ? sh.age[1] : age);
     port.style.opacity = Math.min(1, (u - .25) * 6, (.92 - u) * 6).toFixed(2);
   }
   return true;

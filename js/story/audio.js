@@ -32,7 +32,8 @@ function decodeClip(id) {
   } }) : null);
   return BUF[id];
 }
-function preloadStory(kind) { const tl = buildStory(kind); tl.lines.forEach(l => l.clip && decodeClip(l.clip)); }
+function preloadStory(kind) { const tl = buildStory(kind); tl.lines.forEach(l => l.clip && decodeClip(l.clip)); if (S.loggedIn)
+  filmPreload(tl); }
 function note(c, dest, t, f, d, g, type = "sine") { const o = c.createOscillator(), a = c.createGain(); o.type = type; o.frequency.value = f; a.gain.setValueAtTime(0, t); a.gain.linearRampToValueAtTime(g, t + .02); a.gain.exponentialRampToValueAtTime(.0001, t + d); o.connect(a); a.connect(dest); o.start(t); o.stop(t + d + .05); }
 /* synthesized sound effects – no audio files needed */
 function noiseBuf(c) {
@@ -144,9 +145,12 @@ function pickVoice(kind, fem) {
     const vs = speechSynthesis.getVoices().filter(v => (v.lang || "").toLowerCase().startsWith(S.lang));
     if (!vs.length)
       return null;
-    const F = /female|frau|anna|helena|samantha|karen|petra|katja|marlene|vicki|serena|moira|tessa/i, M = /male|mann|daniel|markus|yannick|hans|thomas|arthur|oliver/i;
+    const F = /female|frau|anna|helena|samantha|karen|petra|katja|marlene|vicki|serena|moira|tessa|google deutsch|google uk english female/i, M = /male|mann|daniel|markus|yannick|hans|thomas|arthur|oliver|martin|google uk english male/i;
     const want = fem ? F : M;
-    return vs.find(v => want.test(v.name)) || vs[0];
+    /* prefer the natural-sounding voices phones offer (Premium / Enhanced / Neural / Google) over the basic ones */
+    const q = v => /premium|enhanced|neural|natural|siri/i.test(v.name) ? 3 : /google/i.test(v.name) ? 2 : v.localService === false ? 1 : 0;
+    const fit = vs.filter(v => want.test(v.name)).sort((a, b) => q(b) - q(a));
+    return fit[0] || vs.slice().sort((a, b) => q(b) - q(a))[0];
   }
   catch (e) {
     return null;

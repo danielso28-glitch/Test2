@@ -192,8 +192,8 @@ function scanReveal() {
   $("#rvGo").onclick = () => scanClose();
 }
 function faceRow() {
-  return S.face ? `<div class="card setrow"><img src="${S.face}" alt="" style="width:52px;height:62px;border-radius:50%;object-fit:cover"><span class="muted" style="flex:1;min-width:0">${TL("Your face scan is used for your avatar. Stored only on this phone.", "Dein Gesichtsscan wird für deinen Avatar genutzt. Nur auf diesem Handy gespeichert.")}</span><button class="btn small dark" data-face-scan>${TL("Scan again", "Neu scannen")}</button><button class="btn small out" data-face-del style="border-color:var(--danger);color:var(--danger)">${TL("Delete my face", "Gesicht löschen")}</button></div>`
-    : `<div class="card setrow"><span class="muted" style="flex:1;min-width:0">${TL("No face scan yet – you see an example avatar.", "Noch kein Gesichtsscan – du siehst einen Beispiel-Avatar.")}</span><button class="btn small dark" data-face-scan>${TL("Scan my face", "Gesicht scannen")}</button></div>`;
+  return S.face ? `<div class="card setrow"><img src="${S.face}" alt="" style="width:52px;height:62px;border-radius:50%;object-fit:cover"><span class="muted" style="flex:1;min-width:0">${TL("Your face appears as a portrait in your films and under \"Me at 75\". Stored only on this phone.", "Dein Gesicht erscheint als Porträt in deinen Filmen und unter „Ich mit 75“. Nur auf diesem Handy gespeichert.")}</span><button class="btn small dark" data-face-scan>${TL("Scan again", "Neu scannen")}</button><button class="btn small out" data-face-del style="border-color:var(--danger);color:var(--danger)">${TL("Delete my face", "Gesicht löschen")}</button></div>`
+    : `<div class="card setrow"><span class="muted" style="flex:1;min-width:0">${TL("No face scan yet – optional, for your portrait in the films.", "Noch kein Gesichtsscan – optional, für dein Porträt in den Filmen.")}</span><button class="btn small dark" data-face-scan>${TL("Scan my face", "Gesicht scannen")}</button></div>`;
 }
 document.addEventListener("click", e => {
   if (e.target.closest("[data-scan-close]")) {
