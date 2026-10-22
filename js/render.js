@@ -111,7 +111,7 @@ function renderAvatar() {
   const s = score(), L = lvlOf(s);
   $("#avTitle").textContent = GOALTXT[S.lang][S.goal];
   $("#tab-avatar .eyebrow").textContent = S.account && S.loggedIn ? `${t("acc").hi(S.account.first)} · ${t("youAt75")}` : t("youAt75");
-  $("#avStage").innerHTML = avatarScene(s);
+  renderAvatarStage(s);
   const C = 2 * Math.PI * 42, col = ["#B3261E", "#C98A0B", "#1F7A55", "#1F7A55"][L];
   $("#ring").innerHTML = `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" fill="none" stroke="#E9EDEA" stroke-width="10"/><circle cx="50" cy="50" r="42" fill="none" stroke="${col}" stroke-width="10" stroke-linecap="round" stroke-dasharray="${C * s / 100} ${C}"/></svg><b>${s}</b>`;
   const lv = $("#lvl");

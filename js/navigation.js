@@ -31,6 +31,8 @@ function openMain(tab) {
   catch (e) { }
 }
 function setTab(k) {
+  if (k === "avatar" && !avRAF)
+    setTimeout(() => renderAvatarStage(score()), 0);
   S.tab = k;
   save();
   $$(".tab").forEach(x => x.hidden = x.id !== "tab-" + k);
