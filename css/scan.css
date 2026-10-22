@@ -167,18 +167,27 @@
 
 .adjwrap {
   position:relative;
-  width:240px;
-  height:282px;
+  width:300px;
+  max-width:100%;
+  aspect-ratio:300/352;
   margin:4px auto;
+  border-radius:28px;
+  overflow:hidden;
 }
 
 #adjCv {
-  width:240px;
-  height:282px;
-  border-radius:50%;
+  width:100%;
+  height:100%;
   touch-action:none;
   cursor:grab;
   display:block;
+}
+
+.adjticks path {
+  stroke:#C8F06A;
+  stroke-width:4;
+  stroke-linecap:round;
+  filter:drop-shadow(0 0 3px rgba(200,240,106,.7));
 }
 
 .adjguide {

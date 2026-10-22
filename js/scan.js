@@ -24,15 +24,16 @@ function scanIntro(msg) {
 }
 /* Face-ID style progress: short radial dashes around the face oval, lit clockwise from the top */
 const SCAN_TICKS = 72;
-function scanTicks() {
+function ovalTicks(cx, cy, rx, ry, len) {
   let s = "";
   for (let i = 0; i < SCAN_TICKS; i++) {
-    const a = i / SCAN_TICKS * 2 * Math.PI, sx = Math.sin(a), cy = -Math.cos(a);
-    const p = (rx, ry) => `${(150 + rx * sx).toFixed(1)} ${(190 + ry * cy).toFixed(1)}`;
-    s += `<path d="M${p(110, 138)}L${p(120, 148)}"/>`;
+    const a = i / SCAN_TICKS * 2 * Math.PI, sx = Math.sin(a), sy = -Math.cos(a);
+    const p = (x, y) => `${(cx + x * sx).toFixed(1)} ${(cy + y * sy).toFixed(1)}`;
+    s += `<path d="M${p(rx, ry)}L${p(rx + len, ry + len)}"/>`;
   }
   return s;
 }
+const scanTicks = () => ovalTicks(150, 190, 110, 138, 10);
 async function scanCam() {
   const b = $("#scanBody");
   b.innerHTML = `<button class="round scx" data-scan-close aria-label="${TL("Close", "Schließen")}">✕</button>
@@ -154,15 +155,15 @@ function scanAdjust() {
   SC.dy = SC.fromCam ? -.04 : 0;
   SC.fromCam = false;
   b.innerHTML = `<h2>${TL("Fit your face in the oval", "Passe dein Gesicht ins Oval ein")}</h2><p class="scanp">${TL("Drag to move, use the slider to zoom. Eyebrows to chin should fill the oval.", "Ziehen zum Verschieben, Regler zum Zoomen. Von den Augenbrauen bis zum Kinn sollte das Oval gefüllt sein.")}</p>
- <div class="adjwrap"><canvas id="adjCv" width="240" height="282"></canvas><svg viewBox="0 0 240 282" class="adjguide"><ellipse cx="120" cy="141" rx="118" ry="139" fill="none" stroke="#C8F06A" stroke-width="4"/><path d="M70 120h100M120 60v170" stroke="rgba(200,240,106,.35)" stroke-width="1.5" stroke-dasharray="5 5"/></svg></div>
+ <div class="adjwrap"><canvas id="adjCv" width="300" height="352"></canvas><svg viewBox="0 0 300 352" class="adjguide" aria-hidden="true"><defs><mask id="adjHole"><rect width="300" height="352" fill="#fff"/><ellipse cx="150" cy="176" rx="120" ry="141" fill="#000"/></mask></defs><rect width="300" height="352" fill="rgba(10,18,15,.62)" mask="url(#adjHole)"/><ellipse cx="150" cy="176" rx="120" ry="141" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.5"/><g class="adjticks">${ovalTicks(150, 176, 126, 147, 10)}</g></svg></div>
  <input type="range" id="adjZoom" min="1" max="3.5" step=".01" value="${SC.zoom}" aria-label="Zoom">
  <button class="btn lime" id="adjOk">${TL("Looks good", "Passt so")}</button><button class="btn ghost" id="adjRedo">${TL("Try again", "Nochmal")}</button>`;
   const cv = $("#adjCv"), x = cv.getContext("2d");
   const draw = () => {
     const im = SC.img, cw = 240, ch = 282, base = Math.max(cw / im.width, ch / im.height) * SC.zoom, w = im.width * base, h = im.height * base;
     x.fillStyle = "#222";
-    x.fillRect(0, 0, cw, ch);
-    x.drawImage(im, (cw - w) / 2 + SC.dx * w, (ch - h) / 2 + SC.dy * h, w, h);
+    x.fillRect(0, 0, 300, 352);
+    x.drawImage(im, 30 + (cw - w) / 2 + SC.dx * w, 35 + (ch - h) / 2 + SC.dy * h, w, h);
   };
   draw();
   let drag = null;
@@ -172,7 +173,7 @@ function scanAdjust() {
   cv.onpointerup = cv.onpointercancel = () => drag = null;
   $("#adjZoom").oninput = e => { SC.zoom = +e.target.value; draw(); };
   $("#adjRedo").onclick = () => { SC.img = null; scanIntro(); };
-  $("#adjOk").onclick = () => { S.face = cv.toDataURL("image/jpeg", .82); S.scanned = true; save(); SC.img = null; scanReveal(); };
+  $("#adjOk").onclick = () => { const out = document.createElement("canvas"); out.width = 240; out.height = 282; out.getContext("2d").drawImage(cv, 30, 35, 240, 282, 0, 0, 240, 282); S.face = out.toDataURL("image/jpeg", .82); S.scanned = true; save(); SC.img = null; scanReveal(); };
 }
 function scanReveal() {
   const b = $("#scanBody");
