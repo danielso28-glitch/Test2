@@ -1,0 +1,181 @@
+/* fitness tracker connection + form helpers (demo label, hint, error, checkbox) */
+.trhead {
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.trlogo {
+  width:56px;
+  height:56px;
+  border-radius:16px;
+  display:grid;
+  place-items:center;
+  font-weight:800;
+  font-size:1.3rem;
+  color:#fff;
+  flex:none;
+}
+
+.trlink {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  margin:4px 0;
+}
+
+.trlink i {
+  width:28px;
+  border-top:3px dotted var(--ink-2);
+}
+
+.perm {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:12px 0;
+  border-bottom:1px solid var(--line);
+}
+
+.perm:last-child {
+  border-bottom:0;
+}
+
+.perm span {
+  flex:1;
+}
+
+.perm span.trlogo,.perm span[aria-hidden] {
+  flex:none;
+}
+
+.perm small {
+  display:block;
+  color:var(--ink-2);
+  font-size:.85rem;
+}
+
+.sw {
+  width:54px;
+  height:32px;
+  border-radius:16px;
+  background:var(--line);
+  position:relative;
+  flex:none;
+  transition:background .2s;
+}
+
+.sw::after {
+  content:"";
+  position:absolute;
+  top:3px;
+  left:3px;
+  width:26px;
+  height:26px;
+  border-radius:50%;
+  background:#fff;
+  box-shadow:0 1px 3px rgba(0,0,0,.25);
+  transition:left .2s;
+}
+
+.sw[aria-checked="true"] {
+  background:var(--green);
+}
+
+.sw[aria-checked="true"]::after {
+  left:25px;
+}
+
+.ring {
+  width:120px;
+  height:120px;
+  margin:10px auto;
+  display:block;
+}
+
+.bars7 {
+  display:flex;
+  align-items:flex-end;
+  gap:8px;
+  height:110px;
+  margin-top:8px;
+}
+
+.bars7 div {
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+  height:100%;
+  justify-content:flex-end;
+}
+
+.bars7 b {
+  width:100%;
+  border-radius:8px 8px 4px 4px;
+  background:var(--green);
+  min-height:6px;
+}
+
+.bars7 b.low {
+  background:#E9B44C;
+}
+
+.bars7 small {
+  font-size:.75rem;
+  color:var(--ink-2);
+}
+
+.demo {
+  display:inline-block;
+  background:var(--lime);
+  color:var(--ink);
+  font-size:.72rem;
+  font-weight:800;
+  padding:3px 8px;
+  border-radius:10px;
+  letter-spacing:.04em;
+  vertical-align:middle;
+}
+
+.hint {
+  color:var(--ink-2);
+  font-size:.95rem;
+  line-height:1.45;
+  margin:0;
+}
+
+.err {
+  color:var(--danger);
+  font-weight:600;
+  font-size:.95rem;
+  margin:0;
+}
+
+.check {
+  display:flex;
+  gap:14px;
+  align-items:flex-start;
+  color:var(--ink-2);
+  font-size:1rem;
+  line-height:1.45;
+  cursor:pointer;
+}
+
+.check input {
+  width:28px;
+  height:28px;
+  accent-color:var(--ink);
+  flex:none;
+  margin:0;
+}
+
+.demo {
+  font-size:.8rem;
+  color:var(--ink-2);
+  text-align:center;
+  margin:0;
+}
+
