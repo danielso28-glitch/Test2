@@ -150,7 +150,7 @@ $("#join").addEventListener("click", doJoin);
 $("#insForm").addEventListener("submit", e => { e.preventDefault(); doJoin(); });
 $("#openApp").onclick = () => openMain("avatar");
 $("#checkin").onclick = () => doCheckin();
-$("#avStage").onclick = () => { const L = lvlOf(score()), arr = t("taps")[L], m = arr[Math.floor(Math.random() * arr.length)]; const st = $("#avStage"); const old = st.querySelector(".bubble"); if (old)
+$("#avStage").onclick = () => { const L = lvlOf(score()), arr = L >= 2 ? [...t("taps")[L], t("goalTaps")[S.goal]] : t("taps")[L], m = arr[Math.floor(Math.random() * arr.length)]; const st = $("#avStage"); const old = st.querySelector(".bubble"); if (old)
   old.remove(); const d = document.createElement("div"); d.className = "bubble"; d.textContent = m; st.appendChild(d); try {
   speechSynthesis.cancel();
 }
