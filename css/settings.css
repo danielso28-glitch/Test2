@@ -172,16 +172,6 @@
   background:var(--bg);
 }
 
-.fbcard {
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-  border:2px solid var(--lime);
-}
-
-.fbcard b {
-  font-size:1.1rem;
-}
 
 .acclinks .btn {
   width:100%;
@@ -189,4 +179,40 @@
 
 .acclinks .btn.danger {
   color:var(--danger);
+}
+
+/* feedback card: dark so it stands out between the white cards */
+.fbcard {
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  background:var(--ink);
+  color:#fff;
+}
+
+.fbcard b {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:1.2rem;
+}
+
+.fbcard b svg {
+  flex:none;
+  width:30px;
+  height:30px;
+  stroke:var(--lime);
+}
+
+.fbcard .muted {
+  color:rgba(255,255,255,.85);
+}
+
+.fbcard .hint {
+  color:rgba(255,255,255,.7);
+}
+
+.fbcard .btn {
+  min-height:56px;
+  font-size:1.1rem;
 }

@@ -1,6 +1,6 @@
 /* ================= DATA ================= */
 /* anonymous feedback form for testers (Google Form without email collection). Empty = button says "coming soon". */
-const FEEDBACK_URL = "";
+const FEEDBACK_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdpruJe6b8HiQPrbwpSrZ6kR5oJyVXjtUOvaG_We7V72dlyAA/viewform";
 /* demo groups placed around the search centre (km east, km north) */
 const GROUPS = [
   { id: "w", type: "walking", name: { en: "Walking group 50+", de: "Walking-Gruppe 50+" }, days: [2, 4], time: "10:00", off: [0.6, 1.0], place: { en: "Park entrance", de: "Parkeingang" }, trainer: "Petra Lange", taken: 7, cap: 12, org: "ins" },
