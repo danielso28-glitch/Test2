@@ -6,11 +6,6 @@
 const FILM_BASE = "assets/video/";
 /* colour grade per mood: warm/golden for the active path, cold and grey for the other */
 const GRADE = { neutral: "contrast(1.04)", warm: "saturate(1.18) sepia(.2) contrast(1.06) brightness(1.04)", c1: "saturate(.7) contrast(1.05) brightness(.95)", c2: "saturate(.5) contrast(1.08) brightness(.9) hue-rotate(-6deg)", c3: "saturate(.3) contrast(1.1) brightness(.84) hue-rotate(-10deg)", rewind: "saturate(.6) contrast(1.1)" };
-/* the scanned face, aged by CSS filters: greyer and paler without exercise */
-function agedFilter(age, bad) {
-  const old = cl((age - 55) / 20);
-  return `grayscale(${(old * (bad ? .85 : .35)).toFixed(2)}) contrast(${(1 + old * .15).toFixed(2)}) brightness(${(1 - old * (bad ? .15 : .03)).toFixed(2)}) sepia(${(old * (bad ? .1 : .25)).toFixed(2)})`;
-}
 function filmKey(sh) {
   if (typeof FILM === "undefined")
     return null;
@@ -34,7 +29,7 @@ function filmLayer(sc) {
   if (!L) {
     L = document.createElement("div");
     L.className = "film";
-    L.innerHTML = `<div class="fv"></div><div class="fport" hidden><img alt=""><b></b></div><div class="fgrain"></div><div class="fvig"></div><div class="fblack"></div>`;
+    L.innerHTML = `<div class="fv"></div><div class="fport" hidden><i><img alt=""><img alt=""></i><b></b></div><div class="fgrain"></div><div class="fvig"></div><div class="fblack"></div>`;
     sc.prepend(L);
   }
   return L;
@@ -93,10 +88,13 @@ function filmAt(k, tl, sh, u, T) {
   const showP = !!(S.face && age && u > .25 && u < .92);
   port.hidden = !showP;
   if (showP) {
-    const img = port.querySelector("img");
+    /* the face as it is today, cross-fading into the aged portrait of this path (aging.js) as the age goes up */
+    const [img, old] = port.querySelectorAll("img"), src = agedFace(tl.kind === "bad");
     if (img.getAttribute("src") !== S.face)
       img.src = S.face;
-    img.style.filter = agedFilter(age, tl.kind === "bad");
+    if (old.getAttribute("src") !== src)
+      old.src = src;
+    old.style.opacity = cl((age - 55) / 20).toFixed(2);
     /* label: the age the narrator names (75), counting only while rewinding back to 55 */
     port.querySelector("b").textContent = (S.lang === "de" ? "Du · " : "You · ") + (sh.age && sh.fx !== "rewind" ? sh.age[1] : age);
     port.style.opacity = Math.min(1, (u - .25) * 6, (.92 - u) * 6).toFixed(2);

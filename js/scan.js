@@ -181,12 +181,12 @@ function scanAdjust() {
   cv.onpointerup = cv.onpointercancel = () => drag = null;
   $("#adjZoom").oninput = e => { SC.zoom = +e.target.value; draw(); };
   $("#adjRedo").onclick = () => { SC.img = null; scanIntro(); };
-  $("#adjOk").onclick = () => { const out = document.createElement("canvas"); out.width = 240; out.height = 282; out.getContext("2d").drawImage(cv, 30, 35, 240, 282, 0, 0, 240, 282); S.face = out.toDataURL("image/jpeg", .82); S.scanned = true; save(); SC.img = null; scanReveal(); };
+  $("#adjOk").onclick = () => { const out = document.createElement("canvas"); out.width = 240; out.height = 282; out.getContext("2d").drawImage(cv, 30, 35, 240, 282, 0, 0, 240, 282); S.face = out.toDataURL("image/jpeg", .82); S.scanned = true; save(); SC.img = null; ageFaces().then(scanReveal); };
 }
 function scanReveal() {
   const b = $("#scanBody");
-  const col = (age, bad, lab, sub) => `<div class="rv"><img src="${S.face}" alt="" style="filter:${age > 55 ? agedFilter(age, bad) : "none"}"><b>${lab}</b><small>${sub}</small></div>`;
-  b.innerHTML = `<h2>${TL("This is you", "Das bist du")}</h2><div class="rvrow">${col(55, false, TL("Today", "Heute"), "55")}${col(75, true, "75", TL("Path A · without exercise", "Weg A · ohne Bewegung"))}${col(75, false, "75", TL("Path B · with exercise", "Weg B · mit Bewegung"))}</div>
+  const col = (src, cls, lab, sub) => `<div class="rv ${cls}"><img src="${src}" alt=""><b>${lab}</b><small>${sub}</small></div>`;
+  b.innerHTML = `<h2>${TL("This is you", "Das bist du")}</h2><div class="rvrow">${col(S.face, "", TL("Today", "Heute"), TL("as you are", "so wie du bist"))}${col(agedFace(true), "rva", "75", TL("Path A · without exercise", "Weg A · ohne Bewegung"))}${col(agedFace(false), "rvb", "75", TL("Path B · with exercise", "Weg B · mit Bewegung"))}</div>
  <p class="scanp">${TL("Same person – the difference is twenty years of small choices. You'll see both paths in two short films.", "Dieselbe Person – der Unterschied sind zwanzig Jahre kleiner Entscheidungen. Beide Wege siehst du gleich in zwei kurzen Filmen.")}</p>
  <button class="btn lime" id="rvGo">${TL("Choose my goal", "Mein Ziel wählen")}</button>`;
   $("#rvGo").onclick = () => scanClose();
@@ -211,6 +211,7 @@ document.addEventListener("click", e => {
   }
   if (e.target.closest("[data-face-del]")) {
     S.face = null;
+    S.faceOld = null;
     S.scanned = false;
     save();
     renderText();

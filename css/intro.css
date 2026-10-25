@@ -449,7 +449,19 @@
   pointer-events:none;
 }
 
+.film .fport i {
+  position:relative;
+  display:block;
+}
+
+.film .fport img+img {
+  position:absolute;
+  left:0;
+  top:0;
+}
+
 .film .fport img {
+  display:block;
   width:84px;
   height:100px;
   object-fit:cover;

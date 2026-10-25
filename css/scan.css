@@ -201,10 +201,29 @@
   accent-color:#C8F06A;
 }
 
+/* today small on top, the two faces at 75 big side by side */
 .rvrow {
-  display:flex;
-  gap:8px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.rvrow .rv:first-child {
+  grid-column:1/-1;
+  flex-direction:row;
   justify-content:center;
+  gap:12px;
+  padding:8px;
+}
+
+.rvrow .rv:first-child img {
+  width:60px;
+  height:70px;
+  margin:0;
+}
+
+.rvrow .rv:first-child small {
+  font-size:.85rem;
 }
 
 .rv {
@@ -227,6 +246,21 @@
   border-radius:50%;
   border:3px solid rgba(255,255,255,.8);
   margin-bottom:6px;
+}
+
+.rva img,.rvb img {
+  width:min(100%,150px);
+  height:auto;
+  aspect-ratio:240/282;
+  border-radius:46%;
+}
+
+.rva img {
+  border-color:#E8743B;
+}
+
+.rvb img {
+  border-color:var(--lime);
 }
 
 .rv b {

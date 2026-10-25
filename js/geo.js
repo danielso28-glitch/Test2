@@ -19,8 +19,14 @@ function makeMap(id) {
   const mb = wrap.querySelector("[data-mapback]");
   if (mb)
     mb.onclick = () => go("s3");
+  /* the handle above the list pulls the map up to full height (to look around freely) and back */
+  const gb = wrap.nextElementSibling && wrap.nextElementSibling.querySelector(".grab");
+  if (gb) {
+    gb.outerHTML = `<button class="maptog" type="button" aria-expanded="false"><i class="grab"></i><span data-t="mapBig">${t("mapBig")}</span><span data-t="mapList">${t("mapList")}</span></button>`;
+    wrap.nextElementSibling.querySelector(".maptog").onclick = () => mapFull(id, !wrap.parentElement.classList.contains("mapfull"));
+  }
   const el = wrap.querySelector(".tpmap");
-  const M = { el, markers: [] };
+  const M = { el, markers: [], w: 0 };
   maps[id] = M;
   if (window.L) {
     const map = L.map(el, { zoomControl: false, zoomSnap: 0.25 }).setView(S.center, 13);
@@ -29,7 +35,8 @@ function makeMap(id) {
     M.ring = L.circle(S.center, { radius: S.radius * 1000, color: "#1F7A55", weight: 2, fillColor: "#C8F06A", fillOpacity: .12, interactive: false }).addTo(map);
     fitMap(M);
     if (window.ResizeObserver)
-      new ResizeObserver(() => { map.invalidateSize(); fitMap(M); }).observe(el);
+      new ResizeObserver(() => { map.invalidateSize(); if (!M.w)
+        fitMap(M); M.w = el.offsetWidth; }).observe(el); /* fit when it first becomes visible, then keep where the user panned */
     let loaded = 0, errs = 0;
     const tl = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 18, attribution: "© OpenStreetMap" }).addTo(map);
     tl.on("tileload", () => loaded++);
@@ -63,6 +70,17 @@ function fitMap(M) {
   const c = L.latLng(me || S.center);
   M.ring.setLatLng(c).setRadius(S.radius * 1000);
   M.map.fitBounds(c.toBounds(S.radius * 2000), { paddingTopLeft: [16, 80], paddingBottomRight: [16, 16] });
+}
+/* full map: the list shrinks to the toggle + the selected group, the map takes the rest of the screen */
+function mapFull(id, on) {
+  const wrap = $("#" + id), host = wrap.parentElement, b = host.querySelector(".maptog");
+  host.classList.toggle("mapfull", on);
+  b.setAttribute("aria-expanded", on);
+  host.scrollTop = 0;
+  if (wrap.dataset.h === undefined)
+    wrap.dataset.h = wrap.style.height;
+  wrap.style.height = on ? Math.max(300, host.clientHeight - 190) + "px" : wrap.dataset.h;
+  setTimeout(() => refreshMap(id), 320);
 }
 function refreshMap(id) { const M = maps[id]; if (M && M.map) {
   M.map.invalidateSize();

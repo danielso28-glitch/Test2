@@ -92,9 +92,9 @@ function renderAvatarStage(s) {
       ap = st.querySelector(".avport");
     }
     const img = ap.querySelector("img");
-    if (img.getAttribute("src") !== S.face)
-      img.src = S.face;
-    img.style.filter = agedFilter(75, L < 2);
+    const src = agedFace(L < 2);
+    if (img.getAttribute("src") !== src)
+      img.src = src;
     ap.querySelector("b").textContent = (S.lang === "de" ? "Du · " : "You · ") + 75;
   }
   else if (ap)
