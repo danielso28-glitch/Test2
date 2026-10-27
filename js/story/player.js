@@ -54,8 +54,8 @@ function renderStill(k) {
   sc.querySelector(".bigplay").setAttribute("aria-label", t("tapPlay"));
   const sh = tl.shots.find(s => s.id.endsWith("8"));
   drawAt(k, tl, sh.start + sh.dur * .5);
-  $("#who" + k).textContent = (S.lang === "de" ? "Deine Geschichte" : "Your story") + " · " + `${Math.floor(tl.total / 60)}:${String(Math.round(tl.total % 60)).padStart(2, "0")}`;
-  $("#sub" + k).textContent = S.lang === "de" ? "Tippe auf Play – mit Stimmen und Untertiteln." : "Tap play – with voices and subtitles.";
+  $("#who" + k).textContent = TL("Your story", "Deine Geschichte", "Tu historia") + " · " + `${Math.floor(tl.total / 60)}:${String(Math.round(tl.total % 60)).padStart(2, "0")}`;
+  $("#sub" + k).textContent = TL("Tap play – with voices and subtitles.", "Tippe auf Play – mit Stimmen und Untertiteln.", "Pulsa play – con voces y subtítulos.");
   $("#sub" + k).classList.add("lit");
   setPlayBtn(k, false);
   preloadStory(STORY_OF[k]);
@@ -149,7 +149,7 @@ function startPath(k) {
         const b = $("#scene" + k + " .bigplay");
         if (b)
           b.hidden = false;
-        $("#who" + k).textContent = S.lang === "de" ? "Ende" : "The end";
+        $("#who" + k).textContent = TL("The end", "Ende", "Fin");
         showEndCard(k);
         return;
       }

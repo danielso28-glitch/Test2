@@ -39,7 +39,7 @@ const STORIES = [
 FEED.push(...STORIES);
 const initials = n => n.split(/[\s-]+/).map(w => w[0]).join("").slice(0, 2);
 function storyCard(f, why) {
-  const [quote, ctx] = f[S.lang];
+  const [quote, ctx] = f[S.lang] || f.en;
   const badge = { story: t("stDemo"), model: t("stModel"), study: t("stStudy") }[f.kind];
   const person = f.kind === "study" ? `<span class="face">${ICON.heart}</span><div><b>${esc(f.src)}</b><span>${esc(ctx)}</span></div>`
     : `<span class="face">${esc(initials(f.who))}</span><div><b>${esc(f.who)}${f.age ? `, ${f.age}` : ""}</b><span>${esc(ctx)}</span></div>`;

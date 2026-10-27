@@ -161,6 +161,8 @@
   align-items:center;
   justify-content:space-between;
   gap:12px;
+  /* below the PROTOTYPE badge */
+  padding-top:26px;
 }
 
 .flabel {
@@ -215,4 +217,99 @@
 .fbcard .btn {
   min-height:56px;
   font-size:1.1rem;
+}
+
+/* language menu with flags */
+.langdd {
+  position:relative;
+}
+
+.langbtn {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-height:50px;
+  padding:0 14px;
+  border-radius:26px;
+  border:1.5px solid var(--line);
+  background:var(--card);
+  font-weight:800;
+  font-size:1rem;
+  color:var(--ink);
+}
+
+.langdd.wide .langbtn {
+  width:100%;
+  border-radius:22px;
+}
+
+.langbtn .chev {
+  width:18px;
+  height:18px;
+  stroke:var(--ink);
+  margin-left:auto;
+  transition:transform .2s;
+}
+
+.langbtn[aria-expanded="true"] .chev {
+  transform:rotate(180deg);
+}
+
+.flag {
+  width:30px;
+  height:20px;
+  border-radius:4px;
+  flex:none;
+  box-shadow:0 0 0 1px rgba(18,32,27,.12);
+}
+
+.langlist {
+  position:absolute;
+  right:0;
+  top:calc(100% + 6px);
+  z-index:1500;
+  min-width:200px;
+  background:var(--card);
+  border-radius:20px;
+  padding:6px;
+  box-shadow:0 12px 32px rgba(18,32,27,.18);
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+
+.langdd.wide .langlist {
+  left:0;
+}
+
+.langlist button {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-height:50px;
+  padding:0 14px;
+  border-radius:14px;
+  font-weight:700;
+  font-size:1rem;
+  color:var(--ink);
+  text-align:left;
+}
+
+.langlist button[aria-selected="true"] {
+  background:var(--green-soft);
+}
+
+.langlist button:focus-visible,.langlist button:hover {
+  background:#EEF2EF;
+}
+
+.langlist .tick {
+  width:20px;
+  height:20px;
+  stroke:var(--green);
+  margin-left:auto;
+}
+
+.acchead .logo {
+  white-space:nowrap;
 }

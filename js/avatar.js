@@ -95,7 +95,7 @@ function renderAvatarStage(s) {
     const src = agedFace(L < 2);
     if (img.getAttribute("src") !== src)
       img.src = src;
-    ap.querySelector("b").textContent = (S.lang === "de" ? "Du · " : "You · ") + 75;
+    ap.querySelector("b").textContent = TL("You · ", "Du · ", "Tú · ") + 75;
   }
   else if (ap)
     ap.remove();

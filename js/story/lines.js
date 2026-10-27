@@ -64,11 +64,12 @@ function spkOf(id) {
   return "N";
 }
 /* recorded clip for this line, or null (→ browser voice). German clips are named de_<ID>. */
-function clipFor(id, sp) { const k = S.lang === "de" ? "de_" + id : id; if (!ADUR[k])
+function clipFor(id, sp) { if (S.lang === "es") /* no Spanish recordings: browser voice */
+  return null; const k = S.lang === "de" ? "de_" + id : id; if (!ADUR[k])
   return null; if (sp[0] === "Y" && S.gender === "f")
   return null; return k; }
 function lineInfo(id) {
-  const sp = spkOf(id), clip = clipFor(id, sp), txt = LT[id][S.lang === "de" ? 1 : 0];
-  const d = clip ? ADUR[clip] : Math.max(1.1, txt.length * (S.lang === "de" ? .068 : .062) + .35) * (/75B|65B/.test(sp) ? 1.2 : 1);
+  const sp = spkOf(id), clip = clipFor(id, sp), txt = LT[id][LANG_I[S.lang]] || LT[id][0];
+  const d = clip ? ADUR[clip] : Math.max(1.1, txt.length * (S.lang === "en" ? .062 : .068) + .35) * (/75B|65B/.test(sp) ? 1.2 : 1);
   return { id, sp, clip, txt, d };
 }

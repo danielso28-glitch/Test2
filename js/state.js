@@ -7,19 +7,21 @@ try {
     S = { ...DEF, ...s };
 }
 catch (e) { }
-if (!S.lang)
-  S.lang = (navigator.language || "").toLowerCase().startsWith("de") ? "de" : "en";
+/* languages: English, German, Spanish (flags for the language menu, see langMenu in render.js) */
+const LANGS = ["de", "en", "es"];
+if (!LANGS.includes(S.lang))
+  S.lang = LANGS.find(l => (navigator.language || "").toLowerCase().startsWith(l)) || "en";
 function save() { try {
   localStorage.setItem("tp2", JSON.stringify(S));
 }
 catch (e) { } }
 const $ = q => document.querySelector(q), $$ = q => [...document.querySelectorAll(q)];
-const t = k => I[S.lang][k];
+const t = k => I[S.lang][k] ?? I.en[k];
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-const nm = g => typeof g.name === "string" ? g.name : g.name[S.lang];
-const pl = g => typeof g.place === "string" ? g.place : g.place[S.lang];
+const nm = g => typeof g.name === "string" ? g.name : g.name[S.lang] || g.name.en;
+const pl = g => typeof g.place === "string" ? g.place : g.place[S.lang] || g.place.en;
 function toast(m) { const el = $("#toast"); el.hidden = false; el.textContent = ""; setTimeout(() => el.textContent = m, 60); clearTimeout(toast.h); toast.h = setTimeout(() => el.hidden = true, 2800); }
 const Gname = () => S.gender === "f" ? t("gm") : t("gp");
-const quote = s => S.lang === "de" ? `„${s}“` : `“${s}”`;
+const quote = s => S.lang === "de" ? `„${s}“` : S.lang === "es" ? `«${s}»` : `“${s}”`;
 const line = (goal, path, i) => DLG[S.lang][goal][path][i].replace("{G}", Gname());
 const dayKey = d => { const z = new Date(d.getTime() - d.getTimezoneOffset() * 6e4); return z.toISOString().slice(0, 10); };

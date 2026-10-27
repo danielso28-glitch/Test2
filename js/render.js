@@ -16,8 +16,8 @@ function renderText() {
       sb.querySelector(".face").innerHTML = S.face ? `<img src="${S.face}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:inherit">` : sb.dataset.orig;
       const tt = sb.querySelector("[data-t=scanT]");
       if (S.face && tt) {
-        tt.textContent = TL("Face scanned ✓", "Gesicht gescannt ✓");
-        sb.querySelector("[data-t=scanD]").textContent = TL("Tap to scan again. Your photo stays on this device.", "Tippen zum Neu-Scannen. Dein Foto bleibt auf diesem Gerät.");
+        tt.textContent = TL("Face scanned ✓", "Gesicht gescannt ✓", "Cara escaneada ✓");
+        sb.querySelector("[data-t=scanD]").textContent = TL("Tap to scan again. Your photo stays on this device.", "Tippen zum Neu-Scannen. Dein Foto bleibt auf diesem Gerät.", "Toca para escanear de nuevo. Tu foto se queda en este dispositivo.");
       }
     }
   }
@@ -157,6 +157,35 @@ function doCheckin(gid) {
   renderAvatar();
   toast(t("checked")(sessionPts(g)));
 }
+/* language menu with flags (sign-up header and settings) */
+const LANG_NAME = { de: "Deutsch", en: "English", es: "Español" };
+const FLAG = {
+  de: `<svg class="flag" viewBox="0 0 30 20" aria-hidden="true"><rect width="30" height="20" fill="#FFCE00"/><rect width="30" height="13.3" fill="#DD0000"/><rect width="30" height="6.7" fill="#000"/></svg>`,
+  es: `<svg class="flag" viewBox="0 0 30 20" aria-hidden="true"><rect width="30" height="20" fill="#AA151B"/><rect y="5" width="30" height="10" fill="#F1BF00"/></svg>`,
+  en: `<svg class="flag" viewBox="0 0 60 40" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="60" height="40" fill="#012169"/><path d="M0 0l60 40M60 0L0 40" stroke="#fff" stroke-width="8"/><path d="M0 0l60 40M60 0L0 40" stroke="#C8102E" stroke-width="3"/><path d="M30 0v40M0 20h60" stroke="#fff" stroke-width="12"/><path d="M30 0v40M0 20h60" stroke="#C8102E" stroke-width="7"/></svg>`
+};
+const langMenu = (cls = "") => `<div class="langdd ${cls}"><button type="button" class="langbtn" aria-haspopup="listbox" aria-expanded="false" aria-label="${t("language")}: ${LANG_NAME[S.lang]}">${FLAG[S.lang]}<span>${LANG_NAME[S.lang]}</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+  <div class="langlist" role="listbox" aria-label="${t("language")}" hidden>${LANGS.map(l => `<button type="button" role="option" aria-selected="${l === S.lang}" data-setlang="${l}" lang="${l}">${FLAG[l]}<span>${LANG_NAME[l]}</span>${l === S.lang ? `<svg class="tick" viewBox="0 0 24 24" fill="none" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>` : ""}</button>`).join("")}</div></div>`;
+/* open/close the menu; picking a language saves it and calls onPick (re-render) */
+function bindLangMenu(box, onPick) {
+  box.querySelectorAll(".langdd").forEach(dd => {
+    const btn = dd.querySelector(".langbtn"), list = dd.querySelector(".langlist");
+    const close = () => { list.hidden = true; btn.setAttribute("aria-expanded", "false"); document.removeEventListener("click", out, true); };
+    const out = e => { if (!dd.contains(e.target))
+      close(); };
+    btn.onclick = () => { if (!list.hidden)
+      return close(); list.hidden = false; btn.setAttribute("aria-expanded", "true"); document.addEventListener("click", out, true); (list.querySelector("[aria-selected=true]") || list.firstChild).focus(); };
+    dd.onkeydown = e => { if (e.key === "Escape") {
+      close();
+      btn.focus();
+    } };
+    list.querySelectorAll("[data-setlang]").forEach(b => b.onclick = () => { close(); if (S.lang !== b.dataset.setlang) {
+      S.lang = b.dataset.setlang;
+      save();
+      onPick();
+    } });
+  });
+}
 /* anonymous tester feedback: opens the external form, sends no app data */
 const feedbackCard = () => `<div class="card fbcard"><b><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/></svg>${t("fb").title}</b><span class="muted">${t("fb").text}</span><button class="btn lime" data-feedback>${t("fb").btn}</button><span class="hint" style="margin:0">${t("fb").anon}</span></div>`;
 function bindFeedback(box) {
@@ -165,7 +194,7 @@ function bindFeedback(box) {
 let resetArm = false;
 function renderSettings(box, sheet) {
   box.innerHTML = `${sheet ? `<h2 class="t" style="font-size:1.6rem">${t("settings")}</h2>` : ""}
-   <div class="lbl">${t("language")}</div><div class="seg"><button data-lang="en" aria-pressed="${S.lang === "en"}">English</button><button data-lang="de" aria-pressed="${S.lang === "de"}">Deutsch</button></div>
+   <div class="lbl">${t("language")}</div>${langMenu("wide")}
    <div class="lbl">${t("textsize")}</div><div class="seg">${[16, 18, 20].map((v, i) => `<button data-size="${v}" aria-pressed="${S.size === v}">${["A", "A+", "A++"][i]}</button>`).join("")}</div>
    ${sheet ? "" : accountRow()}
    ${sheet ? "" : faceRow()}
@@ -176,13 +205,13 @@ function renderSettings(box, sheet) {
    <button class="btn out" data-restart>${t("restartIntro")}</button>
    <button class="btn out" data-reset style="border-color:var(--danger);color:var(--danger)">${resetArm ? t("resetSure") : t("resetAll")}</button>
    <p class="hint">${t("privacy")}</p><p class="hint">${t("credits")}</p>`}`;
-  box.querySelectorAll("[data-lang]").forEach(b => b.onclick = () => { S.lang = b.dataset.lang; save(); renderText(); });
+  bindLangMenu(box, renderText);
   box.querySelectorAll("[data-size]").forEach(b => b.onclick = () => { S.size = +b.dataset.size; applySize(); save(); renderText(); });
   bindAccountRow(box);
   box.querySelectorAll("[data-tr]").forEach(b => b.onclick = () => openTracker(b.dataset.tr));
   const td = box.querySelector("[data-trdis]");
   if (td)
-    td.onclick = () => { S.tracker = null; S.trSync = null; S.health = null; save(); renderText(); toast(TL("Disconnected. Your data was removed from this phone.", "Getrennt. Deine Daten wurden vom Handy gelöscht.")); };
+    td.onclick = () => { S.tracker = null; S.trSync = null; S.health = null; save(); renderText(); toast(TL("Disconnected. Your data was removed from this phone.", "Getrennt. Deine Daten wurden vom Handy gelöscht.", "Desconectado. Tus datos se han borrado de este móvil.")); };
   const tsy = box.querySelector("[data-trsync]");
   if (tsy)
     tsy.onclick = () => openTracker(S.tracker, true);

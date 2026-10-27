@@ -11,14 +11,14 @@ function scanStopCam() { clearInterval(SC.timer); SC.timer = null; if (SC.stream
 const scanHas = () => !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
 function scanIntro(msg) {
   const b = $("#scanBody");
-  b.innerHTML = `<button class="round scx" data-scan-close aria-label="${TL("Close", "Schließen")}">✕</button>
+  b.innerHTML = `<button class="round scx" data-scan-close aria-label="${TL("Close", "Schließen", "Cerrar")}">✕</button>
  <div class="scanhero"><svg viewBox="0 0 200 220" width="170"><g class="herotick">${ovalTicks(100, 110, 74, 92, 9)}</g><circle cx="76" cy="98" r="6" fill="#fff"/><circle cx="124" cy="98" r="6" fill="#fff"/><path d="M76 146q24 18 48 0" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="round"/></svg></div>
- <h2>${TL("Let's meet your future self", "Lerne dein Zukunfts-Ich kennen")}</h2>
- <p class="scanp">${TL("Look straight into the camera and hold still for two seconds. The app finds your face and takes the photo by itself.", "Schau gerade in die Kamera und halt zwei Sekunden still. Die App findet dein Gesicht und macht das Foto von selbst.")}</p>
- <p class="scanp small">🔒 ${TL("Your photo stays on this phone. No upload, no server. You can delete it any time in Settings.", "Dein Foto bleibt auf diesem Handy. Kein Upload, kein Server. Du kannst es jederzeit in den Einstellungen löschen.")}</p>
+ <h2>${TL("Let's meet your future self", "Lerne dein Zukunfts-Ich kennen", "Conoce a tu yo del futuro")}</h2>
+ <p class="scanp">${TL("Look straight into the camera and hold still for two seconds. The app finds your face and takes the photo by itself.", "Schau gerade in die Kamera und halt zwei Sekunden still. Die App findet dein Gesicht und macht das Foto von selbst.", "Mira directamente a la cámara y no te muevas durante dos segundos. La app encuentra tu cara y hace la foto sola.")}</p>
+ <p class="scanp small">🔒 ${TL("Your photo stays on this phone. No upload, no server. You can delete it any time in Settings.", "Dein Foto bleibt auf diesem Handy. Kein Upload, kein Server. Du kannst es jederzeit in den Einstellungen löschen.", "Tu foto se queda en este móvil. Sin subidas, sin servidor. Puedes borrarla cuando quieras en Ajustes.")}</p>
  ${msg ? `<p class="scanmsg">${msg}</p>` : ""}
- ${scanHas() && !msg ? `<button class="btn lime" data-scan-cam>${TL("Start the scan", "Scan starten")}</button>` : ""}
- <label class="btn ${scanHas() && !msg ? "ghost" : "lime"} filebtn">${TL("Take or choose a photo", "Foto aufnehmen oder auswählen")}<input type="file" accept="image/*" capture="user" id="scanFile" hidden></label>`;
+ ${scanHas() && !msg ? `<button class="btn lime" data-scan-cam>${TL("Start the scan", "Scan starten", "Empezar el escaneo")}</button>` : ""}
+ <label class="btn ${scanHas() && !msg ? "ghost" : "lime"} filebtn">${TL("Take or choose a photo", "Foto aufnehmen oder auswählen", "Hacer o elegir una foto")}<input type="file" accept="image/*" capture="user" id="scanFile" hidden></label>`;
   $("#scanFile").onchange = e => { const f = e.target.files && e.target.files[0]; if (!f)
     return; const r = new FileReader(); r.onload = () => { const im = new Image(); im.onload = () => { SC.img = im; Promise.race([detectFace(im).catch(() => null), new Promise(ok => setTimeout(ok, 5000))]).then(b => { SC.box = b && !b.none ? b : null; scanAdjust(); }); }; im.src = r.result; }; r.readAsDataURL(f); };
 }
@@ -36,16 +36,16 @@ function ovalTicks(cx, cy, rx, ry, len) {
 const scanTicks = () => ovalTicks(150, 190, 110, 138, 10);
 async function scanCam() {
   const b = $("#scanBody");
-  b.innerHTML = `<button class="round scx" data-scan-close aria-label="${TL("Close", "Schließen")}">✕</button>
+  b.innerHTML = `<button class="round scx" data-scan-close aria-label="${TL("Close", "Schließen", "Cerrar")}">✕</button>
  <div class="camwrap"><video id="scanVid" playsinline autoplay muted></video>
  <svg class="cammask" viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice"><defs><mask id="hole"><rect width="300" height="400" fill="#fff"/><ellipse cx="150" cy="190" rx="100" ry="128" fill="#000"/></mask></defs><rect width="300" height="400" fill="rgba(10,18,15,.72)" mask="url(#hole)"/><ellipse cx="150" cy="190" rx="104" ry="132" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="1.5"/><g id="scanRing">${scanTicks()}</g><g class="scdone"><circle cx="150" cy="190" r="34" fill="#C8F06A"/><path d="M135 191l10 10 20-21" fill="none" stroke="#12201B" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></g></svg>
- <div class="camhint" id="scanHint">${TL("Starting camera…", "Kamera startet…")}</div>
+ <div class="camhint" id="scanHint">${TL("Starting camera…", "Kamera startet…", "Iniciando la cámara…")}</div>
  <div class="camstep" id="scanStep"></div></div>`;
   try {
     SC.stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user", width: { ideal: 960 }, height: { ideal: 1280 } }, audio: false });
   }
   catch (e) {
-    scanIntro(TL("The camera isn't available here (for example inside Claude, or permission was denied). Take or choose a photo instead.", "Die Kamera ist hier nicht verfügbar (z. B. in Claude, oder die Erlaubnis fehlt). Nimm stattdessen ein Foto auf oder wähle eins aus."));
+    scanIntro(TL("The camera isn't available here (for example inside Claude, or permission was denied). Take or choose a photo instead.", "Die Kamera ist hier nicht verfügbar (z. B. in Claude, oder die Erlaubnis fehlt). Nimm stattdessen ein Foto auf oder wähle eins aus.", "La cámara no está disponible aquí (por ejemplo dentro de Claude, o se denegó el permiso). Haz o elige una foto."));
     return;
   }
   const v = $("#scanVid");
@@ -66,7 +66,7 @@ async function scanCam() {
     h.textContent = s; };
   const step = s => { const h = $("#scanStep"); if (h)
     h.textContent = s; };
-  step(TL("Look straight into the camera", "Schau gerade in die Kamera"));
+  step(TL("Look straight into the camera", "Schau gerade in die Kamera", "Mira directamente a la cámara"));
   faceDetector();
   SC.timer = setInterval(async () => {
     if (!v.videoWidth || busy)
@@ -90,37 +90,37 @@ async function scanCam() {
     const box = await detectFace(v).catch(() => null);
     let ok = true;
     if (lum < 55) {
-      hint(TL("More light, please", "Bitte mehr Licht"));
+      hint(TL("More light, please", "Bitte mehr Licht", "Más luz, por favor"));
       ok = false;
     }
     else if (box && box.none) {
-      hint(TL("Put your face in the oval", "Halte dein Gesicht ins Oval"));
+      hint(TL("Put your face in the oval", "Halte dein Gesicht ins Oval", "Pon tu cara en el óvalo"));
       ok = false;
     }
     else if (box) {
       const ar = vw / vh, fx = Math.min(1, .75 / ar), fy = Math.min(1, ar / .75);
       const cxd = (1 - box.x - box.w / 2 - (1 - fx) / 2) / fx, cyd = (box.y + box.h / 2 - (1 - fy) / 2) / fy, hd = box.h / fy;
       if (hd < .3) {
-        hint(TL("Come a little closer", "Komm etwas näher"));
+        hint(TL("Come a little closer", "Komm etwas näher", "Acércate un poco"));
         ok = false;
       }
       else if (hd > .62) {
-        hint(TL("A little further away", "Etwas weiter weg"));
+        hint(TL("A little further away", "Etwas weiter weg", "Aléjate un poco"));
         ok = false;
       }
       else if (Math.abs(cxd - .5) > .12 || Math.abs(cyd - .475) > .13) {
-        hint(TL("Move your face into the oval", "Schieb dein Gesicht ins Oval"));
+        hint(TL("Move your face into the oval", "Schieb dein Gesicht ins Oval", "Mueve tu cara al óvalo"));
         ok = false;
       }
       else
         lastBox = { x: 1 - box.x - box.w, y: box.y, w: box.w, h: box.h }; /* in the mirrored photo */
     }
     if (ok && diff > 9) {
-      hint(TL("Hold still…", "Halt still…"));
+      hint(TL("Hold still…", "Halt still…", "No te muevas…"));
       ok = false;
     }
     if (ok) {
-      hint(TL("Perfect – stay like this", "Perfekt – so bleiben"));
+      hint(TL("Perfect – stay like this", "Perfekt – so bleiben", "Perfecto – quédate así"));
       steady++;
     }
     else
@@ -130,7 +130,7 @@ async function scanCam() {
       clearInterval(SC.timer);
       scanGrab(v);
       SC.box = lastBox;
-      hint(TL("Done!", "Fertig!"));
+      hint(TL("Done!", "Fertig!", "¡Listo!"));
       setTimeout(() => { scanStopCam(); scanAdjust(); }, 700);
     }
     busy = false;
@@ -162,10 +162,10 @@ function scanAdjust() {
     Object.assign(SC, autoCrop(SC.box, SC.img));
   SC.box = null;
   SC.fromCam = false;
-  b.innerHTML = `<h2>${TL("Fit your face in the oval", "Passe dein Gesicht ins Oval ein")}</h2><p class="scanp">${TL("Drag to move, use the slider to zoom. Eyebrows to chin should fill the oval.", "Ziehen zum Verschieben, Regler zum Zoomen. Von den Augenbrauen bis zum Kinn sollte das Oval gefüllt sein.")}</p>
+  b.innerHTML = `<h2>${TL("Fit your face in the oval", "Passe dein Gesicht ins Oval ein", "Encaja tu cara en el óvalo")}</h2><p class="scanp">${TL("Drag to move, use the slider to zoom. Eyebrows to chin should fill the oval.", "Ziehen zum Verschieben, Regler zum Zoomen. Von den Augenbrauen bis zum Kinn sollte das Oval gefüllt sein.", "Arrastra para mover y usa el control para hacer zoom. De las cejas a la barbilla debe llenar el óvalo.")}</p>
  <div class="adjwrap"><canvas id="adjCv" width="300" height="352"></canvas><svg viewBox="0 0 300 352" class="adjguide" aria-hidden="true"><defs><mask id="adjHole"><rect width="300" height="352" fill="#fff"/><ellipse cx="150" cy="176" rx="120" ry="141" fill="#000"/></mask></defs><rect width="300" height="352" fill="rgba(10,18,15,.62)" mask="url(#adjHole)"/><ellipse cx="150" cy="176" rx="120" ry="141" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.5"/><g class="adjticks">${ovalTicks(150, 176, 126, 147, 10)}</g></svg></div>
  <input type="range" id="adjZoom" min="1" max="3.5" step=".01" value="${SC.zoom}" aria-label="${t("aria").zoom}">
- <button class="btn lime" id="adjOk">${TL("Looks good", "Passt so")}</button><button class="btn ghost" id="adjRedo">${TL("Try again", "Nochmal")}</button>`;
+ <button class="btn lime" id="adjOk">${TL("Looks good", "Passt so", "Se ve bien")}</button><button class="btn ghost" id="adjRedo">${TL("Try again", "Nochmal", "Repetir")}</button>`;
   const cv = $("#adjCv"), x = cv.getContext("2d");
   const draw = () => {
     const im = SC.img, cw = 240, ch = 282, base = Math.max(cw / im.width, ch / im.height) * SC.zoom, w = im.width * base, h = im.height * base;
@@ -186,14 +186,14 @@ function scanAdjust() {
 function scanReveal() {
   const b = $("#scanBody");
   const col = (src, cls, lab, sub) => `<div class="rv ${cls}"><img src="${src}" alt=""><b>${lab}</b><small>${sub}</small></div>`;
-  b.innerHTML = `<h2>${TL("This is you", "Das bist du")}</h2><div class="rvrow">${col(S.face, "", TL("Today", "Heute"), TL("as you are", "so wie du bist"))}${col(agedFace(true), "rva", "75", TL("Path A · without exercise", "Weg A · ohne Bewegung"))}${col(agedFace(false), "rvb", "75", TL("Path B · with exercise", "Weg B · mit Bewegung"))}</div>
- <p class="scanp">${TL("Same person – the difference is twenty years of small choices. You'll see both paths in two short films.", "Dieselbe Person – der Unterschied sind zwanzig Jahre kleiner Entscheidungen. Beide Wege siehst du gleich in zwei kurzen Filmen.")}</p>
- <button class="btn lime" id="rvGo">${TL("Choose my goal", "Mein Ziel wählen")}</button>`;
+  b.innerHTML = `<h2>${TL("This is you", "Das bist du", "Así eres tú")}</h2><div class="rvrow">${col(S.face, "", TL("Today", "Heute", "Hoy"), TL("as you are", "so wie du bist", "tal como eres"))}${col(agedFace(true), "rva", "75", TL("Path A · without exercise", "Weg A · ohne Bewegung", "Camino A · sin ejercicio"))}${col(agedFace(false), "rvb", "75", TL("Path B · with exercise", "Weg B · mit Bewegung", "Camino B · con ejercicio"))}</div>
+ <p class="scanp">${TL("Same person – the difference is twenty years of small choices. You'll see both paths in two short films.", "Dieselbe Person – der Unterschied sind zwanzig Jahre kleiner Entscheidungen. Beide Wege siehst du gleich in zwei kurzen Filmen.", "La misma persona – la diferencia son veinte años de pequeñas decisiones. Verás ambos caminos en dos películas cortas.")}</p>
+ <button class="btn lime" id="rvGo">${TL("Choose my goal", "Mein Ziel wählen", "Elegir mi objetivo")}</button>`;
   $("#rvGo").onclick = () => scanClose();
 }
 function faceRow() {
-  return S.face ? `<div class="card setrow"><img src="${S.face}" alt="" style="width:52px;height:62px;border-radius:50%;object-fit:cover"><span class="muted" style="flex:1;min-width:0">${TL("Your face appears as a portrait in your films and under \"Me at 75\". Stored only on this phone.", "Dein Gesicht erscheint als Porträt in deinen Filmen und unter „Ich mit 75“. Nur auf diesem Handy gespeichert.")}</span><button class="btn small dark" data-face-scan>${TL("Scan again", "Neu scannen")}</button><button class="btn small out" data-face-del style="border-color:var(--danger);color:var(--danger)">${TL("Delete my face", "Gesicht löschen")}</button></div>`
-    : `<div class="card setrow"><span class="muted" style="flex:1;min-width:0">${TL("No face scan yet – optional, for your portrait in the films.", "Noch kein Gesichtsscan – optional, für dein Porträt in den Filmen.")}</span><button class="btn small dark" data-face-scan>${TL("Scan my face", "Gesicht scannen")}</button></div>`;
+  return S.face ? `<div class="card setrow"><img src="${S.face}" alt="" style="width:52px;height:62px;border-radius:50%;object-fit:cover"><span class="muted" style="flex:1;min-width:0">${TL("Your face appears as a portrait in your films and under \"Me at 75\". Stored only on this phone.", "Dein Gesicht erscheint als Porträt in deinen Filmen und unter „Ich mit 75“. Nur auf diesem Handy gespeichert.", "Tu cara aparece como retrato en tus películas y en «Yo a los 75». Guardada solo en este móvil.")}</span><button class="btn small dark" data-face-scan>${TL("Scan again", "Neu scannen", "Escanear de nuevo")}</button><button class="btn small out" data-face-del style="border-color:var(--danger);color:var(--danger)">${TL("Delete my face", "Gesicht löschen", "Borrar mi cara")}</button></div>`
+    : `<div class="card setrow"><span class="muted" style="flex:1;min-width:0">${TL("No face scan yet – optional, for your portrait in the films.", "Noch kein Gesichtsscan – optional, für dein Porträt in den Filmen.", "Aún no hay escaneo facial – opcional, para tu retrato en las películas.")}</span><button class="btn small dark" data-face-scan>${TL("Scan my face", "Gesicht scannen", "Escanear mi cara")}</button></div>`;
 }
 document.addEventListener("click", e => {
   if (e.target.closest("[data-scan-close]")) {
@@ -215,7 +215,7 @@ document.addEventListener("click", e => {
     S.scanned = false;
     save();
     renderText();
-    toast(TL("Your face photo was deleted from this phone.", "Dein Gesichtsfoto wurde von diesem Handy gelöscht."));
+    toast(TL("Your face photo was deleted from this phone.", "Dein Gesichtsfoto wurde von diesem Handy gelöscht.", "Tu foto se ha borrado de este móvil."));
     return;
   }
 });

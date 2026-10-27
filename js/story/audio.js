@@ -128,7 +128,7 @@ function ttsLine(li) {
     if (!("speechSynthesis" in window))
       return;
     const u = new SpeechSynthesisUtterance(li.txt);
-    u.lang = S.lang === "de" ? "de-DE" : "en-GB";
+    u.lang = LOC();
     const fem = li.sp === "K" || li.sp === "F" || li.sp === "D" || (li.sp[0] === "Y" && S.gender === "f");
     const v = pickVoice(fem ? "kid" : "adult", fem);
     if (v)

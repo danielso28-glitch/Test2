@@ -48,7 +48,7 @@ function renderAccount(keep = {}) {
   const fld = (id, type, ac, val = "", extra = "") => `<div class="field"><label for="${id}">${A[id]}</label><input id="${id}" type="${type}" autocomplete="${ac}" value="${esc(keep[id] ?? val)}"${extra}></div>`;
   const pw = `<div class="field"><label for="accPw">${A.accPw}</label><div class="pwrow"><input id="accPw" type="password" autocomplete="${up || re ? "new-password" : "current-password"}" value="${esc(keep.accPw || "")}"><button type="button" class="btn out small" id="accShow" aria-pressed="false">${A.show}</button></div>${up || re ? `<span class="hint" style="margin:0">${A.pwHint}</span>` : ""}</div>`;
   const g = keep.gender;
-  $("#accBody").innerHTML = `<header class="acchead"><div class="logo"><svg viewBox="0 0 22 26" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M2 2l9 11 9-11M11 13v11"/></svg>Two Paths</div><button class="pillbtn" id="accLang">${S.lang === "de" ? "English" : "Deutsch"}</button></header>
+  $("#accBody").innerHTML = `<header class="acchead"><div class="logo"><svg viewBox="0 0 22 26" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M2 2l9 11 9-11M11 13v11"/></svg>Two Paths</div>${langMenu()}</header>
    <div><h2 class="t">${up ? A.upT : re ? A.reT : A.inT(a.first)}</h2><p class="sub">${up ? A.upSub : re ? (a.birth ? A.reSub : A.reSubNoBirth) : A.inSub}</p></div>
    <form class="card accform" id="accForm" novalidate>
      ${up ? `<div class="lbl">${A.secYou}</div>
@@ -68,15 +68,14 @@ function renderAccount(keep = {}) {
    ${up ? "" : re ? `<div class="acclinks"><button class="btn out" id="accBackLogin">${A.backLogin}</button>
      <button class="btn ghost danger" id="accFresh">${accReset ? A.freshSure : A.fresh}</button>${accReset ? `<p class="hint" style="text-align:center">${A.freshD}</p>` : ""}</div>`
      : `<div class="acclinks"><button class="btn out" id="accForgot">${A.forgot}</button></div>`}`;
-  $("#accLang").onclick = () => {
+  /* language menu: keep what was typed */
+  bindLangMenu($("#accBody"), () => {
     const v = {};
     $$("#accForm input").forEach(i => v[i.id] = i.value);
     v.gender = ($("#accGender [aria-pressed=true]") || {}).dataset?.g;
-    S.lang = S.lang === "de" ? "en" : "de";
-    save();
     renderText();
     renderAccount(v);
-  };
+  });
   $$("#accGender [data-g]").forEach(b => b.onclick = () => $$("#accGender [data-g]").forEach(x => x.setAttribute("aria-pressed", x === b)));
   $("#accShow").onclick = e => { const i = $("#accPw"), on = i.type === "password"; i.type = on ? "text" : "password"; e.target.setAttribute("aria-pressed", on); e.target.textContent = on ? A.hide : A.show; };
   $("#accForm").onsubmit = e => { e.preventDefault(); up ? doSignup() : re ? doReset() : doLogin(); };

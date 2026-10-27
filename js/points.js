@@ -53,9 +53,9 @@ function renderGoal() {
   const pct = v => Math.min(100, Math.round(v / G.target * 100));
   const behind = G.expected - G.got, done = G.got >= G.target;
   const status = done ? C.done : behind <= 0 ? C.onTrack : C.behind(behind, Math.ceil(behind / PTS.sessionDef));
-  const endTxt = G.end.toLocaleDateString(S.lang === "de" ? "de-DE" : "en-GB", { day: "numeric", month: "long", year: "numeric" });
+  const endTxt = G.end.toLocaleDateString(LOC(), { day: "numeric", month: "long", year: "numeric" });
   el.innerHTML = `<div class="eyebrow">${C.eyebrow}</div><h3>${C.title(G.endAge)}</h3>${C.stage(G.endAge) ? `<p class="muted" style="margin-top:-4px">${C.stage(G.endAge)}</p>` : ""}
-   <div class="gnum"><b>${G.got.toLocaleString(S.lang)}</b> <span>${C.of(G.target.toLocaleString(S.lang))}</span></div>
+   <div class="gnum"><b>${G.got.toLocaleString(LOC())}</b> <span>${C.of(G.target.toLocaleString(LOC()))}</span></div>
    <div class="bar" role="img" aria-label="${pct(G.got)}%"><i style="width:${pct(G.got)}%"></i>${done ? "" : `<s style="left:${pct(G.expected)}%" title="${C.today}"></s>`}</div>
    <p class="gstatus ${done || behind <= 0 ? "ok" : "late"}">${status}</p>
    <p class="muted">${C.pace(G.weekly)}</p>
@@ -67,7 +67,7 @@ function renderGoal() {
 const ACT_COL = { walking: "#2a78d6", dancing: "#eb6834", football: "#1baf7a", back: "#eda100", yoga: "#e87ba4", cycling: "#008300", other: "#6250d6" };
 /* share of adults meeting the WHO aerobic recommendation (≥150 min/week), RKI GEDA 2019/2020-EHIS, Table 1 (Richter et al., J Health Monit 2021) */
 const PEERS = [[18, 30, 58.9, 69.3], [30, 45, 46.2, 53.5], [45, 65, 47.3, 46.4], [65, 200, 33.3, 42.6]];
-const pctTxt = n => S.lang === "de" ? `${String(n).replace(".", ",")} %` : `${n}%`;
+const pctTxt = n => S.lang !== "en" ? `${String(n).replace(".", ",")} %` : `${n}%`;
 function fitData() {
   const ci = S.ciLog || {}, by = {};
   S.checkins.filter(c => daysSince(c) <= 28).forEach(c => {

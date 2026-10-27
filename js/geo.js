@@ -5,7 +5,7 @@ let me = null;
 const allGroups = () => [...S.own.map(o => ({ ...o, own: true })), ...GROUPS];
 const gpos = g => g.ll || offsetLL(S.center, g.off);
 const gdist = g => dist(me || S.center, gpos(g));
-const fmtKm = v => (Math.round(v * 10) / 10).toLocaleString(S.lang === "de" ? "de-DE" : "en-GB");
+const fmtKm = v => (Math.round(v * 10) / 10).toLocaleString(LOC());
 const maps = {};
 const RADII = [1, 2, 5, 10];
 if (!RADII.includes(S.radius))

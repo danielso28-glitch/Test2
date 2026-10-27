@@ -129,8 +129,8 @@ function renderExplore() {
   $("#feed").innerHTML = items.map(f => {
     if (f.cat === "story")
       return storyCard(f, S.exCat === "all" && f.why ? `<span class="why">${esc(f.why)}</span>` : "");
-    const [h, p] = f[S.lang];
-    const url = f.q ? f.q[S.lang] : f.url;
+    const [h, p] = f[S.lang] || f.en;
+    const url = f.q ? f.q[S.lang] || f.q.en : f.url;
     const liked = S.liked.includes(f.k);
     const media = f.kind === "video" ? `<a class="vid" href="${url}" target="_blank" rel="noopener" aria-label="${t("watch")}"><svg viewBox="0 0 56 56"><circle cx="28" cy="28" r="28" fill="#fff"/><path d="M23 18l15 10-15 10z" fill="#12201B"/></svg></a>` : "";
     const btn = url ? `<a class="open" href="${url}" target="_blank" rel="noopener">${f.kind === "video" ? t("watch") : t("openSrc")}${ICON.ext}</a>` : "";

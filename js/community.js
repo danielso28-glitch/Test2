@@ -3,7 +3,7 @@
    Below: volunteering, other groups, start your own. Messages and RSVPs stay on this phone (S.posts, S.rsvp). */
 let comOpen = null;
 const myGroupList = () => allGroups().filter(g => S.joined.includes(g.id) || S.comJoined.includes(g.id));
-const fmtDay = d => { const m = t("months")[d.getMonth()], mon = m[0] + m.slice(1).toLowerCase(); return S.lang === "de" ? `${t("days")[d.getDay()]}, ${d.getDate()}. ${mon}` : `${t("days")[d.getDay()]}, ${d.getDate()} ${mon}`; };
+const fmtDay = d => { const m = t("months")[d.getMonth()], mon = m[0] + m.slice(1).toLowerCase(); return S.lang === "de" ? `${t("days")[d.getDay()]}, ${d.getDate()}. ${mon}` : S.lang === "es" ? `${t("days")[d.getDay()]}, ${d.getDate()} de ${m.toLowerCase()}` : `${t("days")[d.getDay()]}, ${d.getDate()} ${mon}`; };
 const agoTxt = n => n === 0 ? t("todayW") : n === 1 ? t("yesterday") : t("daysAgo")(n);
 /* demo posts from the group leader and two members, same for every user */
 function demoPosts(g) {

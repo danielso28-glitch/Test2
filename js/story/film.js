@@ -96,7 +96,7 @@ function filmAt(k, tl, sh, u, T) {
       old.src = src;
     old.style.opacity = cl((age - 55) / 20).toFixed(2);
     /* label: the age the narrator names (75), counting only while rewinding back to 55 */
-    port.querySelector("b").textContent = (S.lang === "de" ? "Du · " : "You · ") + (sh.age && sh.fx !== "rewind" ? sh.age[1] : age);
+    port.querySelector("b").textContent = TL("You · ", "Du · ", "Tú · ") + (sh.age && sh.fx !== "rewind" ? sh.age[1] : age);
     port.style.opacity = Math.min(1, (u - .25) * 6, (.92 - u) * 6).toFixed(2);
   }
   return true;
