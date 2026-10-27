@@ -16,7 +16,11 @@ function save() { try {
 }
 catch (e) { } }
 const $ = q => document.querySelector(q), $$ = q => [...document.querySelectorAll(q)];
-const t = k => I[S.lang][k] ?? I.en[k];
+/* the age the app looks ahead to: 75, or 80 for people who are already over 65 (target group: 50–70) */
+const TA = () => { const b = S.account && S.account.birth; return b && typeof ageOn === "function" && ageOn(b) > 65 ? 80 : 75; };
+/* texts write that age as {A} */
+const fillA = v => typeof v === "string" ? v.replace(/\{A\}/g, TA()) : typeof v === "function" ? (...x) => fillA(v(...x)) : Array.isArray(v) ? v.map(fillA) : v && typeof v === "object" ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, fillA(x)])) : v;
+const t = k => fillA(I[S.lang][k] ?? I.en[k]);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const nm = g => typeof g.name === "string" ? g.name : g.name[S.lang] || g.name.en;
 const pl = g => typeof g.place === "string" ? g.place : g.place[S.lang] || g.place.en;

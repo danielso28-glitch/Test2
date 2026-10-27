@@ -45,6 +45,7 @@ function renderGoal() {
       }
       S.account = { ...S.account, birth: v, created: S.account.created || dayKey(new Date()) };
       save();
+      renderText(); /* the target age (75/80) in tab and titles can change with the birth date */
       renderAvatar();
       renderSettingsAll();
     };
