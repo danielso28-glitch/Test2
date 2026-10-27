@@ -191,7 +191,7 @@ function bindLangMenu(box, onPick) {
 const voiceTip = () => S.gender !== "f" && S.lang !== "es" ? "" : (V => `<div class="card"><b>${V.title}</b><p class="muted" style="margin:6px 0">${V.text}</p><p class="hint" style="margin:0">${/android/i.test(navigator.userAgent) ? V.android : V.ios}</p></div>`)(t("voiceTip"));
 const feedbackCard = () => `<div class="card fbcard"><b><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/></svg>${t("fb").title}</b><span class="muted">${t("fb").text}</span><button class="btn lime" data-feedback>${t("fb").btn}</button><span class="hint" style="margin:0">${t("fb").anon}</span></div>`;
 function bindFeedback(box) {
-  box.querySelectorAll("[data-feedback]").forEach(b => b.onclick = () => FEEDBACK_URL ? window.open(FEEDBACK_URL, "_blank", "noopener") : toast(t("fb").soon));
+  box.querySelectorAll("[data-feedback]").forEach(b => b.onclick = () => { const u = FEEDBACK_URL[S.lang] || FEEDBACK_URL.en; u ? window.open(u, "_blank", "noopener") : toast(t("fb").soon); });
 }
 let resetArm = false;
 function renderSettings(box, sheet) {
