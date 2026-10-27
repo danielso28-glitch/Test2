@@ -92,6 +92,12 @@ function startPath(k) {
   stopPath();
   hideEndCard(k);
   const tl = buildStory(STORY_OF[k]);
+  /* iPhone: play as media, so the silent switch doesn't mute the voices (Safari 17+) */
+  try {
+    if (navigator.audioSession)
+      navigator.audioSession.type = "playback";
+  }
+  catch (e) { }
   const c = actx();
   if (c && c.state !== "running")
     c.resume().catch(() => { });
@@ -123,10 +129,17 @@ function startPath(k) {
       mg.gain.value = .9;
       mg.connect(st.gain);
       scheduleMusic(c, mg, st.t0, tl);
+      /* recorded clips; one that couldn't load falls back to the browser voice, one that loaded late starts mid-line (was: silent) */
       tl.lines.forEach(li => { if (!li.clip)
-        return; decodeClip(li.clip).then(b => { if (!b || st.stop)
-        return; const s = c.createBufferSource(); s.buffer = b; const vg = c.createGain(); vg.gain.value = 1.6; s.connect(vg); vg.connect(st.gain); const when = st.t0 + li.at; if (when < c.currentTime)
-        return; s.start(when); st.srcs.push(s); }); });
+        return; decodeClip(li.clip).then(b => { if (st.stop)
+        return; if (!b) {
+        li.tts = true;
+        return;
+      } const when = st.t0 + li.at, late = c.currentTime - when; if (late > b.duration - .3)
+        return; const s = c.createBufferSource(); s.buffer = b; const vg = c.createGain(); vg.gain.value = 1.6; s.connect(vg); vg.connect(st.gain); if (late > 0)
+        s.start(c.currentTime, late);
+      else
+        s.start(when); st.srcs.push(s); }); });
     }
     else {
       st.p0 = performance.now();
@@ -137,7 +150,7 @@ function startPath(k) {
       const T = st.now();
       if (!st.paused) {
         /* browser voice for lines without a recording – and for all lines if Web Audio couldn't start */
-        tl.lines.forEach(li => { if ((!li.clip || !st.useCtx) && T >= li.at && !st.spoken.has(li)) {
+        tl.lines.forEach(li => { if ((!li.clip || !st.useCtx || (li.tts && T < li.at + li.d)) && T >= li.at && !st.spoken.has(li)) {
           st.spoken.add(li);
           ttsLine(li);
         } });
