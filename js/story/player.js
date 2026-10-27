@@ -129,6 +129,7 @@ function startPath(k) {
       mg.gain.value = .9;
       mg.connect(st.gain);
       scheduleMusic(c, mg, st.t0, tl);
+      st.mg = mg;
       /* recorded clips; one that couldn't load falls back to the browser voice, one that loaded late starts mid-line (was: silent) */
       tl.lines.forEach(li => { if (!li.clip)
         return; decodeClip(li.clip).then(b => { if (st.stop)
@@ -153,6 +154,13 @@ function startPath(k) {
         tl.lines.forEach(li => { if ((!li.clip || !st.useCtx || (li.tts && T < li.at + li.d)) && T >= li.at && !st.spoken.has(li)) {
           st.spoken.add(li);
           ttsLine(li);
+          /* music down while the browser voice speaks, so it is easy to understand */
+          if (st.mg) {
+            const g = st.mg.gain, now = ACX.currentTime;
+            g.cancelScheduledValues(now);
+            g.setTargetAtTime(.3, now, .08);
+            g.setTargetAtTime(.9, now + li.d, .3);
+          }
         } });
         drawAt(k, tl, Math.min(T, tl.total));
       }

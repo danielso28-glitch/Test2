@@ -130,29 +130,34 @@ function ttsLine(li) {
     const u = new SpeechSynthesisUtterance(li.txt);
     u.lang = LOC();
     const fem = li.sp === "K" || li.sp === "F" || li.sp === "D" || (li.sp[0] === "Y" && S.gender === "f");
-    const v = pickVoice(fem ? "kid" : "adult", fem);
+    const v = pickVoice(fem);
     if (v)
       u.voice = v;
-    const P = { N: [1, .95], Y55: [fem ? 1 : .85, .95], Y65A: [fem ? .95 : .8, .95], Y65B: [fem ? .85 : .72, .85], Y75A: [fem ? .9 : .75, .9], Y75B: [fem ? .75 : .62, .78], K: [1.8, 1.08], F: [1.1, 1], C: [1, 1], D: [1.05, .92] }[li.sp] || [1, 1];
+    /* only small pitch/speed changes: strong pitch shifting is what makes browser voices sound robotic */
+    const P = { N: [1, .95], Y55: [1, .96], Y65A: [.97, .94], Y65B: [.95, .9], Y75A: [.96, .92], Y75B: [.92, .86], K: [1.25, 1.02], F: [1.04, .98], C: [1, 1], D: [1, .95] }[li.sp] || [1, .96];
     u.pitch = P[0];
     u.rate = P[1];
     speechSynthesis.speak(u);
   }
   catch (e) { }
 }
-function pickVoice(kind, fem) {
+/* the most natural voice the phone offers for this language (and gender) */
+const VOICE_BAD = /\b(eddy|flo|grandma|grandpa|reed|rocko|sandy|shelley|albert|bad news|bahh|bells|boing|bubbles|cellos|wobble|fred|good news|jester|junior|kathy|organ|superstar|ralph|trinoids|whisper|zarvox)\b/i;
+const VOICE_F = /female|frau|anna|petra|helena|katja|marlene|vicki|amala|samantha|karen|moira|tessa|serena|kate|stephanie|martha|libby|sonia|jenny|aria|mónica|monica|marisol|paulina|elvira|lucia|lucía|google deutsch|google español|google uk english female/i;
+const VOICE_M = /\bmale|mann|daniel|markus|yannick|hans|thomas|conrad|arthur|oliver|martin|ryan|guy|jorge|juan|diego|alvaro|álvaro|google uk english male/i;
+function pickVoice(fem) {
   try {
-    const vs = speechSynthesis.getVoices().filter(v => (v.lang || "").toLowerCase().startsWith(S.lang));
+    const vs = speechSynthesis.getVoices().filter(v => (v.lang || "").toLowerCase().startsWith(S.lang) && !VOICE_BAD.test(v.name));
     if (!vs.length)
       return null;
-    const F = /female|frau|anna|helena|samantha|karen|petra|katja|marlene|vicki|serena|moira|tessa|google deutsch|google uk english female/i, M = /male|mann|daniel|markus|yannick|hans|thomas|arthur|oliver|martin|google uk english male/i;
-    const want = fem ? F : M;
-    /* prefer the natural-sounding voices phones offer (Premium / Enhanced / Neural / Google) over the basic ones */
-    const q = v => /premium|enhanced|neural|natural|siri/i.test(v.name) ? 3 : /google/i.test(v.name) ? 2 : v.localService === false ? 1 : 0;
-    const fit = vs.filter(v => want.test(v.name)).sort((a, b) => q(b) - q(a));
-    return fit[0] || vs.slice().sort((a, b) => q(b) - q(a))[0];
+    /* Premium / Enhanced / Siri / Microsoft "Natural" / Google voices sound far less robotic than the basic ones */
+    const q = v => /premium|neural|natural|siri/i.test(v.name) ? 4 : /enhanced|erweitert|mejorada|optimiert/i.test(v.name) ? 3 : /google|online/i.test(v.name) ? 2 : v.localService === false ? 1 : 0;
+    const best = list => list.slice().sort((a, b) => q(b) - q(a))[0];
+    const want = fem ? VOICE_F : VOICE_M, other = fem ? VOICE_M : VOICE_F;
+    return best(vs.filter(v => want.test(v.name))) || best(vs.filter(v => !other.test(v.name))) || best(vs);
   }
   catch (e) {
     return null;
   }
 }
+

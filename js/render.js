@@ -187,6 +187,8 @@ function bindLangMenu(box, onPick) {
   });
 }
 /* anonymous tester feedback: opens the external form, sends no app data */
+/* only when the browser voice reads lines (no recordings for women's own lines yet, none in Spanish) */
+const voiceTip = () => S.gender !== "f" && S.lang !== "es" ? "" : (V => `<div class="card"><b>${V.title}</b><p class="muted" style="margin:6px 0">${V.text}</p><p class="hint" style="margin:0">${/android/i.test(navigator.userAgent) ? V.android : V.ios}</p></div>`)(t("voiceTip"));
 const feedbackCard = () => `<div class="card fbcard"><b><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/></svg>${t("fb").title}</b><span class="muted">${t("fb").text}</span><button class="btn lime" data-feedback>${t("fb").btn}</button><span class="hint" style="margin:0">${t("fb").anon}</span></div>`;
 function bindFeedback(box) {
   box.querySelectorAll("[data-feedback]").forEach(b => b.onclick = () => FEEDBACK_URL ? window.open(FEEDBACK_URL, "_blank", "noopener") : toast(t("fb").soon));
@@ -201,6 +203,7 @@ function renderSettings(box, sheet) {
    ${sheet ? `<button class="btn dark" data-close-sheet>${t("done")}</button>` : `
    <div class="lbl">${t("tracker")}</div>${trackerCard()}
    <div class="lbl">${t("location")}</div><div class="card setrow"><span class="muted" style="flex:1;min-width:0">${me ? t("locStatusOn") : t("locStatusOff")}</span><button class="btn small dark" data-loc>${t("locAsk")}</button></div>
+   ${voiceTip()}
    ${feedbackCard()}
    <button class="btn out" data-restart>${t("restartIntro")}</button>
    <button class="btn out" data-reset style="border-color:var(--danger);color:var(--danger)">${resetArm ? t("resetSure") : t("resetAll")}</button>
