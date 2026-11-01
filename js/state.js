@@ -11,8 +11,8 @@ catch (e) { }
 const LANGS = ["de", "en", "es"];
 if (!LANGS.includes(S.lang))
   S.lang = LANGS.find(l => (navigator.language || "").toLowerCase().startsWith(l)) || "en";
-/* goals: "garden" became part of "own"; at most GOAL_MAX; the first one is S.goal */
-S.goals = [...new Set((S.goals && S.goals.length ? S.goals : [S.goal]).map(g => g === "garden" ? "own" : g))].filter(g => GOALS.includes(g)).slice(0, GOAL_MAX);
+/* goals: at most GOAL_MAX; the first one is S.goal */
+S.goals = [...new Set(S.goals && S.goals.length ? S.goals : [S.goal])].filter(g => GOALS.includes(g)).slice(0, GOAL_MAX);
 if (!S.goals.length)
   S.goals = ["grand"];
 S.goal = S.goals[0];

@@ -143,11 +143,11 @@ const I = {
     stDemo: "Demo-Geschichte · erfundenes Beispiel", stModel: "Vorbild · wahre Geschichte", stStudy: "Studie", stRead: "Zur Geschichte", intQ: "Was interessiert dich?", intSub: "Wähl ein paar aus. Passende Tipps kommen nach oben.", intYours: "Deine Interessen", intEdit: "Ändern", whyInt: k => `Weil dich ${k} interessiert`, whyGroup: g => `Für deine Gruppe ${g}`, whyGoal: "Passt zu deinem Ziel", whyLiked: "Ähnlich wie etwas, das du gemerkt hast",
     kinds: { article: "Artikel", video: "Video", tip: "Tipp des Tages" } }
 };
-/* "garden" merged into "own" (old values migrate in state.js); max. 3 can be chosen */
-const GOALS = ["grand", "travel", "cycle", "hike", "swim", "dance", "friends", "own", "mind", "sleep"], GOAL_MAX = 3;
+/* max. 3 can be chosen */
+const GOALS = ["grand", "travel", "cycle", "hike", "swim", "dance", "friends", "garden", "own", "mind", "sleep"], GOAL_MAX = 3;
 const GOALTXT = {
-  en: { grand: "Walks with my grandchildren", travel: "Travelling the world", cycle: "Cycling trips", own: "Staying independent at home and in the garden", swim: "Swimming", mind: "Staying mentally fit", sleep: "Sleeping better, more energy", garden: "Working in my garden", dance: "Dancing at family parties", hike: "Hiking in nature", friends: "Seeing my friends" },
-  de: { grand: "Spaziergänge mit meinen Enkeln", travel: "Die Welt bereisen", cycle: "Radtouren", own: "Selbstständig bleiben, in Haus und Garten", swim: "Schwimmen", mind: "Geistig fit bleiben", sleep: "Besser schlafen, mehr Energie", garden: "In meinem Garten arbeiten", dance: "Auf Familienfeiern tanzen", hike: "Wandern in der Natur", friends: "Meine Freunde treffen" }
+  en: { grand: "Walks with my grandchildren", travel: "Travelling the world", cycle: "Cycling trips", own: "Living on my own terms", swim: "Swimming", mind: "Staying mentally fit", sleep: "Sleeping better, more energy", garden: "Working in my garden", dance: "Dancing at family parties", hike: "Hiking in nature", friends: "Seeing my friends" },
+  de: { grand: "Spaziergänge mit meinen Enkeln", travel: "Die Welt bereisen", cycle: "Radtouren", own: "Selbstbestimmt leben", swim: "Schwimmen", mind: "Geistig fit bleiben", sleep: "Besser schlafen, mehr Energie", garden: "In meinem Garten arbeiten", dance: "Auf Familienfeiern tanzen", hike: "Wandern in der Natur", friends: "Meine Freunde treffen" }
 };
 const DLG = {
   en: { grand: [["{G}, come and play with me!", "Sorry… my knees won't let me."], ["{G}, race you to the slide!", "Ready, steady… go!"]],

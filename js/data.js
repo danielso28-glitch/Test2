@@ -36,7 +36,7 @@ const GROUPS = [
 /* map filters: chip → group types (and accessible) */
 const FILTERS = { all: null, water: ["swimming"], bike: ["cycling"], walk: ["walking", "running"], strength: ["strength"], dance: ["dancing"], mind: ["yoga"], access: null };
 /* which groups fit a goal */
-const GOAL_FILTER = { grand: "walk", travel: "walk", hike: "walk", cycle: "bike", dance: "dance", own: "strength", swim: "water", mind: "mind", sleep: "mind", friends: "dance" };
+const GOAL_FILTER = { grand: "walk", travel: "walk", hike: "walk", cycle: "bike", dance: "dance", own: "strength", garden: "strength", swim: "water", mind: "mind", sleep: "mind", friends: "dance" };
 const fitsFilter = (g, f) => f === "access" ? !!g.access : !FILTERS[f] || FILTERS[f].includes(g.type);
 const PLZ = { "48143": [51.9625, 7.6280], "48145": [51.9600, 7.6600], "48147": [51.9800, 7.6350], "48149": [51.9650, 7.6000], "48151": [51.9480, 7.6050], "48153": [51.9450, 7.6350], "48155": [51.9550, 7.6650], "48157": [52.0000, 7.6600], "48159": [51.9950, 7.6100], "48161": [51.9800, 7.5500], "48163": [51.9150, 7.6000], "48165": [51.9050, 7.6400], "48167": [51.9300, 7.7000] };
 /* offline fallback: rough centre of the first two postcode digits (big cities only) */
