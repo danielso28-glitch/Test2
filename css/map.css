@@ -470,3 +470,39 @@ select.rad {
   border-color:var(--ink);
   background:rgba(255,255,255,.85);
 }
+
+/* intensity + accessibility on group cards and the group page */
+.gtags {
+  display:flex!important;
+  align-items:center;
+  gap:6px;
+  margin-top:6px!important;
+}
+
+.int {
+  font-style:normal;
+  font-weight:700;
+  font-size:.8rem;
+  padding:2px 9px;
+  border-radius:10px;
+  white-space:nowrap;
+}
+
+.int.easy { background:#E3F1DD; color:#1F5A3F; }
+.int.moderate { background:#FFF1C2; color:#6B4A00; }
+.int.active { background:#FFE3CC; color:#8A3B12; }
+
+.grp .acc {
+  display:inline-grid;
+  place-items:center;
+  width:26px;
+  height:26px;
+  border-radius:50%;
+  background:#DFEAF6;
+}
+
+.grp .acc svg {
+  width:17px;
+  height:17px;
+  stroke:#12201B;
+}

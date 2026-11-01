@@ -19,12 +19,12 @@ function renderPoints() {
     [t("ptsR").volunteer, "+" + PTS.volunteer],
     [t("ptsR").community, `+${PTS.community} (${t("ptsMax")} ${PTS.communityMax})`]
   ];
-  $("#ptsCard").innerHTML = `<div class="eyebrow" style="margin-bottom:10px">${t("ptsTitle")}</div>
-   <div class="ptslist">${parts.map(p => `<div class="${p.pts < 0 ? "neg" : ""}"><span>${esc(label(p))}</span><b>${sgn(p.pts)}</b></div>`).join("")}
-   <div class="sum"><span>${t("ptsTotal")}</span><b>${total}</b></div></div>
-   <details class="ptsrules"><summary>${t("ptsHow")}</summary>
+  $("#ptsCard").innerHTML = `<details class="ptsrules ptsmain"><summary>${t("ptsAsk")}</summary>
    <div class="ptslist">${rules.map(([a, b]) => `<div><span>${esc(a)}</span><b>${b}</b></div>`).join("")}</div>
-   <p class="hint">${t("ptsNote")(PTS.decayAfter, PTS.decayDay)}</p></details>`;
+   <p class="hint">${t("ptsNote")(PTS.decayAfter, PTS.decayDay)}</p>
+   <div class="eyebrow" style="margin:12px 0 8px">${t("ptsTitle")}</div>
+   <div class="ptslist">${parts.map(p => `<div class="${p.pts < 0 ? "neg" : ""}"><span>${esc(label(p))}</span><b>${sgn(p.pts)}</b></div>`).join("")}
+   <div class="sum"><span>${t("ptsTotal")}</span><b>${total}</b></div></div></details>`;
 }
 /* avatar tab: the age-based "active" goal */
 function renderGoal() {

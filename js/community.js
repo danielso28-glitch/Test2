@@ -38,7 +38,7 @@ function renderCommunity() {
   $$("[data-cj]").forEach(b => b.onclick = () => { S.comJoined.push(b.dataset.cj); save(); renderCommunity(); renderGroups(); renderAvatar(); toast(C.joined); });
   const ty = $("#ngType"), dy = $("#ngDay");
   const tv = ty.value, dv = dy.value;
-  ty.innerHTML = ["walking", "dancing", "football", "back", "yoga", "cycling"].map(k => `<option value="${k}">${t(k)}</option>`).join("");
+  ty.innerHTML = ["walking", "running", "swimming", "cycling", "strength", "dancing", "yoga"].map(k => `<option value="${k}">${t(k)}</option>`).join("");
   dy.innerHTML = [1, 2, 3, 4, 5, 6, 0].map(d => `<option value="${d}">${t("daysLong")[d]}</option>`).join("");
   if (tv)
     ty.value = tv;

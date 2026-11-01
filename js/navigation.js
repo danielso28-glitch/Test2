@@ -8,8 +8,10 @@ function go(id) {
   el.scrollTop = 0;
   if (id === "s4")
     setTimeout(() => refreshMap("mapA"), 80);
-  if (id === "s5")
+  if (id === "s5") {
+    joinStep(0);
     renderDetail();
+  }
   if (id === "s6")
     renderConfirm();
 }
@@ -47,6 +49,11 @@ function setTab(k) {
     renderAvatar();
 }
 document.addEventListener("click", e => {
+  const sk = e.target.closest("[data-skip]");
+  if (sk) {
+    skipPath(sk.dataset.skip);
+    return;
+  }
   const g = e.target.closest("[data-go]");
   if (g) {
     go(g.dataset.go);
@@ -102,9 +109,41 @@ $("#setSheet").onclick = e => { if (e.target.id === "setSheet")
   $("#setSheet").hidden = true; };
 $("#showPaths").onclick = () => go("s2");
 $("#scanBtn").onclick = () => scanOpen();
-const findGroup = () => { go("s4"); if (!me)
-  askLocation(); };
+/* goal → group: a short bridge with matching groups, then the map already filtered by the goal */
+function bridgeGroups() {
+  const wanted = S.goals.map(g => GOAL_FILTER[g]), near = allGroups().filter(g => !g.own && (!S.mobility || g.access)).sort((a, b) => gdist(a) - gdist(b));
+  return [...near.filter(g => wanted.some(f => fitsFilter(g, f))), ...near].filter((g, i, a) => a.indexOf(g) === i).slice(0, 3);
+}
+function renderBridge() {
+  $("#brGoal").textContent = t("bridgeT")(S.goals.map(g => GOALTXT[S.lang][g]).join(", "));
+  const l = $("#brList");
+  l.innerHTML = "";
+  bridgeGroups().forEach(g => {
+    const b = document.createElement("button");
+    b.className = "grp";
+    b.innerHTML = groupRow(g);
+    b.onclick = () => { S.group = g.id; go("s5"); };
+    l.appendChild(b);
+  });
+}
+function goalFilter() {
+  S.filter = S.mobility ? "access" : GOAL_FILTER[S.goal] || "all";
+  /* widen the search circle if the closest fitting group is further away */
+  const near = allGroups().filter(g => fitsFilter(g, S.filter)).map(gdist).sort((a, b) => a - b)[0];
+  if (near && near > S.radius + .3)
+    S.radius = RADII.find(r => near <= r + .3) || S.radius;
+  S.filter = near ? S.filter : "all";
+  save();
+  $$("[data-radius]").forEach(el => el.value = S.radius);
+  recenter();
+  drawMarkers();
+  renderGroups();
+}
+const findGroup = () => { go("sb"); renderBridge(); };
 $("#chooseB").onclick = findGroup;
+$("#skipStories").onclick = findGroup;
+$("#brMap").onclick = () => { go("s4"); goalFilter(); if (!me)
+  askLocation(); };
 document.addEventListener("click", e => {
   if (e.target.closest("[data-findgroup]"))
     findGroup();
@@ -114,18 +153,13 @@ document.addEventListener("click", e => {
 });
 $("#aplus").onclick = () => { S.size = S.size >= 20 ? 16 : S.size + 2; applySize(); save(); renderText(); };
 function applySize() { document.documentElement.style.setProperty("--fs", S.size + "px"); }
-$("#detailBack").onclick = () => { if (S.onboarded)
+$("#detailBack").onclick = () => { if (joinNow)
+  return joinStep(joinNow - 1); if (S.onboarded)
   openMain("map");
 else
   go("s4"); };
 function doJoin() {
   const v = $("#insNo").value.trim().toUpperCase().replace(/\s/g, ""), err = $("#insErr");
-  if (!/^[A-Z]\d{9}$/.test(v)) {
-    err.textContent = t("insErr");
-    err.hidden = false;
-    err.scrollIntoView({ block: "center", behavior: "smooth" });
-    return;
-  }
   if (!$("#consent").checked) {
     err.textContent = t("consentErr");
     err.hidden = false;
@@ -147,7 +181,16 @@ function doJoin() {
     toast(t("ptsJoined")(PTS.join));
 }
 $("#join").addEventListener("click", doJoin);
-$("#insForm").addEventListener("submit", e => { e.preventDefault(); doJoin(); });
+$("#toJoin").onclick = () => joinStep(1);
+$("#jNext").onclick = () => {
+  if (joinNow === 2 && !/^[A-Z]\d{9}$/.test($("#insNo").value.trim().toUpperCase().replace(/\s/g, ""))) {
+    $("#insErr").textContent = t("insErr");
+    $("#insErr").hidden = false;
+    return;
+  }
+  joinStep(joinNow + 1);
+};
+$("#insForm").addEventListener("submit", e => { e.preventDefault(); joinNow === 3 ? doJoin() : $("#jNext").click(); });
 $("#openApp").onclick = () => openMain("avatar");
 $("#checkin").onclick = () => doCheckin();
 $("#avStage").onclick = () => { const L = lvlOf(score()), arr = L >= 2 ? [...t("taps")[L], t("goalTaps")[S.goal]] : t("taps")[L], m = arr[Math.floor(Math.random() * arr.length)]; const st = $("#avStage"); const old = st.querySelector(".bubble"); if (old)

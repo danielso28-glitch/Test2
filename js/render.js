@@ -27,11 +27,16 @@ function renderText() {
   /* several goals possible; the first one (S.goal) decides the film ending */
   if (!S.goals || !S.goals.length)
     S.goals = [S.goal];
-  GOALS.forEach(k => { const b = document.createElement("button"); b.className = "opt"; const on = S.goals.includes(k); b.setAttribute("aria-pressed", on); b.innerHTML = ICON[k] + `<span>${GOALTXT[S.lang][k]}</span>` + (k === S.goal && S.goals.length > 1 ? `<em class="optfilm">${t("goalFilm")}</em>` : ""); b.onclick = () => { S.goals = on ? (S.goals.length > 1 ? S.goals.filter(x => x !== k) : S.goals) : [...S.goals, k]; S.goal = S.goals[0]; save(); renderText(); }; g.appendChild(b); });
+  GOALS.forEach(k => { const b = document.createElement("button"); b.className = "opt"; const on = S.goals.includes(k); b.setAttribute("aria-pressed", on); b.innerHTML = ICON[k] + `<span>${GOALTXT[S.lang][k]}</span>` + (k === S.goal && S.goals.length > 1 ? `<em class="optfilm">${t("goalFilm")}</em>` : ""); b.onclick = () => { if (!on && S.goals.length >= GOAL_MAX)
+    return toast(t("goalMax")); S.goals = on ? (S.goals.length > 1 ? S.goals.filter(x => x !== k) : S.goals) : [...S.goals, k]; S.goal = S.goals[0]; save(); renderText(); }; g.appendChild(b); });
   if (!play) {
     renderStill("A");
     renderStill("B");
   }
+  renderSkip();
+  $$("[data-step]").forEach(e => { const n = +e.dataset.step; e.textContent = `${t("stepOf")(n)} · ${t("steps")[n - 1]}`; });
+  if (!$("#sb").hidden)
+    renderBridge();
   $$("[data-avatar]").forEach(e => e.innerHTML = chipAvatar(e.dataset.avatar));
   if (locNote)
     locMsg(locNote === "on" ? t("locOn") : locNote === "denied" ? t("locDenied") : locNote === "locating" ? t("locating") : t("locPlz")(S.plz));
@@ -49,29 +54,49 @@ function renderText() {
   if (!$("#setSheet").hidden)
     renderSettings($("#setSheetBody"), true);
 }
+const groupRow = g => `<span class="ic" style="background:${TINT[g.type]}">${ICON[g.type]}</span><span class="tx"><b>${esc(nm(g))}</b><span class="m">${sched(g)} · ${g.time} · ${fmtKm(gdist(g))} km</span>${g.intensity ? `<span class="m gtags"><i class="int ${g.intensity}">${t("intensity")[g.intensity]}</i>${g.access ? `<i class="acc" title="${t("accessY")}">${ICON.access}</i>` : ""}</span>` : ""}</span><span class="free">${S.joined.includes(g.id) ? t("joined") : t("free")}</span>`;
 function renderGroups() {
-  $$("[data-chips]").forEach(ch => { ch.innerHTML = ""; ["all", "walking", "dancing", "football", "back", "yoga", "cycling"].forEach(k => { const b = document.createElement("button"); b.textContent = t(k); b.setAttribute("aria-pressed", S.filter === k); b.onclick = () => { S.filter = k; renderGroups(); }; ch.appendChild(b); }); });
-  const vis = allGroups().filter(g => (S.filter === "all" || g.type === S.filter) && gdist(g) <= S.radius + 0.3).sort((a, b) => gdist(a) - gdist(b));
+  if (!(S.filter in FILTERS))
+    S.filter = "all";
+  $$("[data-chips]").forEach(ch => { ch.innerHTML = ""; Object.keys(FILTERS).forEach(k => { const b = document.createElement("button"); b.textContent = t("filters")[k]; b.setAttribute("aria-pressed", S.filter === k); b.onclick = () => { S.filter = k; renderGroups(); }; ch.appendChild(b); }); });
+  const vis = allGroups().filter(g => fitsFilter(g, S.filter) && gdist(g) <= S.radius + 0.3).sort((a, b) => gdist(a) - gdist(b));
   $$("[data-count]").forEach(e => e.textContent = vis.length === 1 ? t("groupNear") : t("groupsNear")(vis.length));
   $$("[data-list]").forEach(l => {
     l.innerHTML = vis.length ? "" : `<p class="empty">${t("noGroups")}</p>`;
     vis.forEach(g => {
       const b = document.createElement("button");
       b.className = "grp" + (S.group === g.id ? " on" : "");
-      b.innerHTML = `<span class="ic" style="background:${TINT[g.type]}">${ICON[g.type]}</span><span class="tx"><b>${esc(nm(g))}</b><span class="m">${sched(g)} · ${g.time} · ${fmtKm(gdist(g))} km</span></span><span class="free">${S.joined.includes(g.id) ? t("joined") : t("free")}</span>`;
-      b.onclick = () => { if (S.group === g.id)
-        go("s5");
-      else {
+      b.innerHTML = groupRow(g);
+      b.onclick = () => {
         S.group = g.id;
         renderGroups();
-        renderDetail();
-      } };
+        go("s5");
+      };
       l.appendChild(b);
     });
   });
   drawMarkers();
 }
 const GR = () => allGroups().find(g => g.id === S.group) || GROUPS[0];
+/* sign-up in 3 steps: 0 = group page, 1 about you, 2 insurance, 3 confirm. Name and birth date come from the account (not asked twice);
+   the health boxes are only a prompt for the talk with the trainer and are never saved */
+let joinNow = 0;
+function joinStep(n) {
+  joinNow = n;
+  const sc = $("#s5"), g = GR(), a = S.account || {}, row = (k, v) => `<div><span>${k}</span><b>${esc(v)}</b></div>`;
+  sc.dataset.join = n;
+  $("#insErr").hidden = true;
+  $("#jNext").hidden = n !== 1 && n !== 2;
+  $("#join").hidden = n !== 3;
+  $("#toJoin").hidden = n !== 0 || S.joined.includes(g.id);
+  $$("#insForm [data-js]").forEach(e => e.hidden = +e.dataset.js !== n);
+  $("#jBar").innerHTML = t("jSteps").map((x, i) => `<li class="${i + 1 < n ? "done" : i + 1 === n ? "on" : ""}">${x}</li>`).join("");
+  if (n === 1)
+    $("#jYou").innerHTML = a.first ? row(t("acc").accFirst, `${a.first} ${a.last}`) + (a.birth ? row(t("acc").accBirth, new Date(a.birth + "T12:00:00").toLocaleDateString(LOC())) : "") : "";
+  if (n === 3)
+    $("#jSum").innerHTML = row(t("j3Group"), nm(g)) + row(t("j3When"), `${sched(g)} · ${g.time}`) + row(t("j3Where"), pl(g)) + row(t("j3Cost"), t("j3Free"));
+  sc.scrollTop = 0;
+}
 function renderDetail() {
   const g = GR();
   $("#dName").textContent = nm(g);
@@ -80,7 +105,11 @@ function renderDetail() {
   $("#dDist").textContent = t("fromYou")(fmtKm(gdist(g)));
   $("#dLed").textContent = g.vol || g.own ? t("ledVol") : t("led");
   $("#dTrainer").textContent = g.own ? "" : g.vol ? g.trainer : `${g.trainer}, ${t("certified")}`;
-  $("#dSpots").textContent = t("spots")(g.taken, g.cap);
+  $("#dSpots").textContent = `${t("spots")(g.taken, g.cap)} · ${t("placesLeft")(Math.max(0, g.cap - g.taken))}`;
+  $("#dBring").textContent = g.bring ? g.bring[S.lang] || g.bring.en : t("bringD");
+  /* what it is, how hard, accessible?, how joining works */
+  const tx = g.desc ? g.desc[S.lang] || g.desc.en : "";
+  $("#dInfo").innerHTML = `${tx ? `<p class="gdesc">${esc(tx)}</p>` : ""}${g.intensity ? `<p><i class="int ${g.intensity}">${t("intensity")[g.intensity]}</i> ${t("intensityD")[g.intensity]}</p>` : ""}${g.own ? "" : `<p class="gacc${g.access ? " yes" : ""}">${ICON.access}<span><b>${t("accessT")}:</b> ${g.staff ? t("accessStaff") : g.access ? t("accessY") : t("accessN")}</span></p>`}${g.own ? "" : `<div class="how"><b>${t("howJoinT")}</b><ul>${t("howJoin").map(x => `<li>${x}</li>`).join("")}</ul></div>`}`;
   const inG = S.joined.includes(g.id);
   const a = $("#alreadyIn");
   a.hidden = !inG;
@@ -95,8 +124,9 @@ function renderDetail() {
   kn.hidden = !known;
   if (known)
     kn.textContent = t("insFromAcc")(S.account.ins.slice(0, 3) + "••••" + S.account.ins.slice(-3));
-  $("#join").hidden = inG;
-  $("#insForm").hidden = inG;
+  if (inG && joinNow)
+    joinStep(0);
+  $("#toJoin").hidden = inG || joinNow > 0;
 }
 function nextDate(g) { const n = new Date(); for (let i = 1; i <= 7; i++) {
   const d = new Date(n);
@@ -121,18 +151,18 @@ function renderConfirm() {
 function renderAvatar() {
   const s = score(), L = lvlOf(s);
   $("#avTitle").textContent = GOALTXT[S.lang][S.goal];
+  $("#avGoals").textContent = S.goals.slice(1).map(g => "+ " + GOALTXT[S.lang][g]).join("  ");
   $("#tab-avatar .eyebrow").textContent = S.account && S.loggedIn ? `${t("acc").hi(S.account.first)} · ${t("youAt75")}` : t("youAt75");
   renderAvatarStage(s);
-  const C = 2 * Math.PI * 42, col = ["#E8743B", "#C98A0B", "#1F7A55", "#1F7A55"][L]; /* start = warm orange, not alarm red */
-  $("#ring").innerHTML = `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" fill="none" stroke="#E9EDEA" stroke-width="10"/><circle cx="50" cy="50" r="42" fill="none" stroke="${col}" stroke-width="10" stroke-linecap="round" stroke-dasharray="${C * s / 100} ${C}"/></svg><b>${s}</b>`;
-  const lv = $("#lvl");
-  lv.textContent = t("lvl")[L];
-  lv.style.background = ["#FFE3CC", "#FFF1C2", "#E3F1DD", "#C8F06A"][L];
-  lv.style.color = ["#8A3B12", "#6B4A00", "#1F7A55", "#12201B"][L];
-  $("#lvlText").textContent = t("lvlText")[L];
+  /* one bar towards the goal, one next step */
+  const next = [35, 60, 80][L], mine = allGroups().find(g => S.joined.includes(g.id)), per = sessionPts(mine && mine.id), n = next ? Math.ceil((next - s) / per) : 0;
+  const barCol = ["#E8743B", "#C98A0B", "#1F7A55", "#1F7A55"][L];
+  $("#progCard").innerHTML = `<div class="proghead"><span class="lvl" style="background:${["#FFE3CC", "#FFF1C2", "#E3F1DD", "#C8F06A"][L]};color:${["#8A3B12", "#6B4A00", "#1F7A55", "#12201B"][L]}">${t("lvl")[L]}</span><b>${s}<small> / 100</small></b></div>
+   <div class="progbar" role="progressbar" aria-valuenow="${s}" aria-valuemin="0" aria-valuemax="100"><i style="width:${s}%;background:${barCol}"></i></div>
+   <p><b>${t("towards")(esc(GOALTXT[S.lang][S.goal]))}</b></p><p class="muted">${next ? t("nextM")(n, t("lvl")[L + 1]) : t("topM")}</p>`;
   const sv = statVals(s);
   $("#stats").innerHTML = Object.keys(sv).map(k => `<div class="stat"><div class="lb"><span>${t("stats")[k]}</span><span style="font-variant-numeric:tabular-nums">${sv[k]}</span></div><div class="bar"><i style="width:${sv[k]}%"></i></div><small class="statd">${t("statsD")[k]}</small></div>`).join("") + `<p class="hint statnote">${t("statsNote")}</p>`;
-  $("#scoreHint").textContent = t("scoreHint");
+  renderTip();
   renderGoal();
   renderFitness();
   $("#fbAvatar").innerHTML = feedbackCard();
@@ -198,6 +228,7 @@ function renderSettings(box, sheet) {
   box.innerHTML = `${sheet ? `<h2 class="t" style="font-size:1.6rem">${t("settings")}</h2>` : ""}
    <div class="lbl">${t("language")}</div>${langMenu("wide")}
    <div class="lbl">${t("textsize")}</div><div class="seg">${[16, 18, 20].map((v, i) => `<button data-size="${v}" aria-pressed="${S.size === v}">${["A", "A+", "A++"][i]}</button>`).join("")}</div>
+   <div class="lbl">${t("mobT")}</div><div class="seg"><button data-mob="1" aria-pressed="${!!S.mobility}">${t("mobOn")}</button><button data-mob="0" aria-pressed="${!S.mobility}">${t("mobOff")}</button></div><p class="hint" style="margin:-6px 4px 0">${t("mobD")}</p>
    ${sheet ? "" : accountRow()}
    ${sheet ? "" : faceRow()}
    ${sheet ? `<button class="btn dark" data-close-sheet>${t("done")}</button>` : `
@@ -209,6 +240,7 @@ function renderSettings(box, sheet) {
    <button class="btn out" data-reset style="border-color:var(--danger);color:var(--danger)">${resetArm ? t("resetSure") : t("resetAll")}</button>
    <p class="hint">${t("privacy")}</p><p class="hint">${t("credits")}</p>`}`;
   bindLangMenu(box, renderText);
+  box.querySelectorAll("[data-mob]").forEach(b => b.onclick = () => { S.mobility = b.dataset.mob === "1"; S.filter = S.mobility ? "access" : "all"; save(); drawMarkers(); renderText(); });
   box.querySelectorAll("[data-size]").forEach(b => b.onclick = () => { S.size = +b.dataset.size; applySize(); save(); renderText(); });
   bindAccountRow(box);
   box.querySelectorAll("[data-tr]").forEach(b => b.onclick = () => openTracker(b.dataset.tr));

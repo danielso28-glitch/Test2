@@ -26,6 +26,13 @@ const ICON = {
   search: P('<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>', 2.4),
   arrow: P('<path d="M19 12H5M11 6l-6 6 6 6"/>', 2.4)
 };
+ICON.swimming = P('<circle cx="16" cy="7" r="2"/><path d="M3 13l6-4 4 3M3 17c1.5 1.3 3 1.3 4.500 0s3-1.300 4.500 0 3 1.300 4.500 0 3-1.300 4.500 0M3 21c1.500 1.300 3 1.300 4.500 0s3-1.300 4.500 0 3 1.300 4.500 0 3-1.300 4.500 0"/>');
+ICON.running = P('<circle cx="15" cy="4" r="2"/><path d="M6 21l4-5 1-5 4 3 3 1M11 11l-4 1-2 3M13 10l1-3-3-1"/>');
+ICON.strength = P('<path d="M3 9v6M6 6v12M18 6v12M21 9v6M6 12h12"/>');
+ICON.access = P('<circle cx="11" cy="4" r="2"/><path d="M11 7v7h6l2 5M11 10h5M8.500 12a5 5 0 1 0 7 6"/>');
+ICON.swim = ICON.swimming;
+ICON.mind = P('<path d="M12 21v-4M8 17h8M9 17c0-2-3-3-3-7a6 6 0 0 1 12 0c0 4-3 5-3 7"/>');
+ICON.sleep = P('<path d="M20 14.500A8 8 0 1 1 9.500 4a6.500 6.500 0 0 0 10.500 10.500z"/>');
 ICON.cycle = ICON.cycling;
 const PLAY = '<svg viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z"/></svg>', PAUSE = '<svg viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>';
-const TINT = { walking: "#C8F06A", dancing: "#FFE3CC", football: "#DFEAF6", back: "#E3F1DD", yoga: "#F1E4F7", cycling: "#FFF1C2" };
+const TINT = { swimming: "#CDE7F5", running: "#FFE3CC", strength: "#E3F1DD", walking: "#C8F06A", dancing: "#FFE3CC", football: "#DFEAF6", back: "#E3F1DD", yoga: "#F1E4F7", cycling: "#FFF1C2" };

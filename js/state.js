@@ -1,5 +1,5 @@
 /* ================= STATE ================= */
-const DEF = { face: null, faceOld: null, trPerm: null, trSync: null, lang: null, size: 16, goal: "grand", gender: "m", filter: "all", group: "w", scanned: false, onboarded: false, joined: [], checkins: [], volunteer: false, comJoined: [], own: [], tracker: null, plz: "48149", center: [51.9650, 7.6000], useGeo: false, radius: 2, tab: "avatar", exCat: "all", liked: [], interests: [], ciLog: {}, account: null, loggedIn: false, posts: {}, rsvp: {}, comSeen: [], health: null, goals: null };
+const DEF = { mobility: false, seenStories: {}, face: null, faceOld: null, trPerm: null, trSync: null, lang: null, size: 16, goal: "grand", gender: "m", filter: "all", group: "w", scanned: false, onboarded: false, joined: [], checkins: [], volunteer: false, comJoined: [], own: [], tracker: null, plz: "48149", center: [51.9650, 7.6000], useGeo: false, radius: 2, tab: "avatar", exCat: "all", liked: [], interests: [], ciLog: {}, account: null, loggedIn: false, posts: {}, rsvp: {}, comSeen: [], health: null, goals: null };
 let S = { ...DEF };
 try {
   const s = JSON.parse(localStorage.getItem("tp2") || "null");
@@ -11,6 +11,11 @@ catch (e) { }
 const LANGS = ["de", "en", "es"];
 if (!LANGS.includes(S.lang))
   S.lang = LANGS.find(l => (navigator.language || "").toLowerCase().startsWith(l)) || "en";
+/* goals: "garden" became part of "own"; at most GOAL_MAX; the first one is S.goal */
+S.goals = [...new Set((S.goals && S.goals.length ? S.goals : [S.goal]).map(g => g === "garden" ? "own" : g))].filter(g => GOALS.includes(g)).slice(0, GOAL_MAX);
+if (!S.goals.length)
+  S.goals = ["grand"];
+S.goal = S.goals[0];
 function save() { try {
   localStorage.setItem("tp2", JSON.stringify(S));
 }

@@ -120,11 +120,11 @@ function you(age, good, o = {}) {
   const outfit = o.outfit || "work";
   const tops = { work: f ? "#4F6FA8" : "#4E6E9A", sport: good ? "#E8743B" : "#E8743B", cardigan: "#8A7F72", home: f ? "#A88AA0" : "#7D8C99", smart: f ? "#B03A5B" : "#2F4F6F" };
   const bots = { work: "#2F3A45", sport: "#2B3440", cardigan: "#6D6A66", home: "#5E6670", smart: "#2A2F36" };
-  return fig({ f, age, good, who: "Y", hsc: (o.s || 1) < .85 ? 1.15 : 1, glasses: age >= 62, top: tops[outfit], bot: bots[outfit], zip: outfit === "sport", collar: outfit === "work" ? "#FFFFFF" : null, belly: !good ? cl((age - 55) / 20) * 7 : 0, shoe: outfit === "cardigan" ? "#7A5A48" : "#1D232A", ...o });
+  return fig({ f, age, good, who: "Y", hsc: (o.s || 1) < .85 ? 1.15 : 1, glasses: age >= 65 && !good, top: tops[outfit], bot: bots[outfit], zip: outfit === "sport", collar: outfit === "work" ? "#FFFFFF" : null, belly: !good ? cl((age - 55) / 20) * 7 : 0, shoe: outfit === "cardigan" ? "#7A5A48" : "#1D232A", ...o });
 }
-const FRIEND = (o) => fig({ f: true, age: 62, good: true, sk: "#D9A882", hair: "#B9B2AA", grey: 0, hs: "bob", top: "#2BA58C", bot: "#33414E", who: "F", ph: 1.3, ...o });
+const FRIEND = (o) => fig({ f: true, age: 56, good: true, sk: "#D9A882", hair: "#6A5244", grey: 0, hs: "bob", top: "#2BA58C", bot: "#33414E", who: "F", ph: 1.3, ...o });
 const COACH = (o) => fig({ f: false, age: 35, good: true, sk: "#8D5A3B", hair: "#1D1D1D", grey: 0, top: "#1F7A55", bot: "#1F2A33", zip: true, who: "C", ph: 2.1, ...o });
 const DOCTOR = (o) => fig({ f: true, age: 50, good: true, sk: "#F0C9A8", hair: "#7A4B2A", grey: .1, hs: "bun", coat: true, bot: "#3A4A5A", who: "D", glasses: true, ph: .7, ...o });
 const KID = (o) => fig({ f: false, age: 40, good: true, sk: "#EDC9A9", hair: "#6B4226", grey: 0, hs: "kid", top: "#FF8A4C", bot: "#2E5E8C", who: "K", s: .5, hsc: 1.45, ph: .4, ...o });
 const EXTRAS = [{ f: true, sk: "#C68B65", hair: "#2B211C", hs: "pony", top: "#9B59B6", bot: "#2C3E50" }, { f: false, sk: "#F1CFB3", hair: "#9A8E84", top: "#3498DB", bot: "#34495E", glasses: true }, { f: true, sk: "#EBC4A2", hair: "#D8D2CA", hs: "bob", top: "#F1C40F", bot: "#5D6D7E" }, { f: false, sk: "#7A4E35", hair: "#2A2A2A", top: "#E74C3C", bot: "#2E4053" }, { f: true, sk: "#F3D2BC", hair: "#A0522D", hs: "bun", top: "#16A085", bot: "#3B3B4F" }];
-const EX = (i, o) => fig({ age: 62, good: true, grey: .3, ph: i * .9, ...EXTRAS[i % EXTRAS.length], ...o });
+const EX = (i, o) => fig({ age: 56, good: true, grey: .1, ph: i * .9, ...EXTRAS[i % EXTRAS.length], ...o });

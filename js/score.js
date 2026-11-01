@@ -16,7 +16,7 @@ function steps() { if (S.health)
   return 0; const d = new Date(); return 4200 + ((d.getDate() * 7919 + d.getMonth() * 131) % 5200); }
 const lastAct = () => S.checkins.length ? S.checkins.slice().sort().pop() : null;
 /* the point rules – shown to the user in "How to earn points" */
-const PTS = { start: 24, base: 28, join: 4, joinMax: 2, session: { walking: 5, dancing: 6, football: 7, back: 6, yoga: 5, cycling: 7 }, sessionDef: 6, sessionMax: 48, stepsMax: 10, volunteer: 4, community: 2, communityMax: 6, decayAfter: 3, decayDay: 1.5, decayMax: 26 };
+const PTS = { start: 24, base: 28, join: 4, joinMax: 2, session: { swimming: 6, running: 7, strength: 6, walking: 5, dancing: 6, football: 7, back: 6, yoga: 5, cycling: 7 }, sessionDef: 6, sessionMax: 48, stepsMax: 10, volunteer: 4, community: 2, communityMax: 6, decayAfter: 3, decayDay: 1.5, decayMax: 26 };
 const sessionPts = gid => { const g = gid && allGroups().find(x => x.id === gid); return g ? PTS.session[g.type] || PTS.sessionDef : PTS.sessionDef; };
 /* score = sum of visible parts, clamped to 5–100 */
 function scoreParts() {

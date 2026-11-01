@@ -5,8 +5,8 @@ const spin = c => Math.sign(c || 1) * Math.max(.8, Math.abs(c));
 function goalShot(kind, goal) {
   const g = S.gender === "f" ? "f" : "m";
   const good = kind === "good";
-  const L = good ? { grand: ["K_A_" + g, "A08_grand"], travel: ["A08_travel"], cycle: ["F_cycle"], own: ["A08_own"], garden: ["A08_garden"], dance: ["F_dance", "A08_dance"], hike: ["C_hike"], friends: ["F_friends", "A08_friends"] }[goal]
-    : { grand: ["K_B_" + g, "B08_grand"], travel: ["B08_travel"], cycle: ["B08_cycle"], own: ["B08_own"], garden: ["B08_garden"], dance: ["B08_dance"], hike: ["B08_hike"], friends: ["B08_friends"] }[goal];
+  const L = good ? { grand: ["K_A_" + g, "A08_grand"], travel: ["A08_travel"], cycle: ["F_cycle"], own: ["A08_own"], garden: ["A08_garden"], swim: ["A08_swim"], mind: ["A08_mind"], sleep: ["A08_sleep"], dance: ["F_dance", "A08_dance"], hike: ["C_hike"], friends: ["F_friends", "A08_friends"] }[goal]
+    : { grand: ["K_B_" + g, "B08_grand"], travel: ["B08_travel"], cycle: ["B08_cycle"], own: ["B08_own"], garden: ["B08_garden"], swim: ["B08_swim"], mind: ["B08_mind"], sleep: ["B08_sleep"], dance: ["B08_dance"], hike: ["B08_hike"], friends: ["B08_friends"] }[goal];
   const A = 75;
   let draw, cam = [220, 330, 1, 220, 330, 1.12];
   if (good)
@@ -38,6 +38,9 @@ function goalShot(kind, goal) {
       hike: (u, T) => { const z = ease(cl(u * 1.5)); return bgRoom(T, { day: true, sofa: "#7D7468" }) + you(A, false, { x: 200, y: 500, outfit: "cardigan", pose: { sit: true, aR: [-20, -70] }, holdR: (hx, hy) => phone(hx, hy - 6), mood: "neutral" }) + `<g transform="translate(330 ${210}) scale(${.4 + z * .6})"><rect x="-80" y="-140" width="160" height="280" rx="20" fill="#14181C"/><g transform="translate(0 0) scale(.36)"><clipPath id="ph${PFX}"><rect x="-200" y="-360" width="400" height="720"/></clipPath><g clip-path="url(#ph${PFX})"><g transform="translate(-220 -300)">${bgSummit()}${[0, 2, 3].map((i, j) => EX(i, { x: 150 + j * 70, y: 470, s: .6, pose: { aR: [150, 10] }, mood: "laugh" })).join("")}</g></g></g></g>`; },
       friends: (u, T) => bgCafe({ awn: "#7F8C8D" }) + `<rect x="150" y="455" width="140" height="14" rx="6" fill="#8E6E53"/>${drink(240, 455)}` + you(A, false, { x: 200, y: 470, s: .8, outfit: "cardigan", pose: { sit: true, aR: [-20, -70] }, holdR: (hx, hy) => phone(hx, hy - 6), mood: "sad" }) + `<g transform="translate(330 170)"><rect x="-80" y="-30" width="160" height="60" rx="14" fill="#FFF" opacity=".92"/>${TXT(0, 6, 14, "#5A6670", TL("No new messages", "Keine neuen Nachrichten", "No hay mensajes nuevos"), 700)}</g>`
     }[goal];
+  /* swim, mind, sleep have film clips only; simple drawn fallback if a clip can't load */
+  if (!draw)
+    draw = (u, T) => bgPark(T, { lake: true, sun: good }) + you(A, good, { x: 220, y: 520, outfit: good ? "sport" : "cardigan", mood: good ? "laugh" : "sad" });
   /* follow the climber so the head stays in the picture */
   if (good && goal === "own")
     cam = [185, 370, 1.12, 300, 205, 1.12];

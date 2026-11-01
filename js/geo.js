@@ -18,7 +18,7 @@ function makeMap(id) {
    <button class="locbtn" data-loc>${ICON.loc}<span data-t="useLoc">${t("useLoc")}</span></button>`;
   const mb = wrap.querySelector("[data-mapback]");
   if (mb)
-    mb.onclick = () => go("s3");
+    mb.onclick = () => { go("sb"); renderBridge(); };
   /* the handle above the list pulls the map up to full height (to look around freely) and back */
   const gb = wrap.nextElementSibling && wrap.nextElementSibling.querySelector(".grab");
   if (gb) {
@@ -54,7 +54,7 @@ function drawMarkers() {
       return;
     M.markers.forEach(m => m.remove());
     M.markers = [];
-    allGroups().filter(g => S.filter === "all" || g.type === S.filter).forEach(g => {
+    allGroups().filter(g => fitsFilter(g, S.filter)).forEach(g => {
       const ic = L.divIcon({ className: "", html: `<div class="pin${S.group === g.id ? " on" : ""}${g.own ? " own" : ""}">${ICON[g.type]}</div>`, iconSize: [52, 52], iconAnchor: [26, 26] });
       const mk = L.marker(gpos(g), { icon: ic, title: nm(g) }).addTo(M.map);
       mk.on("click", () => { S.group = g.id; renderGroups(); renderDetail(); });

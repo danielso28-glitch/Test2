@@ -137,3 +137,111 @@
   margin:0;
   font-weight:700;
 }
+
+/* group page: description, intensity, accessibility, how joining works */
+.ginfo {
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.ginfo p {
+  margin:0;
+  line-height:1.45;
+}
+
+.gdesc {
+  font-weight:600;
+}
+
+.gacc {
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+}
+
+.gacc svg {
+  width:24px;
+  height:24px;
+  flex:none;
+  stroke:var(--ink-2);
+}
+
+.gacc.yes svg {
+  stroke:var(--green);
+}
+
+.how ul {
+  margin:6px 0 0;
+  padding-left:20px;
+  line-height:1.5;
+}
+
+/* sign-up in 3 steps */
+#s5:not([data-join="0"]) .facts,#s5:not([data-join="0"]) #dInfo,#s5:not([data-join="0"]) #dPts,#s5:not([data-join="0"]) .note {
+  display:none;
+}
+
+#s5[data-join="0"] #insForm {
+  display:none;
+}
+
+.ins [data-js] {
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.jbar {
+  display:flex;
+  gap:8px;
+  margin:0;
+  padding:0;
+  list-style:none;
+  font-size:.8rem;
+  font-weight:700;
+  color:var(--ink-2);
+}
+
+.jbar li {
+  flex:1;
+  min-width:0;
+  padding-top:8px;
+  border-top:5px solid var(--line);
+}
+
+.jbar li.on,.jbar li.done {
+  border-color:var(--ink);
+  color:var(--ink);
+}
+
+.jyou div {
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  padding:8px 0;
+  border-bottom:1px solid var(--line);
+}
+
+.jyou span {
+  color:var(--ink-2);
+}
+
+.jyou b {
+  text-align:right;
+}
+
+.jhealth {
+  border:0;
+  margin:0;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.jhealth legend {
+  font-weight:700;
+  margin-bottom:8px;
+  padding:0;
+}

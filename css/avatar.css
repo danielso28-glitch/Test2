@@ -488,3 +488,71 @@ details.demo-box summary {
   padding:1px 8px;
   border-radius:8px;
 }
+
+/* simple avatar page: one sentence, one bar, one next step */
+.avlead {
+  margin:0 6px;
+  font-weight:600;
+  line-height:1.4;
+}
+
+.progcard p {
+  margin:6px 0 0;
+}
+
+.proghead {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.proghead b {
+  font-family:var(--display);
+  font-size:1.6rem;
+}
+
+.proghead small {
+  font-size:.9rem;
+  color:var(--ink-2);
+}
+
+.progbar {
+  height:14px;
+  border-radius:8px;
+  background:#E9EDEA;
+  overflow:hidden;
+  margin-top:10px;
+}
+
+.progbar i {
+  display:block;
+  height:100%;
+  border-radius:8px;
+}
+
+.tipcard h3 {
+  margin:0 0 6px;
+}
+
+.tipcard p {
+  margin:0 0 8px;
+  line-height:1.45;
+}
+
+.tipcard .btn {
+  margin-top:10px;
+}
+
+.avmore summary,.ptsmain>summary {
+  font-weight:700;
+  cursor:pointer;
+  min-height:30px;
+}
+
+.avmore .fitcard {
+  margin-top:14px;
+}
+
+.avmore .stats {
+  margin-top:18px;
+}

@@ -65,7 +65,8 @@ function filmAt(k, tl, sh, u, T) {
       x.pause();
   } });
   v.classList.add("on");
-  if (Math.abs(v.currentTime - want) > (live ? .35 : .05))
+  /* while playing, only seek on a big jump: seeking on small drift makes a slow phone stall again and again */
+  if (Math.abs(v.currentTime - want) > (live ? 1.2 : .05))
     try {
       v.currentTime = Math.max(0, want);
     }
@@ -74,13 +75,29 @@ function filmAt(k, tl, sh, u, T) {
     v.play().catch(() => { });
   if (!live && !v.paused)
     v.pause();
-  /* preload the next clip */
+  /* preload the next clip; only the current and the next stay alive: iPhones stall with many open videos */
   const nx = tl.shots[tl.shots.indexOf(sh) + 1], nk = nx && filmKey(nx);
   if (nk)
     filmVideo(lay, nk);
-  /* slow push-in, grade, fade through black between shots */
-  v.style.transform = `scale(${(1.02 + u * .07).toFixed(3)})`;
-  v.style.filter = sh.fx === "rewind" ? `saturate(${lerp(.3, 1.1, u).toFixed(2)}) contrast(1.08)` : GRADE[sh.fx] || GRADE.neutral;
+  lay.querySelectorAll("video").forEach(x => { if (x !== v && x.dataset.k !== nk) {
+    x.removeAttribute("src");
+    x.load();
+    x.remove();
+  } });
+  /* slow push-in as one CSS transition and the grade once per shot: changing them every frame is expensive on phones */
+  if (v.dataset.shot !== sh.id + sh.start) {
+    v.dataset.shot = sh.id + sh.start;
+    v.style.transition = "none";
+    v.style.transform = "scale(1.02)";
+    v.style.filter = GRADE[sh.fx] || GRADE.neutral;
+    if (live) {
+      void v.offsetWidth;
+      v.style.transition = `transform ${sh.dur.toFixed(1)}s linear`;
+      v.style.transform = "scale(1.09)";
+    }
+  }
+  if (sh.fx === "rewind")
+    v.style.filter = `saturate(${lerp(.3, 1.1, Math.round(u * 8) / 8).toFixed(2)}) contrast(1.08)`;
   const fade = Math.max(0, 1 - (T - sh.start) / .45, 1 - (sh.start + sh.dur - T) / .35);
   lay.querySelector(".fblack").style.opacity = Math.min(1, fade).toFixed(2);
   /* "this is you": the scanned face as a portrait in the age shots */

@@ -68,14 +68,30 @@ const FEED = [
   { k: "brisk", cat: "move", tags: ["walking"], kind: "tip", src: "Two Paths", sc: "#C8F06A",
     en: ["Walk a little faster", "Brisk walking means you can still talk, but not sing. Try 10 minutes of brisk walking after lunch. It all counts towards your 150 minutes."],
     de: ["Ein bisschen schneller gehen", "Zügig gehen heißt: Du kannst noch reden, aber nicht mehr singen. Probier 10 Minuten zügiges Gehen nach dem Mittagessen. Alles zählt zu deinen 150 Minuten."] },
+  { k: "learnnew", cat: "mind", tags: ["mind", "social"], kind: "tip", src: "Two Paths", sc: "#F1E4F7",
+    en: ["Keep learning something new", "A language, an instrument, a dance step: new things challenge the brain more than routine. Doing them with others helps twice, because talking and moving train your mind too."],
+    de: ["Lern immer wieder etwas Neues", "Eine Sprache, ein Instrument, ein Tanzschritt: Neues fordert den Kopf mehr als Routine. Mit anderen zusammen hilft es doppelt, denn Reden und Bewegung trainieren den Geist mit."] },
+  { k: "bedtime", cat: "sleep", tags: ["sleep"], kind: "tip", src: "Two Paths", sc: "#DFEAF6",
+    en: ["Same time to bed, same time up", "A regular rhythm helps you fall asleep. Exercise and daylight during the day help too. Avoid the screen and heavy meals just before bed."],
+    de: ["Gleiche Zeit ins Bett, gleiche Zeit raus", "Ein fester Rhythmus hilft beim Einschlafen. Bewegung und Tageslicht tagsüber helfen auch. Bildschirm und schweres Essen kurz vor dem Schlafen besser meiden."] },
+  { k: "swimjoints", cat: "move", tags: ["swimming", "strength"], kind: "tip", src: "Two Paths", sc: "#CDE7F5",
+    en: ["Swimming is kind to your joints", "The water carries your weight, so knees and hips have an easy time while heart and muscles still work. Aqua fitness is a good start if lanes feel like too much."],
+    de: ["Schwimmen schont die Gelenke", "Das Wasser trägt dein Gewicht. Knie und Hüften werden geschont, Herz und Muskeln arbeiten trotzdem. Aquafitness ist ein guter Einstieg, wenn Bahnen zu viel sind."] },
   { k: "ebike", cat: "move", tags: ["cycling"], kind: "tip", src: "Two Paths", sc: "#FFF1C2",
     en: ["An e-bike still counts", "An e-bike makes hills and longer trips easier, so you ride more often. You still pedal, so your heart and legs still train. Practise braking and curves somewhere quiet first."],
     de: ["Auch E-Bike zählt", "Ein E-Bike macht Hügel und lange Strecken leichter, also fährst du öfter. Du trittst trotzdem, Herz und Beine trainieren also mit. Üb Bremsen und Kurven zuerst an einem ruhigen Ort."] }
 ];
 /* tags that fit each goal from the first screen */
-const GOAL_TAGS = { grand: ["strength", "balance", "walking"], travel: ["walking", "strength"], cycle: ["cycling"], own: ["strength", "balance", "food"], garden: ["back", "strength"], dance: ["dancing", "balance"], hike: ["walking", "food"], friends: ["social", "mind"] };
+/* "Tip for you" on the avatar tab: changes daily, alternates between a tip for your goals and a nutrition tip */
+function renderTip() {
+  const tags = S.goals.flatMap(g => GOAL_TAGS[g] || []), tips = FEED.filter(f => f.cat !== "story");
+  const fit = tips.filter(f => f.tags.some(x => tags.includes(x))), food = tips.filter(f => f.cat === "food");
+  const day = Math.floor(Date.now() / 864e5), pool = day % 2 && food.length ? food : fit.length ? fit : tips, f = pool[day % pool.length], [h, p] = f[S.lang] || f.en;
+  $("#avTip").innerHTML = `<div class="eyebrow" style="margin-bottom:8px">${t("tipT")}</div><h3>${esc(h)}</h3><p class="muted">${esc(p)}</p><span class="hint" style="margin:0">${t("tipSrc")}: ${esc(f.src)}</span><button class="btn out small" data-tab="explore">${t("tipMore")}</button>`;
+}
+const GOAL_TAGS = { grand: ["strength", "balance", "walking"], travel: ["walking", "strength"], cycle: ["cycling"], own: ["strength", "balance", "food"], garden: ["back", "strength"], dance: ["dancing", "balance"], hike: ["walking", "food"], friends: ["social", "mind"], swim: ["swimming", "strength"], mind: ["mind", "social"], sleep: ["sleep", "mind"] };
 /* interest chips */
-const INTERESTS = ["food", "walking", "dancing", "cycling", "yoga", "back", "football", "sleep", "mind", "check"];
+const INTERESTS = ["food", "walking", "dancing", "cycling", "yoga", "back", "swimming", "strength", "sleep", "mind", "check"];
 const intLabel = k => t("exCats")[k] || t(k);
 let exEdit = false;
 /* "For you": score each item, return [score, reason] */

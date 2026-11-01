@@ -11,17 +11,17 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Inter+Tight:wght@700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/base.css?v=2fc81f4">
-<link rel="stylesheet" href="css/intro.css?v=2fc81f4">
-<link rel="stylesheet" href="css/map.css?v=2fc81f4">
-<link rel="stylesheet" href="css/booking.css?v=2fc81f4">
-<link rel="stylesheet" href="css/scan.css?v=2fc81f4">
-<link rel="stylesheet" href="css/tracker.css?v=2fc81f4">
-<link rel="stylesheet" href="css/confirmation.css?v=2fc81f4">
-<link rel="stylesheet" href="css/main-app.css?v=2fc81f4">
-<link rel="stylesheet" href="css/avatar.css?v=2fc81f4">
-<link rel="stylesheet" href="css/feed.css?v=2fc81f4">
-<link rel="stylesheet" href="css/settings.css?v=2fc81f4">
+<link rel="stylesheet" href="css/base.css?v=d6e414b">
+<link rel="stylesheet" href="css/intro.css?v=d6e414b">
+<link rel="stylesheet" href="css/map.css?v=d6e414b">
+<link rel="stylesheet" href="css/booking.css?v=d6e414b">
+<link rel="stylesheet" href="css/scan.css?v=d6e414b">
+<link rel="stylesheet" href="css/tracker.css?v=d6e414b">
+<link rel="stylesheet" href="css/confirmation.css?v=d6e414b">
+<link rel="stylesheet" href="css/main-app.css?v=d6e414b">
+<link rel="stylesheet" href="css/avatar.css?v=d6e414b">
+<link rel="stylesheet" href="css/feed.css?v=d6e414b">
+<link rel="stylesheet" href="css/settings.css?v=d6e414b">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
 </head>
 <body>
@@ -39,7 +39,9 @@
         </div>
       </header>
       <div class="bars" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+      <p class="stepl" data-step="1"></p>
       <h1 data-t="s1title"></h1>
+      <p class="s1intro" data-t="s1intro"></p>
       <button class="scan" id="scanBtn">
         <span class="face"><svg viewBox="0 0 36 36" fill="none" stroke="#12201B" stroke-width="2.6" stroke-linecap="round"><path d="M3 11V6a3 3 0 0 1 3-3h5M25 3h5a3 3 0 0 1 3 3v5M33 25v5a3 3 0 0 1-3 3h-5M11 33H6a3 3 0 0 1-3-3v-5"/><circle cx="13.5" cy="15" r="1.4" fill="#12201B"/><circle cx="22.5" cy="15" r="1.4" fill="#12201B"/><path d="M12.5 22c3 2.5 8 2.5 11 0"/></svg></span>
         <span><b data-t="scanT"></b><span data-t="scanD"></span></span>
@@ -48,6 +50,7 @@
       <div class="grid" id="goals"></div>
       <button class="cta" id="showPaths"><span data-t="show"></span><span class="arr"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>
       <p class="twohint" data-t="twoHint"></p>
+      <button class="link skiplink" id="skipStories" data-t="skipStories" hidden></button>
     </div>
   </section>
 
@@ -55,12 +58,13 @@
   <section class="screen story s2" id="s2" hidden style="background:#0E1714">
     <div class="top pad">
       <div class="bars"><i><b id="progA"></b></i><i><b></b></i></div>
+      <p class="stepl dark" data-step="2"></p>
       <div class="row">
         <button class="round" data-go="s1" aria-label="Back" data-aria="back"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button>
         <div class="chip"><span class="av" data-avatar="sad"></span><span style="min-width:0"><b data-t="pathA"></b><span data-scanlabel></span></span></div>
       </div>
     </div>
-    <div class="scene" id="sceneA"></div>
+    <div class="scene" id="sceneA"><button class="skipbtn" data-skip="A" data-t="skip"></button></div>
     <div class="dlg pad">
       <div class="who" id="whoA"></div>
       <p class="line sub" id="subA"></p>
@@ -73,12 +77,13 @@
   <section class="screen story s3" id="s3" hidden style="background:#0E1714">
     <div class="top pad">
       <div class="bars"><i><b style="width:100%"></b></i><i><b id="progB"></b></i></div>
+      <p class="stepl dark" data-step="2"></p>
       <div class="row">
         <button class="round" data-go="s2" aria-label="Back" data-aria="back" style="background:rgba(70,62,50,.7)"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button>
         <div class="chip" style="background:rgba(70,62,50,.7)"><span class="av" data-avatar="happy"></span><span style="min-width:0"><b data-t="pathB"></b><span data-scanlabel></span></span></div>
       </div>
     </div>
-    <div class="scene" id="sceneB"></div>
+    <div class="scene" id="sceneB"><button class="skipbtn" data-skip="B" data-t="skip"></button></div>
     <div class="dlg pad">
       <div class="who" id="whoB"></div>
       <p class="line sub" id="subB"></p>
@@ -88,12 +93,23 @@
     </div>
   </section>
 
+  <!-- bridge: goal → matching groups -->
+  <section class="screen sb pad" id="sb" hidden>
+    <div class="topbar"><button class="round" data-go="s3" aria-label="Back" data-aria="back"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button></div>
+    <div class="bars" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div>
+    <p class="stepl" data-step="3"></p>
+    <div><h2 class="t" id="brGoal"></h2><p class="sub" data-t="bridgeSub"></p></div>
+    <div class="list" id="brList"></div>
+    <button class="cta" id="brMap"><span data-t="bridgeMap"></span><span class="arr"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>
+  </section>
+
   <!-- 4 Groups (intro) -->
   <section class="screen s4" id="s4" hidden>
     <div class="mapwrap" id="mapA"></div>
     <div class="sheet pad">
       <div class="grab"></div>
-      <div class="bars" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>
+      <div class="bars" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div>
+      <p class="stepl" data-step="3"></p>
       <h1 style="font-size:2.3rem" data-count></h1>
       <p class="locmsg" data-locmsg></p>
       <div class="chips" data-chips></div>
@@ -104,26 +120,49 @@
   <!-- 5 Detail -->
   <section class="screen s5 pad" id="s5" hidden>
     <div class="topbar"><button class="round" id="detailBack" aria-label="Back" data-aria="back"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button></div>
+    <div class="bars" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>
+    <p class="stepl" data-step="4"></p>
     <div><h2 class="t" id="dName"></h2><p class="sub" id="dWhen"></p></div>
     <div class="facts">
       <div class="fact"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg><div><b id="dPlace"></b><span id="dDist"></span></div></div>
       <div class="fact"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg><div><b id="dLed"></b><span id="dTrainer"></span></div></div>
       <div class="fact"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round"><circle cx="9" cy="8" r="3.5"/><circle cx="17" cy="9" r="2.8"/><path d="M2.5 20c1-3.5 3.5-5.5 6.5-5.5s5.5 2 6.5 5.5M15 14.5c3 0 5.5 2 6.5 5.5"/></svg><div><b data-t="age"></b><span id="dSpots"></span></div></div>
-      <div class="fact"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linejoin="round"><path d="M5 8h14l-1.5 12h-11z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><div><b data-t="bring"></b><span data-t="bringD"></span></div></div>
+      <div class="fact"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linejoin="round"><path d="M5 8h14l-1.5 12h-11z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><div><b data-t="bring"></b><span id="dBring"></span></div></div>
     </div>
+    <div class="card ginfo" id="dInfo"></div>
     <div class="ptsbox card" id="dPts"></div>
     <div class="note"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg><span data-t="trial"></span></div>
     <form class="ins card" id="insForm" novalidate>
-      <h3 data-t="letpay"></h3>
-      <p class="insknown" id="insKnown" hidden></p>
-      <label class="l askins" for="insNo" data-t="insNo"></label>
-      <input type="text" class="askins" id="insNo" value="A123456789" maxlength="10" autocomplete="off" spellcheck="false">
-      <p class="hint askins" data-t="insHint"></p>
+      <ol class="jbar" id="jBar" aria-hidden="true"></ol>
+      <div data-js="1">
+        <h3 data-t="j1T"></h3>
+        <div class="jyou" id="jYou"></div>
+        <fieldset class="jhealth"><legend data-t="healthQ"></legend>
+          <label class="check"><input type="checkbox" name="hl"><span data-t="healthHeart"></span></label>
+          <label class="check"><input type="checkbox" name="hl"><span data-t="healthJoints"></span></label>
+          <label class="check"><input type="checkbox" name="hl"><span data-t="healthOther"></span></label>
+          <p class="hint" style="margin:0" data-t="healthHint"></p>
+        </fieldset>
+      </div>
+      <div data-js="2">
+        <h3 data-t="letpay"></h3>
+        <p class="muted" style="margin:0" data-t="insWhy"></p>
+        <p class="insknown" id="insKnown" hidden></p>
+        <label class="l askins" for="insNo" data-t="insNo"></label>
+        <input type="text" class="askins" id="insNo" value="A123456789" maxlength="10" autocomplete="off" spellcheck="false">
+        <p class="hint askins" data-t="insHint"></p>
+      </div>
+      <div data-js="3">
+        <h3 data-t="j3T"></h3>
+        <div class="jyou" id="jSum"></div>
+        <label class="check"><input type="checkbox" id="consent" checked><span data-t="consent"></span></label>
+      </div>
       <p class="err" id="insErr" hidden></p>
-      <label class="check"><input type="checkbox" id="consent" checked><span data-t="consent"></span></label>
       <p class="demo" data-t="demoNote"></p>
     </form>
     <p class="note" id="alreadyIn" hidden></p>
+    <button class="cta" id="toJoin" type="button"><span data-t="joinStart"></span><span class="arr"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>
+    <button class="cta" id="jNext" type="button" hidden><span data-t="jNext"></span><span class="arr"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>
     <button class="cta" id="join" type="button"><span data-t="join"></span><span class="arr"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>
   </section>
 
@@ -131,6 +170,7 @@
   <section class="screen s6" id="s6" hidden>
     <div class="hero6 pad">
       <div class="bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+      <p class="stepl dark" data-step="5"></p>
       <div class="tick"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
       <h1 data-t="youreIn"></h1>
       <p id="startsOn"></p>
@@ -161,17 +201,17 @@
       </div>
 
       <div class="tab" id="tab-avatar" hidden>
-        <div class="tabhead pad"><div class="eyebrow" data-t="youAt75"></div><h2 class="t" id="avTitle"></h2></div>
+        <div class="tabhead pad"><div class="eyebrow" data-t="youAt75"></div><h2 class="t" id="avTitle"></h2><p class="avgoals" id="avGoals"></p></div>
         <div id="geoBanner" class="pad" hidden style="padding-top:8px"></div>
         <div style="padding-top:12px"><div class="avstage" id="avStage" role="button" tabindex="0" aria-label="Avatar" data-aria="avatar"></div></div>
         <div class="stack pad" style="padding-top:16px">
-          <div class="card score"><div class="ring" id="ring"></div><div style="min-width:0"><span class="lvl" id="lvl"></span><div class="muted" id="lvlText" style="line-height:1.45"></div></div></div>
-          <p class="hint" id="scoreHint" style="margin:-4px 6px 0"></p>
-          <div class="card goalcard" id="goalCard"></div>
-          <div class="card fitcard" id="fitCard"></div>
-          <div class="card" id="ptsCard"></div>
-          <div class="card"><div class="stats" id="stats"></div></div>
+          <p class="avlead" data-t="avLead"></p>
+          <div class="card progcard" id="progCard"></div>
           <div class="card"><div class="eyebrow" style="margin-bottom:10px" data-t="todo"></div><div class="row2"><button class="btn lime small" id="checkin" data-t="checkin"></button><button class="btn out small" data-tab="map" data-t="findMore"></button></div><p class="hint" id="checkinMsg" style="margin-top:10px"></p></div>
+          <div class="card goalcard" id="goalCard"></div>
+          <div class="card tipcard" id="avTip"></div>
+          <div class="card" id="ptsCard"></div>
+          <details class="card avmore"><summary data-t="avMore"></summary><div class="fitcard" id="fitCard"></div><div class="stats" id="stats"></div></details>
           <div id="fbAvatar"></div>
           <details class="demo-box"><summary data-t="demoMode"></summary><p class="hint" style="margin:10px 0" data-t="demoModeD"></p><div class="row2"><button class="btn small dark" id="simGood" data-t="simGood"></button><button class="btn small out" id="simBad" data-t="simBad"></button><button class="btn small out" id="simReset" data-t="simReset"></button></div></details>
         </div>
@@ -231,41 +271,41 @@
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 </div>
 
-<script src="js/i18n.js?v=2fc81f4"></script>
-<script src="js/i18n-es.js?v=2fc81f4"></script>
-<script src="js/icons.js?v=2fc81f4"></script>
-<script src="js/data.js?v=2fc81f4"></script>
-<script src="js/tracker.js?v=2fc81f4"></script>
-<script src="js/healthimport.js?v=2fc81f4"></script>
-<script src="js/state.js?v=2fc81f4"></script>
-<script src="js/drawing.js?v=2fc81f4"></script>
-<script src="js/story/audio-manifest.js?v=2fc81f4"></script>
-<script src="js/story/helpers.js?v=2fc81f4"></script>
-<script src="js/story/lines.js?v=2fc81f4"></script>
-<script src="js/story/lines-es.js?v=2fc81f4"></script>
-<script src="js/story/characters.js?v=2fc81f4"></script>
-<script src="js/story/props.js?v=2fc81f4"></script>
-<script src="js/story/backgrounds.js?v=2fc81f4"></script>
-<script src="js/story/camera.js?v=2fc81f4"></script>
-<script src="js/story/shots.js?v=2fc81f4"></script>
-<script src="js/story/audio.js?v=2fc81f4"></script>
-<script src="js/story/film-manifest.js?v=2fc81f4"></script>
-<script src="js/story/film.js?v=2fc81f4"></script>
-<script src="js/story/player.js?v=2fc81f4"></script>
-<script src="js/facedetect.js?v=2fc81f4"></script>
-<script src="js/aging.js?v=2fc81f4"></script>
-<script src="js/scan.js?v=2fc81f4"></script>
-<script src="js/score.js?v=2fc81f4"></script>
-<script src="js/points.js?v=2fc81f4"></script>
-<script src="js/avatar.js?v=2fc81f4"></script>
-<script src="js/feed.js?v=2fc81f4"></script>
-<script src="js/stories.js?v=2fc81f4"></script>
-<script src="js/content-es.js?v=2fc81f4"></script>
-<script src="js/geo.js?v=2fc81f4"></script>
-<script src="js/render.js?v=2fc81f4"></script>
-<script src="js/community.js?v=2fc81f4"></script>
-<script src="js/account.js?v=2fc81f4"></script>
-<script src="js/navigation.js?v=2fc81f4"></script>
-<script src="js/main.js?v=2fc81f4"></script>
+<script src="js/i18n.js?v=d6e414b"></script>
+<script src="js/i18n-es.js?v=d6e414b"></script>
+<script src="js/icons.js?v=d6e414b"></script>
+<script src="js/data.js?v=d6e414b"></script>
+<script src="js/tracker.js?v=d6e414b"></script>
+<script src="js/healthimport.js?v=d6e414b"></script>
+<script src="js/state.js?v=d6e414b"></script>
+<script src="js/drawing.js?v=d6e414b"></script>
+<script src="js/story/audio-manifest.js?v=d6e414b"></script>
+<script src="js/story/helpers.js?v=d6e414b"></script>
+<script src="js/story/lines.js?v=d6e414b"></script>
+<script src="js/story/lines-es.js?v=d6e414b"></script>
+<script src="js/story/characters.js?v=d6e414b"></script>
+<script src="js/story/props.js?v=d6e414b"></script>
+<script src="js/story/backgrounds.js?v=d6e414b"></script>
+<script src="js/story/camera.js?v=d6e414b"></script>
+<script src="js/story/shots.js?v=d6e414b"></script>
+<script src="js/story/audio.js?v=d6e414b"></script>
+<script src="js/story/film-manifest.js?v=d6e414b"></script>
+<script src="js/story/film.js?v=d6e414b"></script>
+<script src="js/story/player.js?v=d6e414b"></script>
+<script src="js/facedetect.js?v=d6e414b"></script>
+<script src="js/aging.js?v=d6e414b"></script>
+<script src="js/scan.js?v=d6e414b"></script>
+<script src="js/score.js?v=d6e414b"></script>
+<script src="js/points.js?v=d6e414b"></script>
+<script src="js/avatar.js?v=d6e414b"></script>
+<script src="js/feed.js?v=d6e414b"></script>
+<script src="js/stories.js?v=d6e414b"></script>
+<script src="js/content-es.js?v=d6e414b"></script>
+<script src="js/geo.js?v=d6e414b"></script>
+<script src="js/render.js?v=d6e414b"></script>
+<script src="js/community.js?v=d6e414b"></script>
+<script src="js/account.js?v=d6e414b"></script>
+<script src="js/navigation.js?v=d6e414b"></script>
+<script src="js/main.js?v=d6e414b"></script>
 </body>
 </html>

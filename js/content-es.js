@@ -22,6 +22,9 @@ const CONTENT_ES = {
   medi: ["Cocina mediterránea", "Verdura, aceite de oliva, pescado, legumbres y frutos secos. La dieta mediterránea se asocia con un corazón más sano, y sabe a vacaciones."],
   alcohol: ["Menos alcohol, mejor sueño", "La DGE aconseja evitar el alcohol, porque no hay una cantidad segura para la salud. Una copa por la noche también hace el sueño más ligero. La cerveza sin alcohol o el agua con gas y limón son buenas alternativas."],
   dancehome: ["Baila en casa 15 minutos", "Coreografías sencillas para seguir en tu salón. Buenas para el equilibrio, la memoria y el ánimo."],
+  learnnew: ["Sigue aprendiendo cosas nuevas", "Un idioma, un instrumento, un paso de baile: lo nuevo exige más a la mente que la rutina. Con otras personas ayuda el doble, porque hablar y moverse también entrenan la mente."],
+  bedtime: ["A la cama y en pie a la misma hora", "Un ritmo regular ayuda a dormirse. El ejercicio y la luz del día también ayudan. Mejor evitar las pantallas y las cenas pesadas justo antes de dormir."],
+  swimjoints: ["Nadar cuida tus articulaciones", "El agua sostiene tu peso, así que rodillas y caderas descansan mientras el corazón y los músculos trabajan. El aquafitness es un buen comienzo si los largos te parecen demasiado."],
   brisk: ["Camina un poco más rápido", "Caminar a paso ligero significa que todavía puedes hablar, pero no cantar. Prueba 10 minutos a paso ligero después de comer. Todo cuenta para tus 150 minutos."],
   ebike: ["La bici eléctrica también cuenta", "Una bici eléctrica hace más fáciles las cuestas y los trayectos largos, así que sales más a menudo. Sigues pedaleando, así que tu corazón y tus piernas siguen entrenando. Practica primero frenar y tomar curvas en un sitio tranquilo."],
   "st-monika": ["Antes cogía el ascensor hasta el segundo piso. Tres meses con mi grupo de marcha, y ahora soy yo la que espera a los demás arriba de la escalera.", "Grupo de marcha 50+ · dos veces por semana"],
@@ -44,8 +47,23 @@ FEED.forEach(f => {
   if (f.q && YT_ES[f.k])
     f.q.es = YT(YT_ES[f.k]);
 });
-const GROUPS_ES = { w: ["Grupo de marcha 50+", "Entrada del parque"], d: ["Baile 50+", "Estudio de baile"], f: ["Walking football 50+", "Campo de deporte"], r: ["Espalda fuerte 50+", "Gimnasio"], y: ["Yoga suave 50+", "Centro cívico"], c: ["Excursión en bici 50+", "Aparcamiento del lago"], v: ["Compañeros de paseo del parque", "Paseo del lago"], n: ["Marcha nórdica 50+", "Aparcamiento del bosque"], o: ["Yoga en silla 50+", "Sala de la biblioteca"], l: ["Baile en línea 50+", "Casa del pueblo"] };
+const GROUPS_ES = {
+  w: ["Marcha rápida 50+", "Entrada del parque", "Paseos a buen ritmo por el parque después del trabajo, con ejercicios de fuerza por el camino.", "Zapatillas, agua, chaqueta ligera"],
+  d: ["Salsa 50+", "Estudio de baile", "Aprende los pasos básicos y baila desde la primera tarde. No necesitas pareja.", "Calzado cómodo de suela lisa"],
+  f: ["Correr y caminar 50+", "Campo de deporte", "Alterna correr y caminar hasta que 30 minutos corriendo resulten fáciles. Para principiantes.", "Zapatillas de correr, ropa deportiva, agua"],
+  r: ["Entrenamiento de fuerza 50+", "Gimnasio", "Pesas y máquinas con una monitora que te enseña la técnica correcta. Mantiene fuertes los músculos y la espalda.", "Ropa deportiva, calzado de interior, toalla"],
+  y: ["Yoga y espalda 50+", "Centro cívico", "Estiramientos, equilibrio y calma después de un largo día en el escritorio.", "Ropa cómoda; hay esterillas"],
+  c: ["Excursión en bici 50+", "Aparcamiento del lago", "30–50 km por caminos tranquilos cada domingo, con parada para el café. Bicis eléctricas bienvenidas.", "Bici, casco, agua, algo de comer"],
+  v: ["Aquafitness 50+", "Piscina cubierta", "Ejercicio de cuerpo entero en el agua, suave con las rodillas y la espalda. Con música.", "Bañador, toalla, chanclas"],
+  n: ["Marcha nórdica y senderismo 50+", "Aparcamiento del bosque", "Dos horas al aire libre con bastones, y una vez al mes una ruta más larga.", "Calzado firme; se prestan bastones"],
+  o: ["Natación por calles 50+", "Piscina deportiva", "Mejor técnica, más resistencia: nada antes del trabajo con consejos del monitor.", "Bañador, gafas de natación, toalla"],
+  l: ["Baile en línea 50+", "Casa del pueblo", "Baile en fila con música country y pop. Bueno para la memoria y el ánimo.", "Calzado cómodo, agua"],
+  i: ["Fitness inclusivo", "Pabellón accesible", "Para personas con y sin discapacidad. Personal formado adapta los ejercicios a ti.", "Ropa deportiva, agua"],
+  a: ["Fuerza en silla de ruedas", "Centro de deporte y rehabilitación", "Fuerza y resistencia en la silla de ruedas, con acceso sin escalones y vestuarios accesibles.", "Ropa deportiva, guantes si quieres"]
+};
 GROUPS.forEach(g => { const e = GROUPS_ES[g.id]; if (e) {
   g.name.es = e[0];
   g.place.es = e[1];
+  g.desc.es = e[2];
+  g.bring.es = e[3];
 } });

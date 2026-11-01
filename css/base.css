@@ -278,3 +278,34 @@ h2.t {
   color:var(--ink-2);
 }
 
+
+/* where you are in the onboarding */
+.stepl {
+  margin:-10px 0 0;
+  font-size:.86rem;
+  font-weight:700;
+  color:var(--ink-2);
+}
+
+.stepl.dark {
+  margin:6px 0 0;
+  color:rgba(255,255,255,.8);
+}
+
+.s1intro {
+  margin:-12px 0 0;
+  color:var(--ink-2);
+  line-height:1.4;
+}
+
+.avgoals {
+  margin:6px 0 0;
+  color:var(--ink-2);
+  font-weight:600;
+  font-size:.92rem;
+}
+
+.sb {
+  gap:18px;
+  padding-bottom:28px;
+}

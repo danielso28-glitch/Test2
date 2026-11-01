@@ -42,6 +42,30 @@ function showEndCard(k) {
     bp.hidden = true;
   sc.querySelector(".endcard .btn").focus({ preventScroll: true });
 }
+function markSeen(k) {
+  S.seenStories = { ...(S.seenStories || {}), [k]: true };
+  save();
+  renderSkip();
+}
+/* "Skip": stop the film, show its last line and the next step */
+function skipPath(k) {
+  stopPath();
+  markSeen(k);
+  const tl = buildStory(STORY_OF[k]), last = tl.lines[tl.lines.length - 1];
+  drawAt(k, tl, tl.total - .05);
+  $("#who" + k).textContent = TL("The end", "Ende", "Fin");
+  $("#sub" + k).textContent = quote(last.txt);
+  showEndCard(k);
+}
+/* the link on the first screen: for people who have seen both films */
+function renderSkip() { const b = $("#skipStories"), s = S.seenStories || {}; if (b)
+  b.hidden = !(s.A && s.B); }
+/* phone locked or app switched: pause cleanly, so voice and film stay together; the play button continues */
+function pauseHidden() { if (play && !play.paused)
+  startPath(play.k); }
+document.addEventListener("visibilitychange", () => { if (document.hidden)
+  pauseHidden(); });
+window.addEventListener("pagehide", pauseHidden);
 function hideEndCard(k) { const e = $("#scene" + k + " .endcard"); if (e)
   e.remove(); }
 function renderStill(k) {
@@ -145,10 +169,16 @@ function startPath(k) {
     else {
       st.p0 = performance.now();
     }
-    const loop = () => {
+    const loop = now => {
       if (st.stop)
         return;
       const T = st.now();
+      /* ~30 fps is enough for film + subtitles, and nothing while the page is hidden */
+      if (document.hidden || (now && now - st.drawn < 30 && T < tl.total)) {
+        st.raf = requestAnimationFrame(loop);
+        return;
+      }
+      st.drawn = now || 0;
       if (!st.paused) {
         /* browser voice for lines without a recording – and for all lines if Web Audio couldn't start */
         tl.lines.forEach(li => { if ((!li.clip || !st.useCtx || (li.tts && T < li.at + li.d)) && T >= li.at && !st.spoken.has(li)) {
@@ -171,6 +201,7 @@ function startPath(k) {
         if (b)
           b.hidden = false;
         $("#who" + k).textContent = TL("The end", "Ende", "Fin");
+        markSeen(k);
         showEndCard(k);
         return;
       }
