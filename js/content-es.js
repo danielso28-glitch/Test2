@@ -48,16 +48,16 @@ FEED.forEach(f => {
     f.q.es = YT(YT_ES[f.k]);
 });
 const GROUPS_ES = {
-  w: ["Marcha rápida 50+", "Entrada del parque", "Paseos a buen ritmo por el parque después del trabajo, con ejercicios de fuerza por el camino.", "Zapatillas, agua, chaqueta ligera"],
-  d: ["Salsa 50+", "Estudio de baile", "Aprende los pasos básicos y baila desde la primera tarde. No necesitas pareja.", "Calzado cómodo de suela lisa"],
-  f: ["Correr y caminar 50+", "Campo de deporte", "Alterna correr y caminar hasta que 30 minutos corriendo resulten fáciles. Para principiantes.", "Zapatillas de correr, ropa deportiva, agua"],
-  r: ["Entrenamiento de fuerza 50+", "Gimnasio", "Pesas y máquinas con una monitora que te enseña la técnica correcta. Mantiene fuertes los músculos y la espalda.", "Ropa deportiva, calzado de interior, toalla"],
-  y: ["Yoga y espalda 50+", "Centro cívico", "Estiramientos, equilibrio y calma después de un largo día en el escritorio.", "Ropa cómoda; hay esterillas"],
-  c: ["Excursión en bici 50+", "Aparcamiento del lago", "30–50 km por caminos tranquilos cada domingo, con parada para el café. Bicis eléctricas bienvenidas.", "Bici, casco, agua, algo de comer"],
-  v: ["Aquafitness 50+", "Piscina cubierta", "Ejercicio de cuerpo entero en el agua, suave con las rodillas y la espalda. Con música.", "Bañador, toalla, chanclas"],
-  n: ["Marcha nórdica y senderismo 50+", "Aparcamiento del bosque", "Dos horas al aire libre con bastones, y una vez al mes una ruta más larga.", "Calzado firme; se prestan bastones"],
-  o: ["Natación por calles 50+", "Piscina deportiva", "Mejor técnica, más resistencia: nada antes del trabajo con consejos del monitor.", "Bañador, gafas de natación, toalla"],
-  l: ["Baile en línea 50+", "Casa del pueblo", "Baile en fila con música country y pop. Bueno para la memoria y el ánimo.", "Calzado cómodo, agua"],
+  w: ["Marcha rápida", "Entrada del parque", "Paseos a buen ritmo por el parque después del trabajo, con ejercicios de fuerza por el camino.", "Zapatillas, agua, chaqueta ligera"],
+  d: ["Salsa", "Estudio de baile", "Aprende los pasos básicos y baila desde la primera tarde. No necesitas pareja.", "Calzado cómodo de suela lisa"],
+  f: ["Correr y caminar", "Campo de deporte", "Alterna correr y caminar hasta que 30 minutos corriendo resulten fáciles. Para principiantes.", "Zapatillas de correr, ropa deportiva, agua"],
+  r: ["Entrenamiento de fuerza", "Gimnasio", "Pesas y máquinas con una monitora que te enseña la técnica correcta. Mantiene fuertes los músculos y la espalda.", "Ropa deportiva, calzado de interior, toalla"],
+  y: ["Yoga y espalda", "Centro cívico", "Estiramientos, equilibrio y calma después de un largo día en el escritorio.", "Ropa cómoda; hay esterillas"],
+  c: ["Excursión en bici", "Aparcamiento del lago", "30–50 km por caminos tranquilos cada domingo, con parada para el café. Bicis eléctricas bienvenidas.", "Bici, casco, agua, algo de comer"],
+  v: ["Aquafitness", "Piscina cubierta", "Ejercicio de cuerpo entero en el agua, suave con las rodillas y la espalda. Con música.", "Bañador, toalla, chanclas"],
+  n: ["Marcha nórdica y senderismo", "Aparcamiento del bosque", "Dos horas al aire libre con bastones, y una vez al mes una ruta más larga.", "Calzado firme; se prestan bastones"],
+  o: ["Natación por calles", "Piscina deportiva", "Mejor técnica, más resistencia: nada antes del trabajo con consejos del monitor.", "Bañador, gafas de natación, toalla"],
+  l: ["Baile en línea", "Casa del pueblo", "Baile en fila con música country y pop. Bueno para la memoria y el ánimo.", "Calzado cómodo, agua"],
   i: ["Fitness inclusivo", "Pabellón accesible", "Para personas con y sin discapacidad. Personal formado adapta los ejercicios a ti.", "Ropa deportiva, agua"],
   a: ["Fuerza en silla de ruedas", "Centro de deporte y rehabilitación", "Fuerza y resistencia en la silla de ruedas, con acceso sin escalones y vestuarios accesibles.", "Ropa deportiva, guantes si quieres"]
 };

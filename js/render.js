@@ -54,7 +54,9 @@ function renderText() {
   if (!$("#setSheet").hidden)
     renderSettings($("#setSheetBody"), true);
 }
-const groupRow = g => `<span class="ic" style="background:${TINT[g.type]}">${ICON[g.type]}</span><span class="tx"><b>${esc(nm(g))}</b><span class="m">${sched(g)} · ${g.time} · ${fmtKm(gdist(g))} km</span>${g.intensity ? `<span class="m gtags"><i class="int ${g.intensity}">${t("intensity")[g.intensity]}</i>${g.access ? `<i class="acc" title="${t("accessY")}">${ICON.access}</i>` : ""}</span>` : ""}</span><span class="free">${S.joined.includes(g.id) ? t("joined") : t("free")}</span>`;
+/* age range of a group as a small tag (own groups have none) */
+const ageTag = g => g.ages ? `<i class="int ages">${t("ages")(...g.ages)}</i>` : "";
+const groupRow = g => `<span class="ic" style="background:${TINT[g.type]}">${ICON[g.type]}</span><span class="tx"><b>${esc(nm(g))}</b><span class="m">${sched(g)} · ${g.time} · ${fmtKm(gdist(g))} km</span>${g.intensity ? `<span class="m gtags">${ageTag(g)}<i class="int ${g.intensity}">${t("intensity")[g.intensity]}</i>${g.access ? `<i class="acc" title="${t("accessY")}">${ICON.access}</i>` : ""}</span>` : ""}</span><span class="free">${S.joined.includes(g.id) ? t("joined") : t("free")}</span>`;
 function renderGroups() {
   if (!(S.filter in FILTERS))
     S.filter = "all";
@@ -105,6 +107,8 @@ function renderDetail() {
   $("#dDist").textContent = t("fromYou")(fmtKm(gdist(g)));
   $("#dLed").textContent = g.vol || g.own ? t("ledVol") : t("led");
   $("#dTrainer").textContent = g.own ? "" : g.vol ? g.trainer : `${g.trainer}, ${t("certified")}`;
+  /* "People your age" → the group's age range, if it has one */
+  $("#dAge").textContent = g.ages ? t("ages")(...g.ages) : t("age");
   $("#dSpots").textContent = `${t("spots")(g.taken, g.cap)} · ${t("placesLeft")(Math.max(0, g.cap - g.taken))}`;
   $("#dBring").textContent = g.bring ? g.bring[S.lang] || g.bring.en : t("bringD");
   /* what it is, how hard, accessible?, how joining works */
