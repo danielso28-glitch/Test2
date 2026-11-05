@@ -11,17 +11,17 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Inter+Tight:wght@700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/base.css?v=13d1e95">
-<link rel="stylesheet" href="css/intro.css?v=13d1e95">
-<link rel="stylesheet" href="css/map.css?v=13d1e95">
-<link rel="stylesheet" href="css/booking.css?v=13d1e95">
-<link rel="stylesheet" href="css/scan.css?v=13d1e95">
-<link rel="stylesheet" href="css/tracker.css?v=13d1e95">
-<link rel="stylesheet" href="css/confirmation.css?v=13d1e95">
-<link rel="stylesheet" href="css/main-app.css?v=13d1e95">
-<link rel="stylesheet" href="css/avatar.css?v=13d1e95">
-<link rel="stylesheet" href="css/feed.css?v=13d1e95">
-<link rel="stylesheet" href="css/settings.css?v=13d1e95">
+<link rel="stylesheet" href="css/base.css?v=3217bcc">
+<link rel="stylesheet" href="css/intro.css?v=3217bcc">
+<link rel="stylesheet" href="css/map.css?v=3217bcc">
+<link rel="stylesheet" href="css/booking.css?v=3217bcc">
+<link rel="stylesheet" href="css/scan.css?v=3217bcc">
+<link rel="stylesheet" href="css/tracker.css?v=3217bcc">
+<link rel="stylesheet" href="css/confirmation.css?v=3217bcc">
+<link rel="stylesheet" href="css/main-app.css?v=3217bcc">
+<link rel="stylesheet" href="css/avatar.css?v=3217bcc">
+<link rel="stylesheet" href="css/feed.css?v=3217bcc">
+<link rel="stylesheet" href="css/settings.css?v=3217bcc">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
 </head>
 <body>
@@ -51,6 +51,22 @@
       <button class="cta" id="showPaths"><span data-t="show"></span><span class="arr"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>
       <p class="twohint" data-t="twoHint"></p>
       <button class="link skiplink" id="skipStories" data-t="skipStories" hidden></button>
+    </div>
+  </section>
+
+  <!-- loading: after "Show my two paths", before Path A (voices + film load meanwhile) -->
+  <section class="screen sl" id="sl" hidden>
+    <div class="slwrap" aria-live="polite">
+      <svg class="slfork" viewBox="0 0 160 170" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path class="slstem" d="M80 162V96"/>
+        <path class="slA" d="M80 96C80 70 52 54 26 22"/>
+        <path class="slB" d="M80 96C80 70 108 54 134 22"/>
+        <circle class="sldA" cx="26" cy="22" r="9"/><circle class="sldB" cx="134" cy="22" r="9"/>
+      </svg>
+      <div class="sllabels" aria-hidden="true"><span id="slA"></span><span id="slB"></span></div>
+      <h2 id="slTitle"></h2>
+      <ul class="slsteps" id="slSteps"></ul>
+      <div class="slbar"><b id="slBar"></b></div>
     </div>
   </section>
 
@@ -271,41 +287,41 @@
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 </div>
 
-<script src="js/i18n.js?v=13d1e95"></script>
-<script src="js/i18n-es.js?v=13d1e95"></script>
-<script src="js/icons.js?v=13d1e95"></script>
-<script src="js/data.js?v=13d1e95"></script>
-<script src="js/tracker.js?v=13d1e95"></script>
-<script src="js/healthimport.js?v=13d1e95"></script>
-<script src="js/state.js?v=13d1e95"></script>
-<script src="js/drawing.js?v=13d1e95"></script>
-<script src="js/story/audio-manifest.js?v=13d1e95"></script>
-<script src="js/story/helpers.js?v=13d1e95"></script>
-<script src="js/story/lines.js?v=13d1e95"></script>
-<script src="js/story/lines-es.js?v=13d1e95"></script>
-<script src="js/story/characters.js?v=13d1e95"></script>
-<script src="js/story/props.js?v=13d1e95"></script>
-<script src="js/story/backgrounds.js?v=13d1e95"></script>
-<script src="js/story/camera.js?v=13d1e95"></script>
-<script src="js/story/shots.js?v=13d1e95"></script>
-<script src="js/story/audio.js?v=13d1e95"></script>
-<script src="js/story/film-manifest.js?v=13d1e95"></script>
-<script src="js/story/film.js?v=13d1e95"></script>
-<script src="js/story/player.js?v=13d1e95"></script>
-<script src="js/facedetect.js?v=13d1e95"></script>
-<script src="js/aging.js?v=13d1e95"></script>
-<script src="js/scan.js?v=13d1e95"></script>
-<script src="js/score.js?v=13d1e95"></script>
-<script src="js/points.js?v=13d1e95"></script>
-<script src="js/avatar.js?v=13d1e95"></script>
-<script src="js/feed.js?v=13d1e95"></script>
-<script src="js/stories.js?v=13d1e95"></script>
-<script src="js/content-es.js?v=13d1e95"></script>
-<script src="js/geo.js?v=13d1e95"></script>
-<script src="js/render.js?v=13d1e95"></script>
-<script src="js/community.js?v=13d1e95"></script>
-<script src="js/account.js?v=13d1e95"></script>
-<script src="js/navigation.js?v=13d1e95"></script>
-<script src="js/main.js?v=13d1e95"></script>
+<script src="js/i18n.js?v=3217bcc"></script>
+<script src="js/i18n-es.js?v=3217bcc"></script>
+<script src="js/icons.js?v=3217bcc"></script>
+<script src="js/data.js?v=3217bcc"></script>
+<script src="js/tracker.js?v=3217bcc"></script>
+<script src="js/healthimport.js?v=3217bcc"></script>
+<script src="js/state.js?v=3217bcc"></script>
+<script src="js/drawing.js?v=3217bcc"></script>
+<script src="js/story/audio-manifest.js?v=3217bcc"></script>
+<script src="js/story/helpers.js?v=3217bcc"></script>
+<script src="js/story/lines.js?v=3217bcc"></script>
+<script src="js/story/lines-es.js?v=3217bcc"></script>
+<script src="js/story/characters.js?v=3217bcc"></script>
+<script src="js/story/props.js?v=3217bcc"></script>
+<script src="js/story/backgrounds.js?v=3217bcc"></script>
+<script src="js/story/camera.js?v=3217bcc"></script>
+<script src="js/story/shots.js?v=3217bcc"></script>
+<script src="js/story/audio.js?v=3217bcc"></script>
+<script src="js/story/film-manifest.js?v=3217bcc"></script>
+<script src="js/story/film.js?v=3217bcc"></script>
+<script src="js/story/player.js?v=3217bcc"></script>
+<script src="js/facedetect.js?v=3217bcc"></script>
+<script src="js/aging.js?v=3217bcc"></script>
+<script src="js/scan.js?v=3217bcc"></script>
+<script src="js/score.js?v=3217bcc"></script>
+<script src="js/points.js?v=3217bcc"></script>
+<script src="js/avatar.js?v=3217bcc"></script>
+<script src="js/feed.js?v=3217bcc"></script>
+<script src="js/stories.js?v=3217bcc"></script>
+<script src="js/content-es.js?v=3217bcc"></script>
+<script src="js/geo.js?v=3217bcc"></script>
+<script src="js/render.js?v=3217bcc"></script>
+<script src="js/community.js?v=3217bcc"></script>
+<script src="js/account.js?v=3217bcc"></script>
+<script src="js/navigation.js?v=3217bcc"></script>
+<script src="js/main.js?v=3217bcc"></script>
 </body>
 </html>

@@ -1,6 +1,10 @@
+/* timers of the loading screen; go() clears them */
+let loadT = [];
 /* ================= NAVIGATION ================= */
 function go(id) {
   stopPath();
+  loadT.forEach(clearTimeout);
+  loadT = [];
   $$(".screen").forEach(s => s.hidden = true);
   $("#main").hidden = true;
   const el = $("#" + id);
@@ -107,7 +111,32 @@ document.addEventListener("input", e => { if (e.target.matches("[data-plz]")) {
 } });
 $("#setSheet").onclick = e => { if (e.target.id === "setSheet")
   $("#setSheet").hidden = true; };
-$("#showPaths").onclick = () => go("s2");
+/* loading screen between "Show my two paths" and Path A: builds suspense, and voices + film clips load meanwhile */
+function showLoading() {
+  go("sl");
+  preloadStory(STORY_OF.A);
+  const A = TA(), steps = [S.scanned ? TL(`Ageing your face to ${A}`, `Dein Gesicht altert auf ${A}`, `Envejeciendo tu cara a los ${A}`) : TL(`Creating you at ${A}`, `Wir erstellen dich mit ${A}`, `Creando tu yo a los ${A}`),
+    TL("Path A · without exercise", "Weg A · ohne Bewegung", "Camino A · sin ejercicio"),
+    TL("Path B · with exercise", "Weg B · mit Bewegung", "Camino B · con ejercicio"),
+    TL("Loading voices and film", "Stimmen und Film laden", "Cargando voces y película")];
+  const STEP = 850, sc = $("#sl");
+  $("#slTitle").textContent = TL("Creating your two paths…", "Wir erstellen deine zwei Wege …", "Creando tus dos caminos…");
+  $("#slA").textContent = TL("Path A", "Weg A", "Camino A");
+  $("#slB").textContent = TL("Path B", "Weg B", "Camino B");
+  $("#slSteps").innerHTML = steps.map(x => `<li>${esc(x)}</li>`).join("");
+  $("#slBar").style.width = "0";
+  sc.classList.remove("run");
+  void sc.offsetWidth; /* restart the CSS animation */
+  sc.classList.add("run");
+  const li = $$("#slSteps li");
+  steps.forEach((x, i) => loadT.push(setTimeout(() => {
+    li.forEach((e, j) => e.className = j < i ? "done" : j === i ? "on" : "");
+    $("#slBar").style.width = `${(i + 1) / steps.length * 100}%`;
+  }, i * STEP + 60)));
+  loadT.push(setTimeout(() => li.forEach(e => e.className = "done"), steps.length * STEP));
+  loadT.push(setTimeout(() => go("s2"), steps.length * STEP + 450));
+}
+$("#showPaths").onclick = showLoading;
 $("#scanBtn").onclick = () => scanOpen();
 /* goal → group: a short bridge with matching groups, then the map already filtered by the goal */
 function bridgeGroups() {

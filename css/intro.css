@@ -528,3 +528,44 @@
 @media (hover:none) {
   .film .fgrain { animation:none; }
 }
+
+/* loading screen between "Show my two paths" and Path A */
+.sl { background:#0E1714; color:#fff; justify-content:center; }
+.slwrap { display:flex; flex-direction:column; align-items:center; text-align:center; gap:18px; padding:40px 28px; margin:auto 0; }
+.slfork { width:200px; height:212px; overflow:visible; }
+.slfork path { stroke-width:12; stroke-dasharray:140; stroke-dashoffset:140; }
+.slstem { stroke:#fff; }
+.slA { stroke:#5F6973; }
+.slB { stroke:var(--lime); }
+.slfork circle { opacity:0; transform-box:fill-box; transform-origin:center; }
+.sldA { fill:#5F6973; }
+.sldB { fill:var(--lime); }
+.sl.run .slstem { animation:sldraw .6s ease-out forwards; }
+.sl.run .slA { animation:sldraw .9s .55s ease-out forwards; }
+.sl.run .slB { animation:sldraw .9s 1.4s ease-out forwards; }
+.sl.run .sldA { animation:slpop .4s 1.35s ease-out forwards; }
+.sl.run .sldB { animation:slpop .4s 2.2s ease-out forwards, slpulse 1.6s 2.6s ease-in-out infinite; }
+@keyframes sldraw { to { stroke-dashoffset:0; } }
+@keyframes slpop { from { opacity:0; transform:scale(.3); } to { opacity:1; transform:scale(1); } }
+@keyframes slpulse { 50% { transform:scale(1.25); } }
+.sllabels { order:-1; display:flex; justify-content:space-between; width:200px; margin-bottom:-14px; font-weight:700; font-size:.9rem; }
+.sllabels span { width:66px; text-align:center; }
+#slA { color:#9AA3AB; }
+#slB { color:var(--lime); }
+.sl h2 { font-family:var(--display); font-size:1.6rem; line-height:1.2; margin:6px 0 0; }
+.slsteps { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; text-align:left; min-width:250px; }
+.slsteps li { display:flex; align-items:center; gap:10px; color:rgba(255,255,255,.4); transition:color .3s; }
+.slsteps li::before { content:""; flex:none; width:18px; height:18px; border-radius:50%; border:2px solid currentColor; box-sizing:border-box; }
+.slsteps li.on { color:#fff; }
+.slsteps li.on::before { border-color:var(--lime); border-right-color:transparent; animation:slspin .8s linear infinite; }
+.slsteps li.done { color:rgba(255,255,255,.85); }
+.slsteps li.done::before { background:var(--lime); border-color:var(--lime); }
+@keyframes slspin { to { transform:rotate(360deg); } }
+.slbar { width:250px; height:6px; border-radius:3px; background:rgba(255,255,255,.15); overflow:hidden; }
+.slbar b { display:block; height:100%; width:0; background:var(--lime); border-radius:3px; transition:width .7s ease; }
+@media (prefers-reduced-motion:reduce) {
+  .slfork path { stroke-dashoffset:0; }
+  .slfork circle { opacity:1; }
+  .sl.run .slfork * { animation:none!important; }
+  .slsteps li.on::before { animation:none; }
+}
